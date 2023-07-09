@@ -1,0 +1,7 @@
+{
+  "name": "pokebattleron",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
