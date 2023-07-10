@@ -1,13 +1,45 @@
+<!-- dashboard.component.html -->
+
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>dashboard</ion-title>
+    <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">dashboard</ion-title>
+      <ion-title size="large">Dashboard</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Bem-vindo, {{ username }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Você tem {{ victoryNumber }} vitórias</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Seus Pokémons</ion-label>
+    </ion-list-header>
+    <ion-card *ngFor="let pokemon of pokemons">
+      <img [src]="pokemon.imageUrl" />
+      <ion-card-header>
+        <ion-card-title>{{ pokemon.name }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>HP: {{ pokemon.hp }}</p>
+        <p>Attack: {{ pokemon.attack }}</p>
+        <p>Defense: {{ pokemon.defense }}</p>
+        <p>Special Attack: {{ pokemon.specialAttack }}</p>
+        <p>Special Defense: {{ pokemon.specialDefense }}</p>
+        <p>Speed: {{ pokemon.speed }}</p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
 </ion-content>
