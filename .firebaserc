@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "pokebattleon": {
+      "hosting": {
+        "app": [
+          "pokebattleon"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "pokebattleon"
+  }
+}

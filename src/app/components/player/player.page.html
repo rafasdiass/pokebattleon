@@ -1,13 +1,40 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>player</ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Player</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">player</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div *ngIf="player$ | async as player">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Player ID: {{ player.uid }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-label>Wins: {{ player.wins }}</ion-label>
+
+        <ion-list *ngIf="player.cards.length > 0">
+          <ion-label>Cards:</ion-label>
+          <ion-item *ngFor="let card of player.cards">
+            <ion-icon name="card-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h2>{{ card.name }}</h2>
+              <p><img [src]="card.imageUrl" alt="{{card.name}} image" style="width: 100px; height: 100px;"></p>
+              <p>HP: {{ card.hp }}</p>
+              <p>Attack: {{ card.attack }}</p>
+              <p>Defense: {{ card.defense }}</p>
+              <p>Special Attack: {{ card.specialAttack }}</p>
+              <p>Special Defense: {{ card.specialDefense }}</p>
+              <p>Speed: {{ card.speed }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <ion-label *ngIf="player.cards.length === 0">No cards</ion-label>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-spinner *ngIf="(player$ | async) === undefined" name="circles"></ion-spinner>
 </ion-content>

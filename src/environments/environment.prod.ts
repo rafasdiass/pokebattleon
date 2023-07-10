@@ -1,3 +1,13 @@
 export const environment = {
+  firebase: {
+    projectId: 'pokebattleon',
+    appId: '1:438723625160:web:89bbd55852e9fb2159a5fd',
+    storageBucket: 'pokebattleon.appspot.com',
+    locationId: 'us-central',
+    apiKey: 'AIzaSyBlKiP2o1ExAQpReHcR3WdK167UDF36yeI',
+    authDomain: 'pokebattleon.firebaseapp.com',
+    messagingSenderId: '438723625160',
+    measurementId: 'G-K12X6Q3ZMR',
+  },
   production: true
 };

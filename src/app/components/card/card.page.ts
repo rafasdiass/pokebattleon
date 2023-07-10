@@ -1,62 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { Player } from '../../models/player.model';
-import { GameBoardService } from '../../services/game-board.service';
-import { ApipokemonService } from '../../services/apipokemon.service';
+import { CardPokemonService } from '../../services/card-pokemon.service';
 import { PlayerService } from '../../services/player.service';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.page.html',
-  styleUrls: ['./card.page.css']
+  styleUrls: ['./card.page.scss'],
 })
 export class CardPage implements OnInit {
-  player: Player | null = null;
-  computerCard: Card | null = null;
+  @Input() playerId!: string;
+  @Input() pokemon!: Card;
 
   constructor(
-    private gameBoardService: GameBoardService,
-    private apipokemonService: ApipokemonService,
+    private cardPokemonService: CardPokemonService,
     private playerService: PlayerService
   ) { }
 
   ngOnInit() {
-    this.loadGame();
-  }
-
-  async loadGame() {
-    try {
-      // Load user and their cards
-      await this.gameBoardService.loadPlayer('playerId'); // substitute 'playerId' with the actual player id
-      this.player = this.gameBoardService.getUser();
-
-      // Get a random card for the computer
-      const pokemon = await this.apipokemonService.getRandomPokemon();
-      this.computerCard = new Card(
-        pokemon.id,
-        pokemon.name,
-        pokemon.sprites.front_default,
-        pokemon.stats[0].base_stat,
-        pokemon.stats[1].base_stat,
-        pokemon.stats[2].base_stat,
-        pokemon.stats[3].base_stat,
-        pokemon.stats[4].base_stat,
-        pokemon.stats[5].base_stat
-      );
-
-      // Setup the game
-      this.gameBoardService.setGame(this.computerCard);
-    } catch (err) {
-      console.error('Failed to load game: ', err);
+    if (!this.pokemon) {
+      this.loadPlayerPokemon();
     }
   }
 
-  selectAttribute(attribute: keyof Card) {
-    try {
-      this.gameBoardService.selectAttribute(attribute);
-      this.player = this.gameBoardService.getUser();
-    } catch (err) {
-      console.error('Failed to select attribute: ', err);
+  async loadPlayerPokemon() {
+    if (this.playerId) {
+      let playerData: Player | undefined = await this.playerService.getPlayer(this.playerId).toPromise();
+      
+      if (playerData) {
+        let player: Player = playerData;
+        if (player.cards && player.cards.length > 0) {
+          this.pokemon = player.cards[0]; // Assume que a primeira carta da lista é a ativa
+        }
+      }
     }
   }
 }

@@ -1,8 +1,4 @@
-
-
 import { Component, OnInit } from '@angular/core';
-import { Card } from '../../models/card.model'; 
-import { CardPokemonService } from '../../services/card-pokemon.service'; 
 
 @Component({
   selector: 'app-dashboard',
@@ -10,8 +6,7 @@ import { CardPokemonService } from '../../services/card-pokemon.service';
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
-  
+  constructor() {}
 
-  constructor(private cardpokemonService: CardPokemonService) { }  // Injeta o serviço
-
+  ngOnInit() {}
 }
