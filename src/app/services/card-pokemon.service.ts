@@ -41,4 +41,7 @@ if (wins && wins > pokemons.length) {
 }
     }
   }
+  selectCard(playerId: string, cardId: string): Promise<void> {
+    return this.firestore.collection('players').doc(playerId).update({selectedCard: cardId});
+  }
 }

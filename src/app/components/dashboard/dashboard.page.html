@@ -1,11 +1,32 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Dashboard</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <app-player></app-player>
-  <app-card></app-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{(player$ | async)?.name}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <h2>Ranking: {{(player$ | async)?.wins}}</h2>
+      <h2>Pokémons: {{(pokemons$ | async)?.length}}</h2>
+    </ion-card-content>
+  </ion-card>
+
   <app-ranking></app-ranking>
+
+  <ion-list>
+    <ion-list-header>Pokémons</ion-list-header>
+    <ion-item *ngFor="let pokemon of pokemons$ | async">
+      <app-card-pokemon [pokemon]="pokemon"></app-card-pokemon>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>Selection for the game</ion-list-header>
+    <ion-item *ngFor="let pokemon of (pokemonSelectionService.selectedPokemons$ | async)">
+      <app-card-pokemon [pokemon]="pokemon"></app-card-pokemon>
+      <ion-button (click)="removeCard(pokemon)">Remove</ion-button>
+    </ion-item>
+    <ion-item *ngFor="let pokemon of pokemons$ | async">
+      <ion-button [disabled]="(pokemonSelectionService.selectedPokemons$ | async)?.length >= 5" (click)="selectCard(pokemon)">Select</ion-button>
+      <app-card-pokemon [pokemon]="pokemon"></app-card-pokemon>
+    </ion-item>
+  </ion-list>
 </ion-content>

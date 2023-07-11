@@ -1,18 +1,19 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Ranking</ion-title>
+    <ion-title>
+      Ranking dos Jogadores
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <ion-list-header>
-      <ion-label>Player</ion-label>
-      <ion-label>Wins</ion-label>
-    </ion-list-header>
     <ion-item *ngFor="let player of playerRankings$ | async">
-      <ion-label>{{ player.name }}</ion-label>
-      <ion-label>{{ player.wins }}</ion-label>
+      <ion-label>
+        <h2>{{player.name}}</h2>
+        <h3>{{player.wins}} vitórias</h3>
+        <p>{{player.cards.length}} cartas</p>
+      </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Player } from '../../models/player.model';
 import { RankingService } from '../../services/ranking.service';
+import { Observable, EMPTY } from 'rxjs';
+import { Player } from '../../models/player.model';
 
 @Component({
   selector: 'app-ranking',
@@ -9,10 +9,9 @@ import { RankingService } from '../../services/ranking.service';
   styleUrls: ['./ranking.page.scss'],
 })
 export class RankingPage implements OnInit {
+  playerRankings$: Observable<Player[]> = EMPTY;
 
-  public playerRankings$: Observable<Player[]>;
-
-  constructor(private rankingService: RankingService) { }
+  constructor(private rankingService: RankingService) {}
 
   ngOnInit() {
     this.playerRankings$ = this.rankingService.getRanking();
