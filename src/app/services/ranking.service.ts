@@ -1,31 +1,32 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { map } from 'rxjs/operators';
+import { getFirestore, doc, getDoc, query, collection, orderBy, getDocs } from 'firebase/firestore';
 import { Player } from '../models/player.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RankingService {
+  private db = getFirestore();
 
-  constructor(private firestore: AngularFirestore) {}
+  constructor() {}
 
   // Obter o número de vitórias de um jogador
-  getWins(playerId: string): Promise<number | undefined> {
-    return this.firestore.collection('players').doc(playerId).snapshotChanges()
-      .pipe(map(action => {
-        const data = action.payload.data() as Player;
-        return data && data.hasOwnProperty('wins') ? data.wins : undefined;
-      })).toPromise();
+  async getWins(playerId: string): Promise<number | undefined> {
+    const playerDoc = await getDoc(doc(this.db, 'players', playerId));
+    if (playerDoc.exists()) {
+      const playerData = playerDoc.data() as Player;
+      return playerData.wins;
+    }
+    return undefined;
   }
 
   // Obter a classificação de todos os jogadores
-  getRanking() {
-    return this.firestore.collection('players', ref => ref.orderBy('wins', 'desc')).snapshotChanges()
-      .pipe(map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as Player;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      })));
+  async getRanking(): Promise<Player[]> {
+    const playersQuery = query(collection(this.db, 'players'), orderBy('wins', 'desc'));
+    const querySnapshot = await getDocs(playersQuery);
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data() as Player;
+      return { id: doc.id, ...data };
+    });
   }
 }

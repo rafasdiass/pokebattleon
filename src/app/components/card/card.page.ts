@@ -26,7 +26,7 @@ export class CardPage implements OnInit {
 
   async loadPlayerPokemon() {
     if (this.playerId) {
-      let playerData: Player | undefined = await this.playerService.getPlayer(this.playerId).toPromise();
+      let playerData: Player | undefined = await this.playerService.getPlayer(this.playerId);
       
       if (playerData) {
         let player: Player = playerData;

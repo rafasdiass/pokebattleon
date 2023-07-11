@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RankingService } from '../../services/ranking.service';
-import { Observable, EMPTY } from 'rxjs';
+import { Observable, EMPTY, from } from 'rxjs';
 import { Player } from '../../models/player.model';
 
 @Component({
@@ -14,6 +14,6 @@ export class RankingPage implements OnInit {
   constructor(private rankingService: RankingService) {}
 
   ngOnInit() {
-    this.playerRankings$ = this.rankingService.getRanking();
+    this.playerRankings$ = from(this.rankingService.getRanking());
   }
 }
