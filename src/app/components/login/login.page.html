@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="loginForm" (ngSubmit)="login()">
+  <form [formGroup]="loginForm">
     <div class="form-group">
       <label for="email">Email</label>
       <input id="email" formControlName="email" type="text" class="form-control">
@@ -17,7 +17,7 @@
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-    <button (click)="register()" class="btn btn-link">Faça seu registro</button>
+    <button type="button" (click)="login()" class="btn btn-primary">Login</button>
+    <button type="button" (click)="register()" class="btn btn-link">Faça seu registro</button>
   </form>
 </ion-content>

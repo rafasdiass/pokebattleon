@@ -26,16 +26,20 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   login() {
-    const formValue = this.loginForm.value;
-    this.authService.signIn(formValue.email, formValue.password).then(
-      () => {
-        this.router.navigate(['/home']);
-      },
-      (error: any) => {
-        console.log(error);
-        this.errorMessage = error.message;
-      }
-    );
+    if (this.loginForm.valid) {
+      const formValue = this.loginForm.value;
+      this.authService.signIn(formValue.email, formValue.password).then(
+        () => {
+          this.router.navigate(['/home']);
+        },
+        (error: any) => {
+          console.log(error);
+          this.errorMessage = error.message;
+        }
+      );
+    } else {
+      this.router.navigate(['/register']);
+    }
   }
 
   register() {

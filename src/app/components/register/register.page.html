@@ -10,4 +10,25 @@
       <ion-title size="large">register</ion-title>
     </ion-toolbar>
   </ion-header>
+  
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input [(ngModel)]="email" type="email"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="stacked">Password</ion-label>
+      <ion-input [(ngModel)]="password" type="password"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="stacked">Display Name</ion-label>
+      <ion-input [(ngModel)]="displayName" type="text"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-button expand="full" (click)="register()">Register</ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>
