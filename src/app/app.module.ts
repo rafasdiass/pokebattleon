@@ -12,10 +12,15 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { AuthService } from './services/auth.service'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    FormsModule,
     IonicModule.forRoot(), 
     AppRoutingModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
