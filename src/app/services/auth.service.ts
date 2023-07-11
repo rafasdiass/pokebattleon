@@ -1,47 +1,57 @@
-import { Injectable } from '@angular/core';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from '@angular/fire/auth';
-import { User as FirebaseUser } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
-
+import { Injectable, Inject } from '@angular/core';
+import { User, Auth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import { Observable, of } from 'rxjs';
+import { updateProfile } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  auth = getAuth();
-  
-  async signIn(email: string, password: string): Promise<FirebaseUser> {
-    try {
-      const result = await signInWithEmailAndPassword(this.auth, email, password);
-      return result.user;
-    } catch (error) {
-      console.log(error);
-      return Promise.reject(error);
-    }
-  }
+  auth: Auth;
+  user$: Observable<User | null>;
 
-  async register(email: string, password: string): Promise<FirebaseUser> {
-    try {
-      const result = await createUserWithEmailAndPassword(this.auth, email, password);
-      return result.user;
-    } catch (error) {
-      console.log(error);
-      return Promise.reject(error);
-    }
-  }
-
-  async signOut(): Promise<void> {
-    try {
-      await signOut(this.auth);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  getUser(): Observable<FirebaseUser | null> {
-    return new Observable((subscriber) => {
-      const unsubscribe = onAuthStateChanged(this.auth, subscriber);
+  constructor(@Inject(Auth) auth: Auth) {
+    this.auth = auth;
+    this.user$ = new Observable((subscriber) => {
+      const unsubscribe = onAuthStateChanged(this.auth, (user) => subscriber.next(user));
       // Return the unsubscribe function to clean up the listener
       return unsubscribe;
     });
+  }
+
+  signIn(email: string, password: string): Promise<User> {
+    return signInWithEmailAndPassword(this.auth, email, password)
+      .then((userCredential) => userCredential.user)
+      .catch((error) => {
+        console.error(error);
+        return Promise.reject(error);
+      });
+  }
+
+  register(email: string, password: string): Promise<User> {
+    return createUserWithEmailAndPassword(this.auth, email, password)
+      .then((userCredential) => userCredential.user)
+      .catch((error) => {
+        console.error(error);
+        return Promise.reject(error);
+      });
+  }
+
+  signOut(): Promise<void> {
+    return signOut(this.auth)
+      .catch((error) => {
+        console.error(error);
+        return Promise.reject(error);
+      });
+  }
+
+  getUser(): Observable<User | null> {
+    return this.user$;
+  }
+  async updateProfile(user: User, displayName: string): Promise<void> {
+    return updateProfile(user, { displayName })
+      .catch((error) => {
+        console.error(error);
+        return Promise.reject(error);
+      });
   }
 }

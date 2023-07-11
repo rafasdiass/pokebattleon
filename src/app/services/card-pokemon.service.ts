@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { getFirestore, collection, doc, setDoc, updateDoc, getDoc, getDocs } from 'firebase/firestore';
 import { Card } from '../models/card.model';  
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ApipokemonService } from './apipokemon.service';  // Certifique-se de substituir por seu caminho correto
-import { RankingService } from './ranking.service';  // Certifique-se de substituir por seu caminho correto
+import { ApipokemonService } from './apipokemon.service';  
+import { RankingService } from './ranking.service';  
 
 @Injectable({
   providedIn: 'root'

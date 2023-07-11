@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+register() {
+throw new Error('Method not implemented.');
+}
   email: string = '';
   password: string = '';
   errorMessage: string = '';
