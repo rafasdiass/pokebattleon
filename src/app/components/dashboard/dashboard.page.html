@@ -1,32 +1,48 @@
-<ion-content>
-  <ion-card>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Informações do Jogador -->
+  <ion-card *ngIf="(user$ | async) as user">
     <ion-card-header>
-      <ion-card-title>{{(player$ | async)?.name}}</ion-card-title>
+      <ion-card-title>Informações do Jogador</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h2>Ranking: {{(player$ | async)?.wins}}</h2>
-      <h2>Pokémons: {{(pokemons$ | async)?.length}}</h2>
+      <p>Nome: {{user.displayName}}</p>
+      <!-- Adicione mais informações do usuário conforme necessário -->
     </ion-card-content>
   </ion-card>
 
-  <app-ranking></app-ranking>
+  <!-- Ranking -->
+  <ion-card *ngIf="(player$ | async) as player">
+    <ion-card-header>
+      <ion-card-title>Ranking</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Posição: {{player.rank}}</p>
+      <p>Vitórias: {{player.wins}}</p>
+      <!-- Adicione mais informações do ranking conforme necessário -->
+    </ion-card-content>
+  </ion-card>
 
-  <ion-list>
-    <ion-list-header>Pokémons</ion-list-header>
-    <ion-item *ngFor="let pokemon of pokemons$ | async">
-      <app-card-pokemon [pokemon]="pokemon"></app-card-pokemon>
-    </ion-item>
-  </ion-list>
+  <!-- Pokémons no Card -->
+  <ion-card *ngIf="(pokemons$ | async) as pokemons">
+    <ion-card-header>
+      <ion-card-title>Pokémons no Card</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let pokemon of pokemons">
+          <ion-label>{{pokemon.name}}</ion-label>
+          <ion-button color="primary" (click)="selectCard(pokemon)">Selecionar</ion-button>
+          <ion-button color="danger" (click)="removeCard(pokemon)">Remover</ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 
-  <ion-list>
-    <ion-list-header>Selection for the game</ion-list-header>
-    <ion-item *ngFor="let pokemon of (pokemonSelectionService.selectedPokemons$ | async)">
-      <app-card-pokemon [pokemon]="pokemon"></app-card-pokemon>
-      <ion-button (click)="removeCard(pokemon)">Remove</ion-button>
-    </ion-item>
-    <ion-item *ngFor="let pokemon of pokemons$ | async">
-      <ion-button [disabled]="(pokemonSelectionService.selectedPokemons$ | async)?.length >= 5" (click)="selectCard(pokemon)">Select</ion-button>
-      <app-card-pokemon [pokemon]="pokemon"></app-card-pokemon>
-    </ion-item>
-  </ion-list>
 </ion-content>

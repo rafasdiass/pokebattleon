@@ -1,21 +1,24 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { getFirestore, doc, setDoc, updateDoc, getDoc } from "firebase/firestore"; 
 import { Player } from '../models/player.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerService {
+  private firestore = getFirestore();
 
-  constructor(private firestore: AngularFirestore) { }
-
-  // Obter um jogador pelo ID
-  getPlayer(playerId: string) {
-    return this.firestore.collection('players').doc<Player>(playerId).valueChanges();
+  // Get a player by ID
+  async getPlayer(playerId: string): Promise<Player | undefined> {
+    const docRef = doc(this.firestore, 'players', playerId);
+    const docSnap = await getDoc(docRef);
+    
+    return docSnap.exists() ? docSnap.data() as Player : undefined;
   }
 
-  // Atualizar o número de vitórias de um jogador
-  updatePlayerWins(playerId: string, wins: number) {
-    return this.firestore.collection('players').doc(playerId).update({ wins: wins });
+  // Update a player's number of wins
+  async updatePlayerWins(playerId: string, wins: number): Promise<void> {
+    const docRef = doc(this.firestore, 'players', playerId);
+    await updateDoc(docRef, { wins: wins });
   }
 }

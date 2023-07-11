@@ -1,22 +1,27 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { getFirestore, doc, setDoc, updateDoc, getDoc } from '@angular/fire/firestore';
 import { User } from '../models/user.model';
+import { DocumentData } from '@firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private firestore: AngularFirestore) {}
+  firestore = getFirestore();
 
-  getUser(userId: string) {
-    return this.firestore.collection('users').doc<User>(userId).valueChanges();
+  async getUser(userId: string): Promise<User | undefined> {
+    const userDoc = doc(this.firestore, 'users', userId);
+    const userSnap = await getDoc(userDoc);
+    return userSnap.data() as User;
   }
 
-  updateUser(user: User) {
-    return this.firestore.collection('users').doc<User>(user.uid).update(user);
+  async updateUser(user: User): Promise<void> {
+    const userDoc = doc(this.firestore, 'users', user.uid);
+    return updateDoc(userDoc, user as unknown as DocumentData);
   }
 
-  createUser(user: User) {
-    return this.firestore.collection('users').doc<User>(user.uid).set(user);
+  async createUser(user: User): Promise<void> {
+    const userDoc = doc(this.firestore, 'users', user.uid);
+    return setDoc(userDoc, user as unknown as DocumentData);
   }
 }

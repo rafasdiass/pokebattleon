@@ -1,27 +1,28 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { User } from '../models/user.model';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from '@angular/fire/auth';
+import { User as FirebaseUser } from '@angular/fire/auth';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private afAuth: AngularFireAuth) {}
-
-  async signIn(email: string, password: string): Promise<any> {
+  auth = getAuth();
+  
+  async signIn(email: string, password: string): Promise<FirebaseUser> {
     try {
-      const result = await this.afAuth.signInWithEmailAndPassword(email, password);
-      return result;
+      const result = await signInWithEmailAndPassword(this.auth, email, password);
+      return result.user;
     } catch (error) {
       console.log(error);
       return Promise.reject(error);
     }
   }
 
-  async register(email: string, password: string): Promise<any> {
+  async register(email: string, password: string): Promise<FirebaseUser> {
     try {
-      const result = await this.afAuth.createUserWithEmailAndPassword(email, password);
-      return result;
+      const result = await createUserWithEmailAndPassword(this.auth, email, password);
+      return result.user;
     } catch (error) {
       console.log(error);
       return Promise.reject(error);
@@ -30,13 +31,17 @@ export class AuthService {
 
   async signOut(): Promise<void> {
     try {
-      await this.afAuth.signOut();
+      await signOut(this.auth);
     } catch (error) {
       console.log(error);
     }
   }
 
-  getUser() {
-    return this.afAuth.user;
+  getUser(): Observable<FirebaseUser | null> {
+    return new Observable((subscriber) => {
+      const unsubscribe = onAuthStateChanged(this.auth, subscriber);
+      // Return the unsubscribe function to clean up the listener
+      return unsubscribe;
+    });
   }
 }

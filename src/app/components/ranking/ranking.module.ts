@@ -15,6 +15,7 @@ import { RankingPage } from './ranking.page';
     IonicModule,
     RankingPageRoutingModule
   ],
-  declarations: [RankingPage]
+  declarations: [RankingPage],
+  exports: [RankingPage], 
 })
 export class RankingPageModule {}

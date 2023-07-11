@@ -15,7 +15,7 @@ export class GameBoardService {
 
   // Carregar o jogador e seus Pokémons
   async loadPlayer(playerId: string) {
-    const player = await this.playerService.getPlayer(playerId).toPromise();
+    const player = await this.playerService.getPlayer(playerId);
     if (!player) {
       throw new Error(`Player with ID ${playerId} not found`);
     }

@@ -7,7 +7,7 @@ import { PokemonSelectionService } from '../../services/pokemon-selection.servic
 import { Card } from '../../models/card.model';
 import { User } from '../../models/user.model';
 import { Player } from '../../models/player.model';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,27 +15,37 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
-  user$: Observable<User | undefined> = of();
-  player$: Observable<Player | undefined> = of();
-  pokemons$: Observable<Card[]> = of([]);
+  private userSubject = new BehaviorSubject<User | undefined>(undefined);
+  user$ = this.userSubject.asObservable();
+  
+  private playerSubject = new BehaviorSubject<Player | undefined>(undefined);
+  player$ = this.playerSubject.asObservable();
+  
+  private pokemonsSubject = new BehaviorSubject<Card[]>([]);
+  pokemons$ = this.pokemonsSubject.asObservable();
 
   constructor(
-    private authService: AuthService,
-    private userService: UserService,
-    private playerService: PlayerService,
-    private cardPokemonService: CardPokemonService,
-    private pokemonSelectionService: PokemonSelectionService,
+    public authService: AuthService,
+    public userService: UserService,
+    public playerService: PlayerService,
+    public cardPokemonService: CardPokemonService,
+    public pokemonSelectionService: PokemonSelectionService,
   ) {}
-
-  ngOnInit() {
-    this.authService.getUser().subscribe(user => {
+  async ngOnInit() {
+    this.authService.getUser().subscribe(async user => {
       if (user) {
-        this.user$ = this.userService.getUser(user.uid);
-        this.player$ = this.playerService.getPlayer(user.uid);
-        this.pokemons$ = this.cardPokemonService.getCard(user.uid);
+        const userResult = await this.userService.getUser(user.uid);
+        this.userSubject.next(userResult);
+        
+        const playerResult = await this.playerService.getPlayer(user.uid);
+        this.playerSubject.next(playerResult);
+        
+        const cardResult = await this.cardPokemonService.getCard(user.uid);
+        this.pokemonsSubject.next(cardResult);
       }
     });
   }
+  
 
   selectCard(card: Card) {
     this.pokemonSelectionService.selectPokemon(card);
@@ -44,5 +54,4 @@ export class DashboardPage implements OnInit {
   removeCard(card: Card) {
     this.pokemonSelectionService.removePokemon(card);
   }
-
 }

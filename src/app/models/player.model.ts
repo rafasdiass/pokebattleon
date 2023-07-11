@@ -5,6 +5,7 @@ export class Player {
     public uid: string,
     public name: string,
     public wins: number,
-    public cards: Card[]
+    public cards: Card[],
+    public rank: number
   ) {}
 }

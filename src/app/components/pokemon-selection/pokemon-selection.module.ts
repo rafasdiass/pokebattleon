@@ -15,6 +15,7 @@ import { PokemonSelectionPage } from './pokemon-selection.page';
     IonicModule,
     PokemonSelectionPageRoutingModule
   ],
-  declarations: [PokemonSelectionPage]
+  declarations: [PokemonSelectionPage],
+  exports: [PokemonSelectionPage], 
 })
 export class PokemonSelectionPageModule {}

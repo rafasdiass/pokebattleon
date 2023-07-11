@@ -15,6 +15,7 @@ import { CardPage } from './card.page';
     IonicModule,
     CardPageRoutingModule
   ],
-  declarations: [CardPage]
+  declarations: [CardPage],
+  exports: [CardPage], 
 })
 export class CardPageModule {}
