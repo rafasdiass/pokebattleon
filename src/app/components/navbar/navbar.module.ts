@@ -15,6 +15,7 @@ import { NavbarPage } from './navbar.page';
     IonicModule,
     NavbarPageRoutingModule
   ],
-  declarations: [NavbarPage]
+  declarations: [NavbarPage],
+  exports: [NavbarPage]
 })
 export class NavbarPageModule {}

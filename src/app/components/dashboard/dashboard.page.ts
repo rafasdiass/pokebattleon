@@ -30,7 +30,9 @@ export class DashboardPage implements OnInit {
     public playerService: PlayerService,
     public cardPokemonService: CardPokemonService,
     public pokemonSelectionService: PokemonSelectionService,
+    
   ) {}
+  isLoggedIn: boolean=true;
   
   async ngOnInit() {
     this.authService.getUser().subscribe(async user => {

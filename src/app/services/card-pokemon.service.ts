@@ -22,53 +22,39 @@ export class CardPokemonService {
 
     return pokemons;
   }
-  async getCard(playerId: string): Promise<Card[]> {
-    const cardCollection = collection(this.db, 'players', playerId, 'pokemons');
-    const cardIds = await getDocs(cardCollection);
-  
-    const cardData: Card[] = [];
-  
-    for (const cardId of cardIds.docs) {
-      const pokemonCollection = collection(cardCollection, cardId.id, 'pokemon');
-      const pokemonDocs = await getDocs(pokemonCollection);
-  
-      pokemonDocs.docs.forEach((doc) => {
-        const pokemonData = doc.data();
-        cardData.push(new Card(
-          Number(pokemonData['id']) || 0,
-          pokemonData['name'] || '',
-          pokemonData['imageUrl'] || '',
-          Number(pokemonData['hp']) || 0,
-          Number(pokemonData['attack']) || 0,
-          Number(pokemonData['defense']) || 0,
-          Number(pokemonData['specialAttack']) || 0,
-          Number(pokemonData['specialDefense']) || 0,
-          Number(pokemonData['speed']) || 0
-        ));
-      });
-    }
-  
-    return cardData;
+
+  async getCard(userId: string): Promise<Card[]> {
+    const pokemonsSnap = await getDocs(collection(this.db, 'users', userId, 'pokemons'));
+    const pokemonsData = pokemonsSnap.docs.map((doc) => {
+      const pokemonData = doc.data();
+      return new Card(
+        Number(pokemonData['id']) || 0,
+        pokemonData['name'] || '',
+        pokemonData['imageUrl'] || '',
+        Number(pokemonData['hp']) || 0,
+        Number(pokemonData['attack']) || 0,
+        Number(pokemonData['defense']) || 0,
+        Number(pokemonData['specialAttack']) || 0,
+        Number(pokemonData['specialDefense']) || 0,
+        Number(pokemonData['speed']) || 0
+      );
+    });
+    return pokemonsData;
   }
-  
 
   async getPokemonsFromCard(userId: string): Promise<any[]> {
     const cardSnap = await getDocs(collection(this.db, 'users', userId, 'pokemons'));
     const pokemons = cardSnap.docs.map((doc) => doc.data());
-
-    // Adicione este log para verificar os dados retornados
     console.log('Pokemons from card:', pokemons);
-
     return pokemons;
-}
-
+  }
 
   async updateUserCard(userId: string, cardData: any): Promise<void> {
-    const userDoc = collection(this.db, 'users', userId, 'pokemons');
+    const pokemonsCollection = collection(this.db, 'users', userId, 'pokemons');
   
     if (Array.isArray(cardData.pokemons)) {
       for (const pokemon of cardData.pokemons) {
-        await setDoc(doc(userDoc), pokemon);
+        await setDoc(doc(pokemonsCollection, pokemon.id.toString()), pokemon);
       }
     } else {
       console.error('cardData.pokemons is not an array:', cardData.pokemons);

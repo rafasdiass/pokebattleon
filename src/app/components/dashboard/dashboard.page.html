@@ -1,6 +1,8 @@
+<app-navbar *ngIf="isLoggedIn"></app-navbar>
 <ion-header>
   <ion-toolbar>
     <ion-title>Dashboard</ion-title>
+   
   </ion-toolbar>
 </ion-header>
 
@@ -28,8 +30,7 @@
       <!-- Adicione mais informações do ranking conforme necessário -->
     </ion-card-content>
   </ion-card>
-
- <!-- Pokémons no Card -->
+<!-- Pokémons no Card -->
 <ion-card *ngIf="(pokemons$ | async) as pokemons">
   <ion-card-header>
     <ion-card-title>Pokémons no Card</ion-card-title>
@@ -37,6 +38,7 @@
   <ion-card-content>
     <ion-list>
       <ion-item *ngFor="let pokemon of pokemons">
+        <img [src]="pokemon.imageUrl" alt="{{pokemon.name}} image"> <!-- Adicionado a tag de imagem -->
         <ion-label>
           <p>Nome: {{pokemon.name}}</p>
           <p>HP: {{pokemon.hp}}</p>
@@ -52,6 +54,7 @@
     </ion-list>
   </ion-card-content>
 </ion-card>
+
 
 
 </ion-content>

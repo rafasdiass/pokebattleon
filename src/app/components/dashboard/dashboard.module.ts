@@ -5,15 +5,17 @@ import { IonicModule } from '@ionic/angular';
 import { DashboardPageRoutingModule } from './dashboard-routing.module';
 import { DashboardPage } from './dashboard.page';
 import { AuthService } from '../../services/auth.service'; // Substitua pelo caminho correto para o AuthService
+import { NavbarPageModule } from '../navbar/navbar.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DashboardPageRoutingModule
+    DashboardPageRoutingModule,
+    NavbarPageModule
   ],
   declarations: [DashboardPage],
-  providers: [AuthService] // Provedor do AuthService
+  providers: [AuthService] 
 })
 export class DashboardPageModule {}

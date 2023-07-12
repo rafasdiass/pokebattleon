@@ -1,0 +1,17 @@
+ion-item[clickable] {
+    cursor: pointer;
+  }
+  ion-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  
+    ion-item {
+      cursor: pointer;
+  
+      &:hover {
+        background-color: #f3f3f3;  // A cor de fundo quando o mouse passar sobre um item. Ajuste conforme necessário.
+      }
+    }
+  }
+  

@@ -14,6 +14,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { AuthService } from './services/auth.service'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { AuthGuard } from './services/auth.guard';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +29,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, AuthService],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    AuthService,
+    AuthGuard //  Adicione o AuthGuard aos providers  
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
