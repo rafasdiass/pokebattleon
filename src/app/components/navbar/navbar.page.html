@@ -1,33 +1,29 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      PokeBattler
-    </ion-title>
- 
-<!-- <ion-content> -->
+    <ion-title>PokeBattler</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 
   <ion-list>
     <ion-item *ngIf="isLoggedIn" (click)="navigateToDashboard()">
       <ion-icon name="grid-outline" slot="start"></ion-icon>
-      <ion-label>Dashboard</ion-label>
+      <ion-button expand="full" fill="outline">Dashboard</ion-button>
     </ion-item>
 
     <ion-item *ngIf="isLoggedIn" (click)="navigateToPokemonGym()">
       <ion-icon name="game-controller-outline" slot="start"></ion-icon>
-      <ion-label>Ginásio Pokémon</ion-label>
+      <ion-button expand="full" fill="outline">Ginásio Pokémon</ion-button>
     </ion-item>
 
     <ion-item *ngIf="!isLoggedIn">
       <ion-icon name="log-in-outline" slot="start"></ion-icon>
-      <ion-label>Entrar</ion-label>
+      <ion-button expand="full" fill="outline">Entrar</ion-button>
     </ion-item>
 
     <ion-item *ngIf="isLoggedIn" (click)="logout()">
       <ion-icon name="log-out-outline" slot="start"></ion-icon>
-      <ion-label>Sair</ion-label>
+      <ion-button expand="full" fill="outline">Sair</ion-button>
     </ion-item>
   </ion-list>
-</ion-toolbar>
-</ion-header>
 
-<!-- </ion-content> -->
