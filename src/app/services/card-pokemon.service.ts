@@ -11,6 +11,17 @@ export class CardPokemonService {
   private db = getFirestore();
 
   constructor(private apiPokemonService: ApipokemonService, private rankingService: RankingService) { }
+ 
+  async getRandomPokemon(count: number = 1): Promise<Card[]> {
+    const pokemons: Card[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const pokemon = await this.apiPokemonService.getRandomPokemon();
+      pokemons.push(pokemon);
+    }
+
+    return pokemons;
+  }
 
   async getCard(playerId: string): Promise<Card[]> {
     const cardSnap = await getDocs(collection(this.db, 'players', playerId, 'pokemons'));
@@ -50,22 +61,20 @@ export class CardPokemonService {
     let pokemons: any[] = await this.getPokemonsFromCard(userId);
     console.log('Existing Pokemons:', pokemons);
 
-    if (pokemons && pokemons.length < 3) {
-      let randomPokemon = await this.apiPokemonService.getRandomPokemon();
-      console.log('Random Pokemon Data:', randomPokemon);
+    let randomPokemon = await this.apiPokemonService.getRandomPokemon();
+    console.log('Random Pokemon Data:', randomPokemon);
 
-      // Convert the Card object to a basic JavaScript object
-      let randomPokemonData = randomPokemon.toFirestore();
+    // Convert the Card object to a basic JavaScript object
+    let randomPokemonData = randomPokemon.toFirestore();
 
-      pokemons.push(randomPokemonData);
+    pokemons.push(randomPokemonData);
 
-      let cardData = {
+    let cardData = {
         pokemons
-      };
+    };
 
-      await this.updateUserCard(userId, cardData);
-      console.log('Pokemons successfully added to the user card.');
-    }
+    await this.updateUserCard(userId, cardData);
+    console.log('Pokemons successfully added to the user card.');
   }
 
   selectCard(playerId: string, cardId: string): Promise<void> {

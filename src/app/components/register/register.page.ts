@@ -41,7 +41,7 @@ export class RegisterPage implements OnInit {
       const { email, password, displayName } = this.registerForm.value;
 
       // Register user with Firebase Auth
-      const firebaseUser = await this.authService.register(email, password);
+      const firebaseUser = await this.authService.register(email, password, displayName);
 
       if (firebaseUser) {
         console.log('User successfully registered with Firebase.');
@@ -53,11 +53,7 @@ export class RegisterPage implements OnInit {
           displayName
         );
 
-        const userData = {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName
-        };
+        const userData = user.toFirestore();
 
         await this.userService.createUser(userData);
 

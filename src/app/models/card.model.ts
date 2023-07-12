@@ -42,4 +42,5 @@ export class Card {
       speed: this.speed
     };
   }
+  
 }

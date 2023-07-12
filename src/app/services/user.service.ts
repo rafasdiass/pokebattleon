@@ -12,7 +12,12 @@ export class UserService {
   async getUser(userId: string): Promise<User | undefined> {
     const userDoc = doc(this.firestore, 'users', userId);
     const userSnap = await getDoc(userDoc);
-    return userSnap.data() as User;
+    if (userSnap.exists()) {
+      return userSnap.data() as User;
+    } else {
+      console.log(`Nenhum usuário encontrado para o ID: ${userId}`);
+      return undefined;
+    }
   }
 
   async updateUser(user: User): Promise<void> {

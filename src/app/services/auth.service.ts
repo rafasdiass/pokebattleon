@@ -1,16 +1,19 @@
 import { Injectable, Inject } from '@angular/core';
-import { User, Auth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from '@angular/fire/auth';
-import { Observable, of } from 'rxjs';
-import { updateProfile } from '@angular/fire/auth';
+import { User as FirebaseUser, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, Auth } from '@angular/fire/auth';
+import { Observable } from 'rxjs';
+import { CardPokemonService } from './card-pokemon.service';
+import { UserService } from './user.service';
+import { User } from '../models/user.model';
+import { Firestore } from '@angular/fire/firestore';
+import { setDoc, doc } from 'firebase/firestore';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  auth: Auth;
-  user$: Observable<User | null>;
+  user$: Observable<FirebaseUser | null>;
 
-  constructor(@Inject(Auth) auth: Auth) {
-    this.auth = auth;
+  constructor(@Inject(Auth) public auth: Auth, private cardPokemonService: CardPokemonService, private userService: UserService, private db: Firestore) {
     this.user$ = new Observable((subscriber) => {
       const unsubscribe = onAuthStateChanged(this.auth, (user) => subscriber.next(user));
       // Return the unsubscribe function to clean up the listener
@@ -18,7 +21,7 @@ export class AuthService {
     });
   }
 
-  signIn(email: string, password: string): Promise<User> {
+  signIn(email: string, password: string): Promise<FirebaseUser> {
     return signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => userCredential.user)
       .catch((error) => {
@@ -27,14 +30,35 @@ export class AuthService {
       });
   }
 
-  register(email: string, password: string): Promise<User> {
-    return createUserWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => userCredential.user)
-      .catch((error) => {
-        console.error(error);
-        return Promise.reject(error);
-      });
+  async register(email: string, password: string, displayName: string): Promise<FirebaseUser> {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      const firebaseUser = userCredential.user;
+  
+      if (firebaseUser && firebaseUser.email) { // Check if email is not null
+        // Update user profile with displayName
+        await updateProfile(firebaseUser, { displayName });
+  
+        // Create a new user document in Firestore
+        const user = new User(firebaseUser.uid, firebaseUser.email, displayName);
+        await setDoc(doc(this.db, 'users', firebaseUser.uid), user.toFirestore());
+  
+        // Get 5 random Pokemons
+        const randomPokemons = await this.cardPokemonService.getRandomPokemon(5);
+  
+        // Save each Pokemon to the user's Pokemon collection
+        for (const pokemon of randomPokemons) {
+            await this.cardPokemonService.updateUserCard(firebaseUser.uid, pokemon);
+        }
+      }
+  
+      return firebaseUser;
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(error);
+    }
   }
+  
 
   signOut(): Promise<void> {
     return signOut(this.auth)
@@ -44,10 +68,11 @@ export class AuthService {
       });
   }
 
-  getUser(): Observable<User | null> {
+  getUser(): Observable<FirebaseUser | null> {
     return this.user$;
   }
-  async updateProfile(user: User, displayName: string): Promise<void> {
+  
+  async updateProfile(user: FirebaseUser, displayName: string): Promise<void> {
     return updateProfile(user, { displayName })
       .catch((error) => {
         console.error(error);
