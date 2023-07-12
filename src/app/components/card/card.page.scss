@@ -1,0 +1,32 @@
+ion-content {
+    ion-card {
+      margin: 10px;
+      text-align: center;
+  
+      ion-img {
+        max-height: 300px;
+        object-fit: cover;
+      }
+  
+      ion-card-header {
+        ion-card-title {
+          font-size: 20px;
+          font-weight: bold;
+        }
+      }
+  
+      ion-card-content {
+        ion-list {
+          ion-item {
+            display: flex;
+            justify-content: space-between;
+  
+            ion-label:last-child {
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+  
