@@ -38,6 +38,6 @@ export class CardPage implements OnInit {
           console.log('Pokemon Card Selected:', this.pokemon);
         }
       }
-    }
+     } 
   }
 }

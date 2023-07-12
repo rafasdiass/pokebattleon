@@ -48,7 +48,7 @@ export class AuthService {
   
         // Save each Pokemon to the user's Pokemon collection
         for (const pokemon of randomPokemons) {
-            await this.cardPokemonService.updateUserCard(firebaseUser.uid, pokemon);
+            await this.cardPokemonService.updateUserCard(firebaseUser.uid, pokemon.toFirestore());
         }
       }
   
