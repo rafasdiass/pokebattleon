@@ -29,20 +29,29 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Pokémons no Card -->
-  <ion-card *ngIf="(pokemons$ | async) as pokemons">
-    <ion-card-header>
-      <ion-card-title>Pokémons no Card</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let pokemon of pokemons">
-          <ion-label>{{pokemon.name}}</ion-label>
-          <ion-button color="primary" (click)="selectCard(pokemon)">Selecionar</ion-button>
-          <ion-button color="danger" (click)="removeCard(pokemon)">Remover</ion-button>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+ <!-- Pokémons no Card -->
+<ion-card *ngIf="(pokemons$ | async) as pokemons">
+  <ion-card-header>
+    <ion-card-title>Pokémons no Card</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list>
+      <ion-item *ngFor="let pokemon of pokemons">
+        <ion-label>
+          <p>Nome: {{pokemon.name}}</p>
+          <p>HP: {{pokemon.hp}}</p>
+          <p>Ataque: {{pokemon.attack}}</p>
+          <p>Defesa: {{pokemon.defense}}</p>
+          <p>Ataque Especial: {{pokemon.specialAttack}}</p>
+          <p>Defesa Especial: {{pokemon.specialDefense}}</p>
+          <p>Velocidade: {{pokemon.speed}}</p>
+        </ion-label>
+        <ion-button color="primary" (click)="selectCard(pokemon)">Selecionar</ion-button>
+        <ion-button color="danger" (click)="removeCard(pokemon)">Remover</ion-button>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
+
 
 </ion-content>
