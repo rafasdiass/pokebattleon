@@ -34,13 +34,18 @@ export class DashboardPage implements OnInit {
   async ngOnInit() {
     this.authService.getUser().subscribe(async user => {
       if (user) {
+        console.log("User authenticated: ", user);  // Log the authenticated user
+
         const userResult = await this.userService.getUser(user.uid);
+        console.log("User data: ", userResult);  // Log user data
         this.userSubject.next(userResult);
         
         const playerResult = await this.playerService.getPlayer(user.uid);
+        console.log("Player data: ", playerResult);  // Log player data
         this.playerSubject.next(playerResult);
         
         const cardResult = await this.cardPokemonService.getCard(user.uid);
+        console.log("Pokemons: ", cardResult);  // Log pokemons
         this.pokemonsSubject.next(cardResult);
       }
     });

@@ -1,36 +1,45 @@
-
+import { PokemonDetails } from './pokemondetails.model';
 
 export class Card {
-    public id: string;              // ID do Pokémon
-    public name: string;            // Nome do Pokémon
-    public imageUrl: string;        // URL da imagem do Pokémon
-    public hp: number;              // Pontos de vida do Pokémon
-    public attack: number;          // Ataque do Pokémon
-    public defense: number;         // Defesa do Pokémon
-    public specialAttack: number;   // Ataque especial do Pokémon
-    public specialDefense: number;  // Defesa especial do Pokémon
-    public speed: number;           // Velocidade do Pokémon
-  
-    constructor(
-      id: string,
-      name: string,
-      imageUrl: string,
-      hp: number,
-      attack: number,
-      defense: number,
-      specialAttack: number,
-      specialDefense: number,
-      speed: number
-    ) {
-      this.id = id;
-      this.name = name;
-      this.imageUrl = imageUrl;
-      this.hp = hp;
-      this.attack = attack;
-      this.defense = defense;
-      this.specialAttack = specialAttack;
-      this.specialDefense = specialDefense;
-      this.speed = speed;
-    }
+  [key: string]: number | string | Function;
+
+  constructor(
+    public id: number,
+    public name: string,
+    public imageUrl: string,
+    public hp: number,
+    public attack: number,
+    public defense: number,
+    public specialAttack: number,
+    public specialDefense: number,
+    public speed: number
+  ) {}
+
+  static fromPokemonDetails(pokemonDetails: PokemonDetails): Card {
+    return new Card(
+      pokemonDetails.id,
+      pokemonDetails.name,
+      pokemonDetails.sprites.front_default,
+      pokemonDetails.stats.find((stat) => stat.stat.name === 'hp')?.base_stat || 0,
+      pokemonDetails.stats.find((stat) => stat.stat.name === 'attack')?.base_stat || 0,
+      pokemonDetails.stats.find((stat) => stat.stat.name === 'defense')?.base_stat || 0,
+      pokemonDetails.stats.find((stat) => stat.stat.name === 'special-attack')?.base_stat || 0,
+      pokemonDetails.stats.find((stat) => stat.stat.name === 'special-defense')?.base_stat || 0,
+      pokemonDetails.stats.find((stat) => stat.stat.name === 'speed')?.base_stat || 0
+    );
   }
-  
+
+  toFirestore(): any {
+    return {
+      id: this.id,
+      name: this.name,
+      imageUrl: this.imageUrl,
+      hp: this.hp,
+      attack: this.attack,
+      defense: this.defense,
+      specialAttack: this.specialAttack,
+      specialDefense: this.specialDefense,
+      speed: this.speed
+    };
+  }
+}

@@ -19,19 +19,23 @@ export class CardPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('CardPage Component Initialized');
     if (!this.pokemon) {
       this.loadPlayerPokemon();
     }
   }
 
   async loadPlayerPokemon() {
+    console.log('Loading Player Pokemon');
     if (this.playerId) {
       let playerData: Player | undefined = await this.playerService.getPlayer(this.playerId);
       
       if (playerData) {
         let player: Player = playerData;
+        console.log('Player Data:', player);
         if (player.cards && player.cards.length > 0) {
           this.pokemon = player.cards[0]; // Assume que a primeira carta da lista é a ativa
+          console.log('Pokemon Card Selected:', this.pokemon);
         }
       }
     }

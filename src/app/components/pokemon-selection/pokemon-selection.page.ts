@@ -31,10 +31,10 @@ export class PokemonSelectionPage implements OnInit {
     // Define a carta selecionada
     this.selectedCard = card;
     console.log("Card selecionado:", card);
-
+  
     // Atualizar a seleção no Firestore
     if (this.user) {
-      await this.cardPokemonService.selectCard(this.user.uid, card.id);
+      await this.cardPokemonService.selectCard(this.user.uid, String(card.id));
       console.log("Card selecionado salvo no Firestore");
     }
   }

@@ -30,7 +30,9 @@ export class LoginPage implements OnInit {
       const formValue = this.loginForm.value;
       this.authService.signIn(formValue.email, formValue.password).then(
         () => {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/dashboard']);
+          console.log('Login successful');  
+        
         },
         (error: any) => {
           console.log(error);
