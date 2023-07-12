@@ -1,0 +1,81 @@
+app-navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+  }
+  
+  ion-header {
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  ion-toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  ion-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  ion-content {
+    ion-padding {
+      padding: 20px;
+    }
+  }
+  
+  ion-card {
+    margin-bottom: 20px;
+    color: #fcfcfc; 
+    ion-card-header {
+      background-color: #f4f4f4;
+      border-bottom: 1px solid #f50000;
+        
+      padding: 10px;
+  
+      ion-card-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0;
+        color: #001167; 
+      }
+    }
+  
+    ion-card-content {
+      padding: 10px;
+  
+      p {
+        margin: 5px 0;
+      }
+    }
+  }
+  
+  ion-list {
+    ion-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+  
+      img {
+        width: 80px;
+        height: 80px;
+        margin-right: 10px;
+        border-radius: 50%;
+      }
+  
+      ion-label {
+        flex: 1;
+  
+        p {
+          margin: 5px 0;
+        }
+      }
+  
+      ion-button {
+        margin-left: 10px;
+      }
+    }
+  }
+  
