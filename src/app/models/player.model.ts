@@ -4,8 +4,8 @@ export class Player {
   constructor(
     public uid: string,
     public name: string,
-    public wins: number,
     public cards: Card[],
-    public rank: number
+    public wins?: number,   // "wins" é opcional e vem depois dos parâmetros obrigatórios
+    public rank?: number    // "rank" é opcional e vem depois dos parâmetros obrigatórios
   ) {}
 }
