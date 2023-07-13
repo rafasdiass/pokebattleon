@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router'; // Adicione este import
 import { Player } from '../../models/player.model';
 import { BehaviorSubject } from 'rxjs';
+import { GameBoardService } from '../../services/game-board.service';
 
 @Component({
   selector: 'app-player',
@@ -20,7 +21,8 @@ export class PlayerPage implements OnInit {
   constructor(
     private playerService: PlayerService, 
     private authService: AuthService, 
-    private router: Router // Injete o Router
+    private router: Router, // Injete o Router
+    private gameBoardService: GameBoardService
   ) {}
 
   async ngOnInit() {
@@ -34,6 +36,9 @@ export class PlayerPage implements OnInit {
           if (playerResult) {
             console.log("Player data: ", playerResult);
             this.playerSubject.next(playerResult);
+
+            // Load the player into the game
+            await this.gameBoardService.loadPlayer(user.uid);
           } else {
             // console.log("Player data not loaded");
             // alert('Failed to load player data'); 

@@ -15,9 +15,10 @@ import { AuthService } from './services/auth.service'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthGuard } from './services/auth.guard';
+import { ComputerplayerPipe } from './components/computerplayer.pipe';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ComputerplayerPipe],
   imports: [
     BrowserModule,
     ReactiveFormsModule,

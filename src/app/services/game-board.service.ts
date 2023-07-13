@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { PlayerService } from './player.service';
+import { ComputerPlayerService } from './computer-player.service';
 import { Card } from '../models/card.model';
 import { Player } from '../models/player.model';
 
@@ -9,60 +11,81 @@ import { Player } from '../models/player.model';
 export class GameBoardService {
   private currentPlayer: 'user' | 'computer' = 'user';
   private user: Player | null = null;
-  private computerCard: Card | null = null;
+  private computerPlayer$ = new BehaviorSubject(this.computerPlayerService.getComputerPlayer());
 
-  constructor(private playerService: PlayerService) { }
+  private _userPlayer$ = new BehaviorSubject<Player | null>(null);
+  
+  get userPlayer$() {
+    return this._userPlayer$.asObservable();
+  }
 
-  // Carregar o jogador e seus Pokémons
+  get computerPlayerObservable() {
+    return this.computerPlayer$.asObservable();
+  }
+
+  constructor(
+    private playerService: PlayerService,
+    private computerPlayerService: ComputerPlayerService
+  ) { }
+
   async loadPlayer(playerId: string) {
     const player = await this.playerService.getPlayer(playerId);
     if (!player) {
       throw new Error(`Player with ID ${playerId} not found`);
     }
     this.user = player;
+    this._userPlayer$.next(player);
   }
 
-  // Configuração inicial do jogo
-  setGame(computerCard: Card) {
+  setGame(computerCards: Card[]) {
     if (this.user && this.user.cards.length > 0) {
-      this.computerCard = computerCard;
+      this.computerPlayerService.getComputerPlayer().cards = computerCards;
       this.currentPlayer = 'user';
+      this.computerPlayer$.next(this.computerPlayerService.getComputerPlayer());
     } else {
       throw new Error('User has no cards');
     }
   }
 
-  // Selecionar um atributo do card para a batalha
+  generateComputerPlayer() {
+    this.computerPlayerService.init();
+    this.computerPlayer$.next(this.computerPlayerService.getComputerPlayer());
+  }
+
   async selectAttribute(attribute: keyof Card) {
-    if (this.currentPlayer === 'user' && this.user && this.computerCard) {
+    if (this.currentPlayer === 'user' && this.user && this.computerPlayerService.getComputerPlayer().cards.length > 0) {
       const userCard = this.user.cards[0];
       const userAttribute = userCard[attribute];
-      const computerAttribute = this.computerCard[attribute];
+      const computerCard = this.computerPlayerService.getComputerPlayer().cards[0];
+      const computerAttribute = computerCard[attribute];
 
-      // Comparar atributos e decidir o vencedor
       if (userAttribute > computerAttribute) {
-        this.user.wins++;
-        await this.playerService.updatePlayerWins(this.user.uid, this.user.wins);
-      } else {
-        // Computador vence o turno
-        this.currentPlayer = 'computer';
-      }
-
-      // Remover o cartão usado da mão do usuário
-      this.user.cards.shift();
-
-      // Verificar se o usuário ainda tem cartões
-      if (this.user.cards.length === 0) {
-        // Fim do jogo, computar vitória para o outro jogador
-        if (this.currentPlayer === 'user') {
+        if (typeof this.user.wins === 'number') {
           this.user.wins++;
           await this.playerService.updatePlayerWins(this.user.uid, this.user.wins);
         }
-        // Resetar o jogo ou encerrar a sessão
+        this.computerPlayerService.getComputerPlayer().cards.shift();
+      } else {
+        this.computerPlayerService.getComputerPlayer().wins++;
+        this.currentPlayer = 'computer';
+        if (this.user && this.user.cards.length > 0) {
+          this.user.cards.shift();
+        }
+      }
+
+      if (this.user && this.user.cards.length === 0 || this.computerPlayerService.getComputerPlayer().cards.length === 0) {
+        if (this.currentPlayer === 'user' && typeof this.user.wins === 'number') {
+          this.user.wins++;
+          await this.playerService.updatePlayerWins(this.user.uid, this.user.wins);
+        } else {
+          this.computerPlayerService.getComputerPlayer().wins++;
+        }
         this.user = null;
-        this.computerCard = null;
+        this.computerPlayerService.getComputerPlayer().cards = [];
         this.currentPlayer = 'user';
       }
+    } else if (this.currentPlayer === 'computer') {
+      // Aqui você pode adicionar a lógica para a jogada do computador
     }
   }
 }

@@ -25,6 +25,9 @@ export class ComputerPlayerService {
   }
 
   playCard(): Card | undefined {
+    // The computer player will use its strategy to choose the attribute to play
+    const chosenStat = this.computerPlayer.maximizeStatStrategy();
+    console.log('ComputerPlayer chosen stat:', chosenStat);  // Log the chosen stat
     return this.computerPlayer.playCard();
   }
 

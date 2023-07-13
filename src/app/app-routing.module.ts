@@ -43,6 +43,10 @@ const routes: Routes = [
     path: 'pokemon-selection',
     loadChildren: () => import('./components/pokemon-selection/pokemon-selection.module').then( m => m.PokemonSelectionPageModule)
   },
+  {
+    path: 'computerplayer',
+    loadChildren: () => import('./components/computerplayer/computerplayer.module').then( m => m.ComputerplayerPageModule)
+  },
   
 ];
 
