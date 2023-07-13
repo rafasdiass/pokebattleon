@@ -15,7 +15,9 @@ export class NavbarPage implements OnInit {
   ngOnInit() {
     this.authService.user$.subscribe(user => {
       this.isLoggedIn = !!user;
-      this.router.navigate(['/login']);
+      if (!this.isLoggedIn) {
+        this.router.navigate(['/login']);
+      }
       console.log('isLoggedIn:', this.isLoggedIn);
     });
   }
