@@ -25,6 +25,9 @@ export class PlayerPage implements OnInit {
 
   async ngOnInit() {
     this.authService.getUser().subscribe(async user => {
+      if (user !== null) {
+      console.log('User ID: ', user.uid); 
+    
       if (user) {
         try {
           const playerResult = await this.playerService.getPlayer(user.uid);
@@ -32,17 +35,18 @@ export class PlayerPage implements OnInit {
             console.log("Player data: ", playerResult);
             this.playerSubject.next(playerResult);
           } else {
-            console.log("Player data not loaded");
-            alert('Failed to load player data'); // Adicione uma mensagem de alerta ao usuário
+            // console.log("Player data not loaded");
+            // alert('Failed to load player data'); 
           }
         } catch (error) {
           console.error("Error while fetching player data: ", error);
-          alert('An error occurred while fetching player data'); // Adicione uma mensagem de alerta ao usuário
+          alert('An error occurred while fetching player data'); 
         }
       } else {
         console.log('User not authenticated');
         this.router.navigate(['/login']); // Redirecione para a página de login
       }
+    }
     });
   }
 }
