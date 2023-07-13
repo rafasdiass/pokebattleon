@@ -6,6 +6,11 @@ ion-card {
       font-family: 'Pokemon Solid', sans-serif;
       color: #ff6347; /* Este é um tom de laranja, mas você pode escolher qualquer cor que preferir. */
     }
+    .pokebola-image {
+      width: 30px; /* Ajuste o tamanho da imagem de acordo com suas preferências */
+      height: 30px; /* Ajuste o tamanho da imagem de acordo com suas preferências */
+      margin-right: 10px; /* Ajuste a margem à direita para separar a imagem do texto */
+    }
   }
 
   ion-list {
