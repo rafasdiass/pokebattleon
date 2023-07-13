@@ -6,6 +6,8 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 import { DashboardPage } from './dashboard.page';
 import { AuthService } from '../../services/auth.service'; // Substitua pelo caminho correto para o AuthService
 import { NavbarPageModule } from '../navbar/navbar.module';
+import { PlayerPageModule } from '../player/player.module';
+import { CardPageModule } from '../card/card.module';
 
 @NgModule({
   imports: [
@@ -13,7 +15,9 @@ import { NavbarPageModule } from '../navbar/navbar.module';
     FormsModule,
     IonicModule,
     DashboardPageRoutingModule,
-    NavbarPageModule
+    NavbarPageModule,
+    PlayerPageModule,
+    CardPageModule
   ],
   declarations: [DashboardPage],
   providers: [AuthService] 

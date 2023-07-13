@@ -15,6 +15,7 @@ import { PlayerPage } from './player.page';
     IonicModule,
     PlayerPageRoutingModule
   ],
-  declarations: [PlayerPage]
+  declarations: [PlayerPage],
+  exports: [PlayerPage] 
 })
 export class PlayerPageModule {}

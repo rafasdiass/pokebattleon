@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { CardPageRoutingModule } from './card-routing.module';
 
 import { CardPage } from './card.page';
+import { AuthService } from 'src/app/services/auth.service';
 
 @NgModule({
   imports: [
@@ -17,5 +18,6 @@ import { CardPage } from './card.page';
   ],
   declarations: [CardPage],
   exports: [CardPage], 
+  providers: [AuthService] 
 })
 export class CardPageModule {}

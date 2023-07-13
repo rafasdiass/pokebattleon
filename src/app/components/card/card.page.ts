@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Card } from '../../models/card.model';
-import { Player } from '../../models/player.model';
 import { CardPokemonService } from '../../services/card-pokemon.service';
+import { AuthService } from '../../services/auth.service';
 import { PlayerService } from '../../services/player.service';
+import { PokemonSelectionService } from '../../services/pokemon-selection.service';
 
 @Component({
   selector: 'app-card',
@@ -10,34 +11,55 @@ import { PlayerService } from '../../services/player.service';
   styleUrls: ['./card.page.scss'],
 })
 export class CardPage implements OnInit {
-  @Input() playerId!: string;
-  @Input() pokemon!: Card;
+  @Input() pokemons: Card[] = [];
+  @Output() pokemonsEmitter = new EventEmitter<Card[]>();
 
   constructor(
     private cardPokemonService: CardPokemonService,
-    private playerService: PlayerService
-  ) { }
+    private playerService: PlayerService,
+    private pokemonSelectionService: PokemonSelectionService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
-    console.log('CardPage Component Initialized');
-    if (!this.pokemon) {
-      this.loadPlayerPokemon();
+    this.authService.getUser().subscribe(async user => {
+      if (user && user.uid) {
+        console.log('CardPage Component Initialized with playerId:', user.uid);
+        await this.loadPlayerPokemon(user.uid);
+      } else {
+        console.log('User not authenticated or invalid user object');
+      }
+    });
+  }
+
+  async loadPlayerPokemon(playerId: string) {
+    console.log('Loading Player Pokemon');
+    if (playerId) {
+      console.log('Loading data for player:', playerId);
+      try {
+        const pokemons = await this.cardPokemonService.getCard(playerId);
+        console.log('Pokemons Data:', pokemons);
+
+        // Emitting the pokemons data to parent Dashboard component
+        this.pokemonsEmitter.emit(pokemons);
+
+        // Update pokemons in this component
+        this.pokemons = pokemons;
+      } catch (error) {
+        console.error('Error loading player pokemons:', error);
+      }
+    } else {
+        console.log('No playerId provided to CardPage');
     }
   }
 
-  async loadPlayerPokemon() {
-    console.log('Loading Player Pokemon');
-    if (this.playerId) {
-      let playerData: Player | undefined = await this.playerService.getPlayer(this.playerId);
-      
-      if (playerData) {
-        let player: Player = playerData;
-        console.log('Player Data:', player);
-        if (player.cards && player.cards.length > 0) {
-          this.pokemon = player.cards[0]; // Assume que a primeira carta da lista é a ativa
-          console.log('Pokemon Card Selected:', this.pokemon);
-        }
-      }
-     } 
+  selectCard(card: Card) {
+    this.pokemonSelectionService.selectPokemon(card);
+    console.log('Pokemon Card Selected:', card);
+  }
+
+  removeCard(card: Card) {
+    this.pokemonSelectionService.removePokemon(card);
+    console.log('Pokemon Card Removed:', card);
   }
 }

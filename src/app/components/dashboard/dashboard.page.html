@@ -1,60 +1,8 @@
-<app-navbar></app-navbar>
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Dashboard</ion-title>
-    
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-
-  <!-- Informações do Jogador -->
-  <ion-card *ngIf="(user$ | async) as user">
-    <ion-card-header>
-      <ion-card-title>Informações do Jogador</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Nome: {{user.displayName}}</p>
-      <!-- Adicione mais informações do usuário conforme necessário -->
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Ranking -->
-  <ion-card *ngIf="(player$ | async) as player">
-    <ion-card-header>
-      <ion-card-title>Ranking</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Posição: {{player.rank}}</p>
-      <p>Vitórias: {{player.wins}}</p>
-      <!-- Adicione mais informações do ranking conforme necessário -->
-    </ion-card-content>
-  </ion-card>
-<!-- Pokémons no Card -->
-<ion-card *ngIf="(pokemons$ | async) as pokemons">
-  <ion-card-header>
-    <ion-card-title>Pokebola</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-list>
-      <ion-item *ngFor="let pokemon of pokemons">
-        <img [src]="pokemon.imageUrl" alt="{{pokemon.name}} image"> <!-- Adicionado a tag de imagem -->
-        <ion-label>
-          <p>Nome: {{pokemon.name}}</p>
-          <p>HP: {{pokemon.hp}}</p>
-          <p>Ataque: {{pokemon.attack}}</p>
-          <p>Defesa: {{pokemon.defense}}</p>
-          <p>Ataque Especial: {{pokemon.specialAttack}}</p>
-          <p>Defesa Especial: {{pokemon.specialDefense}}</p>
-          <p>Velocidade: {{pokemon.speed}}</p>
-        </ion-label>
-        <ion-button color="primary" (click)="selectCard(pokemon)">Selecionar</ion-button>
-        <ion-button color="danger" (click)="removeCard(pokemon)">Remover</ion-button>
-      </ion-item>
-    </ion-list>
-  </ion-card-content>
-</ion-card>
-
-
-
-</ion-content>
+<ion-content>
+    <app-navbar *ngIf="isLoggedIn"></app-navbar>
+    <div class="content-wrapper">
+      <app-player *ngIf="isLoggedIn"></app-player>
+      <app-card [pokemons]="pokemons"></app-card>
+    </div>
+  </ion-content>
+  
