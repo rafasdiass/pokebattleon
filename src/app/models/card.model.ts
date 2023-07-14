@@ -1,4 +1,5 @@
 import { PokemonDetails } from './pokemondetails.model';
+export type CardAttribute = 'hp' | 'attack' | 'defense' | 'specialAttack' | 'specialDefense' | 'speed';
 
 export class Card {
   [key: string]: number | string | Function;

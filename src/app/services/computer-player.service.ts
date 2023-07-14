@@ -1,54 +1,51 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ComputerPlayer } from '../models/computer-player.model';
 import { Card } from '../models/card.model';
-import { ApipokemonService } from './apipokemon.service';
+import { CardService } from './card.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComputerPlayerService {
-  private computerPlayer: ComputerPlayer = new ComputerPlayer();
+  private _computerPlayer$: BehaviorSubject<ComputerPlayer>;
 
-  constructor(private apiPokemonService: ApipokemonService) {}
+  constructor(private cardService: CardService) {
+    this.reset();
+  }
 
   async init(): Promise<void> {
     try {
-      const randomCard = await this.apiPokemonService.getRandomPokemon();
-      this.computerPlayer.addCard(randomCard);
+      const randomCard = await this.cardService.getRandomPokemon();
+      this._computerPlayer$.getValue().addCard(randomCard);
     } catch (error) {
       console.error('Error initializing ComputerPlayer:', error);
     }
   }
 
   getComputerPlayer(): ComputerPlayer {
-    return this.computerPlayer;
+    return this._computerPlayer$.getValue();
   }
 
-  playCard(): Card | undefined {
-    // The computer player will use its strategy to choose the attribute to play
-    const chosenStat = this.computerPlayer.maximizeStatStrategy();
-    console.log('ComputerPlayer chosen stat:', chosenStat);  // Log the chosen stat
-    return this.computerPlayer.playCard();
+  getComputerPlayerObservable(): Observable<ComputerPlayer> {
+    return this._computerPlayer$.asObservable();
   }
 
   async drawCard(): Promise<void> {
     try {
-      const randomCard = await this.apiPokemonService.getRandomPokemon();
-      this.computerPlayer.addCard(randomCard);
+      const randomCard = await this.cardService.getRandomPokemon();
+      this._computerPlayer$.getValue().addCard(randomCard);
     } catch (error) {
       console.error('Error drawing card for ComputerPlayer:', error);
     }
   }
 
   win(): void {
-    this.computerPlayer.win();
-  }
-
-  incrementComputerWins(): void {
-    this.computerPlayer.wins++;
+    this._computerPlayer$.getValue().win();
   }
 
   reset(): void {
-    this.computerPlayer = new ComputerPlayer();
+    const computerPlayer = new ComputerPlayer();
+    this._computerPlayer$ = new BehaviorSubject<ComputerPlayer>(computerPlayer);
   }
 }

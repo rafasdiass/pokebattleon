@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { PlayerService } from './player.service';
 import { ComputerPlayerService } from './computer-player.service';
+import { BattleService } from './battle.service';
 import { Card } from '../models/card.model';
 import { Player } from '../models/player.model';
-
+import { AuthService } from './auth.service';
+import { CardPokemonService } from './card-pokemon.service';
 @Injectable({
   providedIn: 'root'
 })
 export class GameBoardService {
   private currentPlayer: 'user' | 'computer' = 'user';
   private user: Player | null = null;
-  private computerPlayer$ = new BehaviorSubject(this.computerPlayerService.getComputerPlayer());
-
   private _userPlayer$ = new BehaviorSubject<Player | null>(null);
   
   get userPlayer$() {
@@ -20,72 +20,112 @@ export class GameBoardService {
   }
 
   get computerPlayerObservable() {
-    return this.computerPlayer$.asObservable();
+    return this.computerPlayerService.getComputerPlayerObservable();
   }
 
   constructor(
     private playerService: PlayerService,
-    private computerPlayerService: ComputerPlayerService
+    private computerPlayerService: ComputerPlayerService,
+    private battleService: BattleService,
+    private authService: AuthService,
+    private cardPokemonService: CardPokemonService
   ) { }
 
   async loadPlayer(playerId: string) {
-    const player = await this.playerService.getPlayer(playerId);
-    if (!player) {
-      throw new Error(`Player with ID ${playerId} not found`);
+    try {
+      const player = await this.playerService.getPlayer(playerId);
+      if (!player) {
+        console.error(`Player with ID ${playerId} not found`);
+        return;
+      }
+  
+      // Obter as cartas do jogador
+      const cards = await this.cardPokemonService.getCard(playerId);
+  
+      // Adicionar as cartas ao objeto do jogador
+      player.cards = cards;
+  
+      this.user = player;
+      this._userPlayer$.next(player);
+    } catch (error) {
+      console.error("Error while loading player:", error);
+      // Tratar o erro de acordo com a sua necessidade
     }
-    this.user = player;
-    this._userPlayer$.next(player);
   }
 
   setGame(computerCards: Card[]) {
     if (this.user && this.user.cards.length > 0) {
-      this.computerPlayerService.getComputerPlayer().cards = computerCards;
+      this.computerPlayerService.setCards(computerCards);
       this.currentPlayer = 'user';
-      this.computerPlayer$.next(this.computerPlayerService.getComputerPlayer());
     } else {
       throw new Error('User has no cards');
     }
   }
 
-  generateComputerPlayer() {
-    this.computerPlayerService.init();
-    this.computerPlayer$.next(this.computerPlayerService.getComputerPlayer());
-  }
-
   async selectAttribute(attribute: keyof Card) {
-    if (this.currentPlayer === 'user' && this.user && this.computerPlayerService.getComputerPlayer().cards.length > 0) {
+    if (this.currentPlayer === 'user' && this.user && this.computerPlayerService.getCards().length > 0) {
       const userCard = this.user.cards[0];
-      const userAttribute = userCard[attribute];
-      const computerCard = this.computerPlayerService.getComputerPlayer().cards[0];
-      const computerAttribute = computerCard[attribute];
+      const computerCard = this.computerPlayerService.getCards()[0];
 
-      if (userAttribute > computerAttribute) {
+      const battleResult = this.battleService.battle(attribute, userCard, computerCard);
+
+      if (battleResult === 'user') {
         if (typeof this.user.wins === 'number') {
           this.user.wins++;
           await this.playerService.updatePlayerWins(this.user.uid, this.user.wins);
         }
-        this.computerPlayerService.getComputerPlayer().cards.shift();
-      } else {
-        this.computerPlayerService.getComputerPlayer().wins++;
+        this.computerPlayerService.getCards().shift();
+      } else if (battleResult === 'computer') {
+        this.computerPlayerService.incrementComputerWins();
         this.currentPlayer = 'computer';
         if (this.user && this.user.cards.length > 0) {
           this.user.cards.shift();
         }
+      } else {
+        // logic for draw goes here...
       }
 
-      if (this.user && this.user.cards.length === 0 || this.computerPlayerService.getComputerPlayer().cards.length === 0) {
+      if (this.user && this.user.cards.length === 0 || this.computerPlayerService.getCards().length === 0) {
         if (this.currentPlayer === 'user' && typeof this.user.wins === 'number') {
           this.user.wins++;
           await this.playerService.updatePlayerWins(this.user.uid, this.user.wins);
         } else {
-          this.computerPlayerService.getComputerPlayer().wins++;
+          this.computerPlayerService.incrementComputerWins();
         }
         this.user = null;
-        this.computerPlayerService.getComputerPlayer().cards = [];
+        this.computerPlayerService.resetCards();
         this.currentPlayer = 'user';
       }
     } else if (this.currentPlayer === 'computer') {
-      // Aqui você pode adicionar a lógica para a jogada do computador
+      this.computerPlayerService.playCard();
+      await this.computerPlayerService.drawCard();
     }
+  }
+
+  initialize() {
+    this.authService.getUser().subscribe(async user => {
+      if (user !== null) {
+        console.log('User ID: ', user.uid);
+      
+        if (user) {
+          try {
+            const playerResult = await this.playerService.getPlayer(user.uid);
+            if (playerResult) {
+              console.log("Player data: ", playerResult);
+              this._userPlayer$.next(playerResult);
+
+              // Load the player into the game
+              await this.loadPlayer(user.uid);
+            } else {
+              // console.log("Player data not loaded");
+              // alert('Failed to load player data'); 
+            }
+          } catch (error) {
+            console.error("Error while fetching player data: ", error);
+            alert('An error occurred while fetching player data'); 
+          }
+        }
+      }
+    });
   }
 }

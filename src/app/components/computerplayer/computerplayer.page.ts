@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GameBoardService } from '../../services/game-board.service';
+import { ComputerPlayerService } from '../../services/computer-player.service';
 import { ComputerPlayer } from '../../models/computer-player.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-computerplayer',
@@ -8,11 +9,12 @@ import { ComputerPlayer } from '../../models/computer-player.model';
   styleUrls: ['./computerplayer.page.scss'],
 })
 export class ComputerPlayerPage implements OnInit {
-  computerPlayer$ = this.gameBoardService.computerPlayerObservable;
+  computerPlayer$: Observable<ComputerPlayer>;
 
-  constructor(
-    private gameBoardService: GameBoardService
-  ) {}
+  constructor(private computerPlayerService: ComputerPlayerService) {}
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.computerPlayer$ = this.computerPlayerService.getComputerPlayerObservable();
+    await this.computerPlayerService.init();
+  }
 }

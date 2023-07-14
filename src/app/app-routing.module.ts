@@ -47,6 +47,10 @@ const routes: Routes = [
     path: 'computerplayer',
     loadChildren: () => import('./components/computerplayer/computerplayer.module').then( m => m.ComputerplayerPageModule)
   },
+  {
+    path: 'pokemon-gym',
+    loadChildren: () => import('./components/pokemon-gym/pokemon-gym.module').then( m => m.PokemonGymPageModule)
+  },
   
 ];
 

@@ -8,8 +8,8 @@ import { Card } from '../models/card.model';
 export class PlayerService {
   private firestore = getFirestore();
 
-  // Get a player by ID
-  // Get a player by ID
+  // aqui ele esta pegando o id do player e retornando o player ou undefined
+  
 async getPlayer(playerId: string): Promise<Player | undefined> {
   const docRef = doc(this.firestore, 'players', playerId);
   const docSnap = await getDoc(docRef);

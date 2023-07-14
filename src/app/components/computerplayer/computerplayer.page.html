@@ -5,7 +5,6 @@
   </ion-card-header>
   <ion-card-content>
     <p>Vitórias: {{computerPlayer.wins}}</p>
-    <img src="assets/img/computer.png" alt="Computador" class="computer-image">
     <app-card *ngFor="let card of computerPlayer.cards" [pokemons]="[card]"></app-card>
   </ion-card-content>
 </ion-card>

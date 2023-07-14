@@ -4,7 +4,7 @@ import { Card } from './card.model';
 export class ComputerPlayer extends User {
   cards: Card[];
   wins: number;
-  name: string = 'Computer Player';
+  name: string = 'Gary';
 
   constructor() {
     super('computer', 'computer@game.com', 'Computer Player');
