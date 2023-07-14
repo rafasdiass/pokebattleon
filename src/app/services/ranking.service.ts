@@ -1,51 +1,38 @@
+
 import { Injectable } from '@angular/core';
-import { ComputerPlayer } from '../models/computer-player.model';
-import { Card } from '../models/card.model';
-import { ApipokemonService } from './apipokemon.service';
+import { getFirestore, doc, getDoc, query, collection, orderBy, getDocs } from 'firebase/firestore';
+import { Player } from '../models/player.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ComputerPlayerService {
-  private computerPlayer: ComputerPlayer = new ComputerPlayer();
+export class RankingService {
+  private db = getFirestore();
 
-  constructor(private apiPokemonService: ApipokemonService) {}
+  constructor() {}
 
-  async init(): Promise<void> {
-    try {
-      const randomCard = await this.apiPokemonService.getRandomPokemon();
-      this.computerPlayer.addCard(randomCard);
-    } catch (error) {
-      console.error('Error initializing ComputerPlayer:', error);
+  // Obter o número de vitórias de um jogador
+  async getWins(playerId: string): Promise<number | undefined> {
+    const playerDoc = await getDoc(doc(this.db, 'players', playerId));
+    if (playerDoc.exists()) {
+      const playerData = playerDoc.data();
+      if (playerData) {
+        return (playerData as Player).wins;
+      }
     }
+    return undefined;
   }
 
-  getComputerPlayer(): ComputerPlayer {
-    return this.computerPlayer;
-  }
-
-  playCard(): Card | undefined {
-    return this.computerPlayer.playCard();
-  }
-
-  async drawCard(): Promise<void> {
-    try {
-      const randomCard = await this.apiPokemonService.getRandomPokemon();
-      this.computerPlayer.addCard(randomCard);
-    } catch (error) {
-      console.error('Error drawing card for ComputerPlayer:', error);
-    }
-  }
-
-  win(): void {
-    this.computerPlayer.win();
-  }
-
-  incrementComputerWins(): void {
-    this.computerPlayer.wins++;
-  }
-
-  reset(): void {
-    this.computerPlayer = new ComputerPlayer();
+  // Obter a classificação de todos os jogadores
+  async getRanking(): Promise<Player[]> {
+    const playersQuery = query(collection(this.db, 'players'), orderBy('wins', 'desc'));
+    const querySnapshot = await getDocs(playersQuery);
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      if (data) {
+        return { id: doc.id, ...(data as Player) };
+      }
+      return {} as Player;
+    }).filter(player => player !== {} as Player);
   }
 }
