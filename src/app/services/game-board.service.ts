@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { PlayerService } from './player.service';
+import { ComputerPlayerService } from './computer-player.service';
 import { Card } from '../models/card.model';
 import { Player } from '../models/player.model';
 import { ComputerPlayer } from '../models/computer-player.model';
-import { PlayerService } from './player.service';
-import { ComputerPlayerService } from './computer-player.service';
-import { CardPokemonService } from './card-pokemon.service';
+import { DeckService } from './deck.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,34 +17,59 @@ export class GameBoardService {
   constructor(
     private playerService: PlayerService,
     private computerPlayerService: ComputerPlayerService,
-    private cardPokemonService: CardPokemonService
+    private deckService: DeckService
   ) {
+    this.player = new Player('', '', []);
+    this.computer = new ComputerPlayer();
     this.initGame();
   }
 
   async initGame(): Promise<void> {
-    // Initialize player and computer with their first cards
-    this.player = await this.playerService.init();
-    this.computer = await this.computerPlayerService.init();
+    this.player = await this.playerService.getPlayer();
+    if (!this.player) {
+      // Tratar caso o jogador não seja encontrado
+      return;
+    }
 
-    // Play first turn
-    this.playTurn();
+    await this.computerPlayerService.init();
+    this.computer = this.computerPlayerService.getComputerPlayer();
+
+    const deck = await this.deckService.createDeck(10);
+    this.deckService.addCardsToPile(deck);
+
+    while (!this.isGameEnd()) {
+      this.playTurn();
+    }
+
+    this.endGame();
   }
 
   playTurn(): void {
-    const playerCard = this.player.cards[0];
-    const computerCard = this.computer.cards[0];
+    const playerCard = this.player.playCard();
+    const computerCard = this.computer.playCard();
 
-    if (playerCard.value > computerCard.value) {
-      // Player wins, add cards to their pile
-      this.playerService.addCardsToPlayer([playerCard, computerCard]);
-    } else if (playerCard.value < computerCard.value) {
-      // Computer wins, add cards to their pile
-      this.computerPlayerService.addCardsToComputer([playerCard, computerCard]);
-    } else {
-      // Draw, add cards to draw pile
-      this.pile.push(playerCard, computerCard);
+    if (playerCard && computerCard) {
+      const playerValue = playerCard['value'];
+      const computerValue = computerCard['value'];
+
+      if (playerValue > computerValue) {
+        this.deckService.addCardToPile(playerCard);
+        this.deckService.addCardToPile(computerCard);
+        this.deckService.addCardsToPile(this.pile);
+        this.pile = [];
+      } else if (playerValue < computerValue) {
+        this.deckService.addCardToPile(playerCard);
+        this.deckService.addCardToPile(computerCard);
+        this.deckService.addCardsToPile(this.pile);
+        this.pile = [];
+      } else {
+        this.pile.push(playerCard, computerCard);
+      }
     }
+  }
+
+  isGameEnd(): boolean {
+    return this.player.cards.length === 0 || this.computer.cards.length === 0;
   }
 
   endGame(): void {

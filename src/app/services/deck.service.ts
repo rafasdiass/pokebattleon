@@ -31,6 +31,14 @@ export class DeckService {
     return this.deck.length > 0 ? this.deck.shift()! : null;
   }
 
+  addCardToPile(card: Card): void {
+    this.deck.push(card);
+  }
+
+  addCardsToPile(cards: Card[]): void {
+    this.deck.push(...cards);
+  }
+
   getDeck(): Card[] {
     return this.deck;
   }
