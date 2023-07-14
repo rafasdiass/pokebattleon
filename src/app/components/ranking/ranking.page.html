@@ -8,11 +8,10 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let player of playerRankings$ | async">
+    <ion-item *ngFor="let ranking of playerRankings$ | async">
       <ion-label>
-        <h2>{{player.name}}</h2>
-        <h3>{{player.wins}} vitórias</h3>
-        <p>{{player.cards.length}} cartas</p>
+        <h2>{{ranking.id}}</h2>
+        <h3>{{ranking.wins}} vitórias</h3>
       </ion-label>
     </ion-item>
   </ion-list>

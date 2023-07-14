@@ -8,4 +8,8 @@ export class Player {
     public wins?: number,   // "wins" é opcional e vem depois dos parâmetros obrigatórios
     public rank?: number    // "rank" é opcional e vem depois dos parâmetros obrigatórios
   ) {}
+  playCard(): Card | null {
+    return this.cards.pop() || null;
+  }
+  
 }

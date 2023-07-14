@@ -5,27 +5,28 @@ import { Card } from '../models/card.model';
 import { Player } from '../models/player.model';
 import { ComputerPlayer } from '../models/computer-player.model';
 import { DeckService } from './deck.service';
+import { BattleService } from './battle.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameBoardService {
-  player: Player;
+  player?: Player;
   computer: ComputerPlayer;
   pile: Card[] = [];
 
   constructor(
     private playerService: PlayerService,
     private computerPlayerService: ComputerPlayerService,
-    private deckService: DeckService
+    private deckService: DeckService,
+    private battleService: BattleService
   ) {
-    this.player = new Player('', '', []);
     this.computer = new ComputerPlayer();
     this.initGame();
   }
 
   async initGame(): Promise<void> {
-    this.player = await this.playerService.getPlayer();
+    this.player = await this.playerService.getPlayer(this.playerService.getCurrentUserId());
     if (!this.player) {
       // Tratar caso o jogador não seja encontrado
       return;
@@ -45,19 +46,23 @@ export class GameBoardService {
   }
 
   playTurn(): void {
+    if (!this.player) {
+      throw new Error('Player is not defined');
+    }
+
     const playerCard = this.player.playCard();
     const computerCard = this.computer.playCard();
 
     if (playerCard && computerCard) {
-      const playerValue = playerCard['value'];
-      const computerValue = computerCard['value'];
+      const attributeToCompare: keyof Card = 'hp'; // Defina o atributo a ser comparado, por exemplo, 'hp', 'attack', 'defense', etc.
+      const battleResult = this.battleService.battle(attributeToCompare, playerCard, computerCard);
 
-      if (playerValue > computerValue) {
+      if (battleResult === 'user') {
         this.deckService.addCardToPile(playerCard);
         this.deckService.addCardToPile(computerCard);
         this.deckService.addCardsToPile(this.pile);
         this.pile = [];
-      } else if (playerValue < computerValue) {
+      } else if (battleResult === 'computer') {
         this.deckService.addCardToPile(playerCard);
         this.deckService.addCardToPile(computerCard);
         this.deckService.addCardsToPile(this.pile);
@@ -69,11 +74,15 @@ export class GameBoardService {
   }
 
   isGameEnd(): boolean {
+    if (!this.player) {
+      return true; // O jogo termina se o jogador não for definido
+    }
+
     return this.player.cards.length === 0 || this.computer.cards.length === 0;
   }
 
   endGame(): void {
-    if (this.player.cards.length === 0) {
+    if (!this.player || this.player.cards.length === 0) {
       console.log('Computer wins!');
     } else if (this.computer.cards.length === 0) {
       console.log('Player wins!');
