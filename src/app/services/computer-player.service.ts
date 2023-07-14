@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ComputerPlayer } from '../models/computer-player.model';
 import { Card } from '../models/card.model';
-import { CardService } from './card.service';
+import { ComputerCardService } from './computer-card.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +10,16 @@ import { CardService } from './card.service';
 export class ComputerPlayerService {
   private _computerPlayer$: BehaviorSubject<ComputerPlayer>;
 
-  constructor(private cardService: CardService) {
-    this.reset();
+  constructor(private computerCardService: ComputerCardService) {
+    this._computerPlayer$ = new BehaviorSubject<ComputerPlayer>(new ComputerPlayer());
   }
 
   async init(): Promise<void> {
     try {
-      const randomCard = await this.cardService.getRandomPokemon();
-      this._computerPlayer$.getValue().addCard(randomCard);
+      const randomCards = await this.computerCardService.getRandomPokemon();
+      randomCards.forEach(card => {
+        this._computerPlayer$.getValue().addCard(card);
+      });
     } catch (error) {
       console.error('Error initializing ComputerPlayer:', error);
     }
@@ -33,8 +35,10 @@ export class ComputerPlayerService {
 
   async drawCard(): Promise<void> {
     try {
-      const randomCard = await this.cardService.getRandomPokemon();
-      this._computerPlayer$.getValue().addCard(randomCard);
+      const randomCards = await this.computerCardService.getRandomPokemon();
+      randomCards.forEach(card => {
+        this._computerPlayer$.getValue().addCard(card);
+      });
     } catch (error) {
       console.error('Error drawing card for ComputerPlayer:', error);
     }
@@ -45,7 +49,6 @@ export class ComputerPlayerService {
   }
 
   reset(): void {
-    const computerPlayer = new ComputerPlayer();
-    this._computerPlayer$ = new BehaviorSubject<ComputerPlayer>(computerPlayer);
+    this._computerPlayer$ = new BehaviorSubject<ComputerPlayer>(new ComputerPlayer());
   }
 }

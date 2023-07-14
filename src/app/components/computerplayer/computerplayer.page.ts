@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./computerplayer.page.scss'],
 })
 export class ComputerPlayerPage implements OnInit {
-  computerPlayer$: Observable<ComputerPlayer>;
+  computerPlayer$: Observable<ComputerPlayer> = new Observable<ComputerPlayer>();
 
   constructor(private computerPlayerService: ComputerPlayerService) {}
 

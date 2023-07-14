@@ -4,7 +4,6 @@ import { CardPokemonService } from '../../services/card-pokemon.service';
 import { AuthService } from '../../services/auth.service';
 import { PlayerService } from '../../services/player.service';
 import { PokemonSelectionService } from '../../services/pokemon-selection.service';
-import { GameBoardService } from '../../services/game-board.service';
 
 @Component({
   selector: 'app-card',
@@ -19,8 +18,7 @@ export class CardPage implements OnInit {
     private cardPokemonService: CardPokemonService,
     private playerService: PlayerService,
     private pokemonSelectionService: PokemonSelectionService,
-    private authService: AuthService,
-    private gameBoardService: GameBoardService
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -28,9 +26,6 @@ export class CardPage implements OnInit {
       if (user && user.uid) {
         console.log('CardPage Component Initialized with playerId:', user.uid);
         await this.loadPlayerPokemon(user.uid);
-
-        // Load the player into the game
-        await this.gameBoardService.loadPlayer(user.uid);
       } else {
         console.log('User not authenticated or invalid user object');
       }
