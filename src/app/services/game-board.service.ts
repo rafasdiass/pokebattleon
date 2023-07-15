@@ -22,28 +22,30 @@ export class GameBoardService {
     private battleService: BattleService
   ) {
     this.computer = new ComputerPlayer();
-    this.initGame();
+    // this.initGame();
   }
 
-  async initGame(): Promise<void> {
-    this.player = await this.playerService.getPlayer(this.playerService.getCurrentUserId());
-    if (!this.player) {
-      // Tratar caso o jogador não seja encontrado
-      return;
-    }
+  // async initGame(): Promise<void> {
+  //   const player = await this.playerService.getPlayer(this.playerService.getCurrentUserId());
+  //   if (!player) {
+  //     // Tratar caso o jogador não seja encontrado
+  //     return;
+  //   }
 
-    await this.computerPlayerService.init();
-    this.computer = this.computerPlayerService.getComputerPlayer();
+  //   this.player = player;
 
-    const deck = await this.deckService.createDeck(10);
-    this.deckService.addCardsToPile(deck);
+  //   await this.computerPlayerService.init();
+  //   this.computer = this.computerPlayerService.getComputerPlayer();
 
-    while (!this.isGameEnd()) {
-      this.playTurn();
-    }
+  //   const deck = await this.deckService.createDeck(10);
+  //   this.deckService.addCardsToPile(deck);
 
-    this.endGame();
-  }
+  //   while (!this.isGameEnd()) {
+  //     this.playTurn();
+  //   }
+
+  //   this.endGame();
+  // }
 
   playTurn(): void {
     if (!this.player) {

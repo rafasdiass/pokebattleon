@@ -1,33 +1,34 @@
 /* player.page.scss */
 
-/* player.page.scss */
-
 ion-card {
-    ion-card-header {
-      ion-card-title {
-        font-family: 'Pokemon Hollow', sans-serif;
-        color: #ff6347; /* Este é um tom de laranja, mas você pode escolher qualquer cor que preferir. */
-      }
-    }
-  
-    ion-card-content {
-      p {
-        font-family: 'Pokemon Solid', sans-serif;
-        color: #ffffff; /* Cor branca */
-      }
+  ion-card-header {
+    ion-card-title {
+      font-family: 'Pokemon Hollow', sans-serif;
+      color: #ff6347; /* Este é um tom de laranja, mas você pode escolher qualquer cor que preferir. */
     }
   }
-  
-  ion-card-title {
-    font-weight: bold;
-    text-decoration: underline;
+
+  .card-content {
+    display: flex; // Cria um layout flexível
+    justify-content: space-between; // Alinha os itens nas extremidades do contêiner
+
+    > div {
+      width: 50%; // Divide o espaço disponível em duas colunas
+    }
+
+    .ash-image {
+      width: 100%; // Preenche a largura total da coluna
+      height: auto; // Mantém a proporção da imagem
+    }
+
+    p {
+      font-family: 'Pokemon Solid', sans-serif;
+      color: #ffffff; /* Cor branca */
+    }
   }
-  
-  
-  .ash-image {
-    height: 400px; /* Ajuste a altura da imagem de acordo com suas preferências */
-    width: calc(400px * 0.75); /* Ajuste a largura proporcionalmente à altura da imagem */
-    font-family: 'Pokemon Solid', sans-serif;
-    color: #ff6347;
-  }
-  
+}
+
+ion-card-title {
+  font-weight: bold;
+  text-decoration: underline;
+}

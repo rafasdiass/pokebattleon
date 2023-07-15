@@ -1,30 +1,33 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Game Board</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ng-container *ngIf="player$ | async as player">
+  <!-- Player Information -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Informações do Jogador</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Nome: {{player.name}}</p>
+      <p>Vitórias: {{player.wins}}</p>
+      <p>Ranking: {{player.rank}}</p>
+      <img src="assets/img/ash.png" alt="Ash" class="ash-image">
+    </ion-card-content>
+  </ion-card>
 
-<ion-content>
-  <ng-container *ngIf="player">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Player: {{ player.name }}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Cards left: {{ player.cards.length }}</p>
-      </ion-card-content>
-    </ion-card>
-  </ng-container>
+  <!-- Player's Pokemon Cards -->
+  <app-card [pokemons]="player.cards" (pokemonsEmitter)="onPokemonsChanged($event)"></app-card>
+</ng-container>
 
-  <ng-container *ngIf="computer">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Computer</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Cards left: {{ computer.cards.length }}</p>
-      </ion-card-content>
-    </ion-card>
-  </ng-container>
-
-</ion-content>
+<!-- Computer Information -->
+<ng-container *ngIf="computerPlayer$ | async as computerPlayer">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Informações do Computador</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Vitórias: {{computerPlayer.wins}}</p>
+      <!-- Computer's Pokemon Cards -->
+      <div *ngFor="let card of computerPlayer.cards">
+        <app-computer-player-card [pokemons]="[card]"></app-computer-player-card>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ng-container>

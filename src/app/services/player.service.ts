@@ -1,55 +1,66 @@
 import { Injectable } from '@angular/core';
-import { getFirestore, doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getFirestore, doc, setDoc, updateDoc, getDoc } from 'firebase/firestore';
+import { User } from '../models/user.model';
 import { Player } from '../models/player.model';
 import { Card } from '../models/card.model';
 import { CardPokemonService } from './card-pokemon.service';
+import { AuthService } from './auth.service';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerService {
-  private firestore = getFirestore();
-  private auth = getAuth();
 
-  constructor(private cardPokemonService: CardPokemonService) {}
+  private db = getFirestore();
 
-  async getPlayer(uid: string): Promise<Player | undefined> {
-    const docRef = doc(this.firestore, 'players', uid);
-    const docSnap = await getDoc(docRef);
+  constructor(private cardPokemonService: CardPokemonService, private authService: AuthService) {}
 
-    console.log('Fetched player document: ', docSnap);
+  async getPlayer(uid: string): Promise<Player | null> {
+    const playerDoc = doc(this.db, 'users', uid);
+    const playerSnapshot = await getDoc(playerDoc);
 
-    if(docSnap.exists()){
-      const playerData = docSnap.data() as Player;
-      // Get the player's cards
-      playerData.cards = await this.cardPokemonService.getCard(uid);
-      return playerData;
+    if (playerSnapshot.exists()) {
+      const playerData = playerSnapshot.data();
+      const playerCards: Card[] = await this.cardPokemonService.getCard(uid);
+
+      const player = new Player(
+        uid,
+        playerData['name'],
+        playerCards,
+        playerData['wins'],
+        playerData['rank']
+      );
+
+      return player;
     } else {
-      return undefined;
+      console.log(`No document found for the player: ${uid}`);
+      return null;
     }
   }
 
   async updatePlayerWins(uid: string, wins: number): Promise<void> {
-    const docRef = doc(this.firestore, 'players', uid);
-    await updateDoc(docRef, { wins: wins });
+    const playerDoc = doc(this.db, 'users', uid);
+    await updateDoc(playerDoc, { wins: wins });
   }
 
   async addPokemonToPlayer(uid: string, pokemon: Card): Promise<void> {
-    const playerRef = doc(this.firestore, 'players', uid);
-    const playerSnap = await getDoc(playerRef);
+    const playerDoc = doc(this.db, 'users', uid);
+    const playerSnapshot = await getDoc(playerDoc);
 
-    if (!playerSnap.exists()) {
+    if (!playerSnapshot.exists()) {
       throw new Error('Player does not exist');
     }
 
-    const playerData = playerSnap.data() as Player;
-    playerData.cards = [...(playerData.cards || []), pokemon.toFirestore()];
-    await setDoc(playerRef, playerData);
+    const playerData = { ...playerSnapshot.data(), cards: [...(playerSnapshot.data()['cards'] || []), pokemon.toFirestore()] };
+    await setDoc(playerDoc, playerData);
   }
 
   getCurrentUserId(): string {
-    const user = this.auth.currentUser;
-    return user ? user.uid : '';
+    let userId: string | null = null;
+    this.authService.getUser().pipe(take(1)).subscribe(user => {
+      userId = user ? user.uid : null;
+    });
+    return userId || '';
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getFirestore, collection, doc, setDoc, updateDoc, getDoc, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc } from 'firebase/firestore';
 import { Card } from '../models/card.model';
 import { ApipokemonService } from './apipokemon.service';
 import { RankingService } from './ranking.service';
@@ -25,8 +25,8 @@ export class CardPokemonService {
 
   async getCard(userId: string): Promise<Card[]> {
     const pokemonsSnap = await getDocs(collection(this.db, 'users', userId, 'pokemons'));
-    const pokemonsData = pokemonsSnap.docs.map((doc) => {
-      const pokemonData = doc.data();
+    const pokemonsData = pokemonsSnap.docs.map((docSnap) => {
+      const pokemonData = docSnap.data();
       return new Card(
         Number(pokemonData['id']) || 0,
         pokemonData['name'] || '',
@@ -44,7 +44,7 @@ export class CardPokemonService {
 
   async getPokemonsFromCard(userId: string): Promise<any[]> {
     const cardSnap = await getDocs(collection(this.db, 'users', userId, 'pokemons'));
-    const pokemons = cardSnap.docs.map((doc) => doc.data());
+    const pokemons = cardSnap.docs.map((docSnap) => docSnap.data());
     console.log('Pokemons from card:', pokemons);
     return pokemons;
   }
@@ -62,27 +62,19 @@ export class CardPokemonService {
   }
 
   async addPokemon(userId: string): Promise<void> {
-    let pokemons: any[] = await this.getPokemonsFromCard(userId);
-    console.log('Existing Pokemons:', pokemons);
-
     let randomPokemon = await this.apiPokemonService.getRandomPokemon();
     console.log('Random Pokemon Data:', randomPokemon);
 
     // Convert the Card object to a basic JavaScript object
     let randomPokemonData = randomPokemon.toFirestore();
 
-    pokemons.push(randomPokemonData);
-
-    let cardData = {
-      pokemons
-    };
-
-    await this.updateUserCard(userId, cardData);
+    await setDoc(doc(collection(this.db, 'users', userId, 'pokemons'), randomPokemon.id.toString()), randomPokemonData);
+    
     console.log('Pokemons successfully added to the user card.');
   }
 
-  selectCard(playerId: string, cardId: string): Promise<void> {
-    console.log('Selecting card for player:', playerId, cardId); // Log selected card
-    return updateDoc(doc(this.db, 'players', playerId), { selectedCard: cardId });
+  async selectCard(uid: string, cardId: string): Promise<void> {
+    console.log('Selecting card for player:', uid, cardId); // Log selected card
+    await updateDoc(doc(this.db, 'players', uid), { selectedCard: cardId });
   }
 }

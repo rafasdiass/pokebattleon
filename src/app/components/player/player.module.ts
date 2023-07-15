@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { PlayerPageRoutingModule } from './player-routing.module';
 
 import { PlayerPage } from './player.page';
+import { CardPageModule } from '../card/card.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PlayerPageRoutingModule
+    PlayerPageRoutingModule,
+    CardPageModule
   ],
   declarations: [PlayerPage],
   exports: [PlayerPage] 

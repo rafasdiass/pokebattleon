@@ -1,0 +1,16 @@
+<div *ngFor="let card of pokemons">
+  <ion-card>
+    <img [src]="card.imageUrl" alt="{{card.name}} image">
+    <ion-card-header>
+      <ion-card-title>{{card.name}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>HP: {{card.hp}}</p>
+      <p>Attack: {{card.attack}}</p>
+      <p>Defense: {{card.defense}}</p>
+      <p>Special Attack: {{card.specialAttack}}</p>
+      <p>Special Defense: {{card.specialDefense}}</p>
+      <p>Speed: {{card.speed}}</p>
+    </ion-card-content>
+  </ion-card>
+</div>

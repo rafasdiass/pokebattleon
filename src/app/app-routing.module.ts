@@ -51,6 +51,10 @@ const routes: Routes = [
     path: 'pokemon-gym',
     loadChildren: () => import('./components/pokemon-gym/pokemon-gym.module').then( m => m.PokemonGymPageModule)
   },
+  {
+    path: 'computer-player-card',
+    loadChildren: () => import('./components/computer-player-card/computer-player-card.module').then( m => m.ComputerPlayerCardPageModule)
+  },
   
 ];
 

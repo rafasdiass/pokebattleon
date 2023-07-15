@@ -1,11 +1,21 @@
-<!-- Informações do Jogador -->
-<ion-card *ngIf="(user$ | async) as user">
-  <ion-card-header>
-    <ion-card-title>Informações do Jogador</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <p>Nome: {{user.displayName}}</p>
-    <img src="assets/img/ash.png" alt="Ash" class="ash-image">
-   
-  </ion-card-content>
-</ion-card>
+<ng-container *ngIf="player$ | async as player">
+  <!-- Player Information -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Informações do Jogador</ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="card-content">
+      <div>
+        <img src="assets/img/ash.png" alt="Ash" class="ash-image">
+        <p>Nome: {{player.name}}</p>
+        <p>Vitórias: {{player.wins}}</p>
+        <p>Ranking: {{player.rank}}</p>
+      </div>
+      <div>
+        
+        <!-- Player pokebola -->
+        <app-card [pokemons]="player.cards" (pokemonsEmitter)="onPokemonsChanged($event)"></app-card>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ng-container>
