@@ -13,7 +13,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { AuthService } from './services/auth.service'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AuthGuard } from './services/auth.guard';
 
 
@@ -23,8 +23,10 @@ import { AuthGuard } from './services/auth.guard';
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,
+    FontAwesomeModule,
     IonicModule.forRoot(), 
     AppRoutingModule,
+    
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

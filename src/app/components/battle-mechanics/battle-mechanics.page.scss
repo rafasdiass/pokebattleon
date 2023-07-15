@@ -1,0 +1,25 @@
+page-battle-mechanics {
+    ion-header {
+      ion-toolbar {
+        ion-title {
+          font-size: 24px;
+        }
+      }
+    }
+  
+    ion-content {
+      ion-grid {
+        ion-row {
+          ion-col {
+            ion-button {
+              ion-icon {
+                font-size: 32px;
+                margin-right: 8px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

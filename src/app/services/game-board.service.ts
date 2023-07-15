@@ -38,9 +38,6 @@ export class GameBoardService {
 
     const deck = await this.deckService.createDeck(10);
     this.deckService.addCardsToPile(deck);
-
-    // Note that playTurn method is not called here anymore. It should be called
-    // from the component where the user selects the attribute.
   }
 
   playTurn(attributeToCompare: CardAttribute): void {

@@ -1,32 +1,36 @@
-/* card.page.scss */
-
 ion-card {
   ion-card-header {
     ion-card-title {
-      font-family: 'Pokemon Solid', sans-serif;
-      color: #ff6347; /* Este é um tom de laranja, mas você pode escolher qualquer cor que preferir. */
-    }
-    .pokebola-image {
-      width: 30px; /* Ajuste o tamanho da imagem de acordo com suas preferências */
-      height: 30px; /* Ajuste o tamanho da imagem de acordo com suas preferências */
-      margin-right: 10px; /* Ajuste a margem à direita para separar a imagem do texto */
-    }
-  }
+      display: flex;
+      align-items: center;
 
-  ion-list {
-    ion-item {
-      ion-label {
-        p {
-          &.pokemon-attribute-title {
-            font-family: 'Pokemon Solid', sans-serif;
-            color: #32cd32; /* Verde limão, escolha a cor que preferir */
-          }
-        }
+      .pokebola-image {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
       }
     }
   }
-}
-.pokemon-image {
-  width: 150px; /* Ajuste de acordo com suas necessidades */
-  height: 150px; /* Ajuste de acordo com suas necessidades */
+
+  ion-item {
+    display: flex;
+    align-items: center;
+
+    .pokemon-image {
+      width: 100px;
+      height: 100px;
+      margin-right: 10px;
+    }
+
+    ion-label {
+      ion-label {
+        margin-top: 5px;
+      }
+
+      .pokemon-attribute-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+    }
+  }
 }

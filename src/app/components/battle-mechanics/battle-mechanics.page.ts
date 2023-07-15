@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { CardAttribute } from '../../models/card.model';
+import { AttributeIcon } from '../../models/card.model';
 import { GameBoardService } from '../../services/game-board.service';
 
 @Component({
@@ -9,21 +8,22 @@ import { GameBoardService } from '../../services/game-board.service';
   styleUrls: ['./battle-mechanics.page.scss'],
 })
 export class BattleMechanicsPage implements OnInit {
-  // Possible attributes to compare
-  attributes: CardAttribute[] = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
+  attributes: AttributeIcon[] = [
+    { name: 'hp', icon: 'heart' },
+    { name: 'attack', icon: 'arrow-forward' },
+    { name: 'defense', icon: 'shield' },
+    { name: 'specialAttack', icon: 'flash' },
+    { name: 'specialDefense', icon: 'shield' },
+    { name: 'speed', icon: 'speedometer' }
+  ];
 
-  // Selected attribute
-  selectedAttribute = new FormControl();
+  constructor(private gameBoardService: GameBoardService) {}
 
-  constructor(
-    private gameBoardService: GameBoardService
-  ) {}
+  async ngOnInit() {
+    await this.gameBoardService.initGame();
+  }
 
-  ngOnInit() {
-    this.selectedAttribute.valueChanges.subscribe(value => {
-      if (value) {
-        this.gameBoardService.playTurn(value);
-      }
-    });
+  selectAttribute(attribute: AttributeIcon) {
+    this.gameBoardService.playTurn(attribute.name);
   }
 }

@@ -1,3 +1,8 @@
+.cards-section, .battle-mechanics-section {
+  flex: 1.5; /* Increase this number as needed */
+  margin-right: 20px;
+}
+
 ion-content {
   display: flex;
   justify-content: center;
@@ -57,3 +62,4 @@ ion-content {
     }
   }
 }
+

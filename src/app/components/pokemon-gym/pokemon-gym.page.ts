@@ -18,13 +18,11 @@ import { Router } from '@angular/router';
 export class PokemonGymPage implements OnInit {
   player$!: Observable<Player>;
   computerPlayer$!: Observable<ComputerPlayer>;
-  confirmationForm!: FormGroup;
 
   constructor(
     private playerService: PlayerService,
     private authService: AuthService,
     private computerPlayerService: ComputerPlayerService,
-    private formBuilder: FormBuilder,
     private router: Router
   ) {}
 
@@ -45,10 +43,6 @@ export class PokemonGymPage implements OnInit {
 
     this.computerPlayer$ = this.computerPlayerService.getComputerPlayerObservable();
     this.computerPlayerService.init();
-
-    this.confirmationForm = this.formBuilder.group({
-      confirmation: [''],
-    });
   }
 
   onAttributeSelect(event: any) {
@@ -56,19 +50,9 @@ export class PokemonGymPage implements OnInit {
     // Implement the logic to handle the attribute selection here
   }
 
-  onPokemonsChanged(updatedPokemons: Card[]) {
-    // Implement the logic to handle the changed pokemons here
-  }
-
   confirmBattleAbandonment() {
-    const confirmationValue = this.confirmationForm.get('confirmation')?.value;
-
-    if (confirmationValue === 'confirm') {
-      // User confirmed the abandonment, navigate to the dashboard
-      this.router.navigate(['/dashboard']);
-    } else {
-      // User canceled the abandonment
-      // Perform any necessary actions or display a message
-    }
+    // Aqui você pode exibir um modal ou uma caixa de diálogo para confirmar a saída da batalha
+    // Ao confirmar, você pode navegar para o dashboard
+    this.router.navigate(['/dashboard']);
   }
 }

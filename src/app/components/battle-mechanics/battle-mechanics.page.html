@@ -7,14 +7,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item>
-      <ion-label>Attribute to compare</ion-label>
-      <ion-select [formControl]="selectedAttribute">
-        <ion-select-option *ngFor="let attribute of attributes" [value]="attribute">
-          {{ attribute }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-  </ion-list>
+  <ion-grid>
+    <ion-row *ngFor="let attribute of attributes">
+      <ion-col>
+        <ion-button expand="full" (click)="selectAttribute(attribute)">
+          <ion-icon [name]="attribute.icon"></ion-icon>
+          {{ attribute.name }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

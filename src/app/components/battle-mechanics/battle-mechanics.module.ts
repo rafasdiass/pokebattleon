@@ -5,8 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { BattleMechanicsPageRoutingModule } from './battle-mechanics-routing.module';
-
+import { IconService } from '../../services/icon.service';
 import { BattleMechanicsPage } from './battle-mechanics.page';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   imports: [
@@ -14,9 +15,11 @@ import { BattleMechanicsPage } from './battle-mechanics.page';
     FormsModule,
     IonicModule,
     BattleMechanicsPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FontAwesomeModule
   ],
   declarations: [BattleMechanicsPage],
-  exports: [BattleMechanicsPage]
+  exports: [BattleMechanicsPage],
+  providers: [IconService]
 })
 export class BattleMechanicsPageModule {}

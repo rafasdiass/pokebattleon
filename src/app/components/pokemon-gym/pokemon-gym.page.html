@@ -35,20 +35,11 @@
       <app-battle-mechanics (attributeSelect)="onAttributeSelect($event)"></app-battle-mechanics>
     </section>
     
-    <!-- Action Section -->
-    <section class="action-section">
-      <form [formGroup]="confirmationForm" (ngSubmit)="confirmBattleAbandonment()">
-        <ion-list>
-          <ion-item>
-            <ion-label>Confirmar abandono da batalha?</ion-label>
-            <ion-select formControlName="confirmation">
-              <ion-select-option value="confirm">Confirmar</ion-select-option>
-              <ion-select-option value="cancel">Cancelar</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-list>
-        <ion-button expand="full" type="submit">Sair</ion-button>
-      </form>
-    </section>
-  </div>
+   <!-- Exit Button Section -->
+   <section class="exit-button-section">
+    <div class="button-wrapper">
+      <ion-button expand="full" (click)="confirmBattleAbandonment()">Sair</ion-button>
+    </div>
+  </section>
+</div>
 </ion-content>

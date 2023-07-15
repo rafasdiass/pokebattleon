@@ -1,5 +1,11 @@
 import { PokemonDetails } from './pokemondetails.model';
+
 export type CardAttribute = 'hp' | 'attack' | 'defense' | 'specialAttack' | 'specialDefense' | 'speed';
+
+export interface AttributeIcon {
+  name: CardAttribute;
+  icon: string;
+}
 
 export class Card {
   [key: string]: number | string | Function;
@@ -43,5 +49,4 @@ export class Card {
       speed: this.speed
     };
   }
-  
 }
