@@ -7,7 +7,8 @@ import { ComputerPlayer } from '../../models/computer-player.model';
 import { Observable, from, EMPTY } from 'rxjs';
 import { switchMap, catchError, filter, map } from 'rxjs/operators';
 import { Card } from '../../models/card.model';
-import { CardPage } from '../card/card.page';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-gym',
@@ -17,11 +18,14 @@ import { CardPage } from '../card/card.page';
 export class PokemonGymPage implements OnInit {
   player$!: Observable<Player>;
   computerPlayer$!: Observable<ComputerPlayer>;
+  confirmationForm!: FormGroup;
 
   constructor(
     private playerService: PlayerService,
     private authService: AuthService,
-    private computerPlayerService: ComputerPlayerService
+    private computerPlayerService: ComputerPlayerService,
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -41,9 +45,25 @@ export class PokemonGymPage implements OnInit {
 
     this.computerPlayer$ = this.computerPlayerService.getComputerPlayerObservable();
     this.computerPlayerService.init();
+
+    this.confirmationForm = this.formBuilder.group({
+      confirmation: [''],
+    });
   }
 
   onPokemonsChanged(updatedPokemons: Card[]) {
     // Implement the logic to handle the changed pokemons here
+  }
+
+  confirmBattleAbandonment() {
+    const confirmationValue = this.confirmationForm.get('confirmation')?.value;
+
+    if (confirmationValue === 'confirm') {
+      // User confirmed the abandonment, navigate to the dashboard
+      this.router.navigate(['/dashboard']);
+    } else {
+      // User canceled the abandonment
+      // Perform any necessary actions or display a message
+    }
   }
 }

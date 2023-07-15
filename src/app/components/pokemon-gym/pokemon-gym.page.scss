@@ -2,49 +2,73 @@ ion-content {
     display: flex;
     justify-content: center;
     padding: 20px;
-
+  
     .cards {
-        display: flex;
-        justify-content: flex-start;
-        width: 50%;
-        border: 2px solid #ff6347; /* Cor da borda */
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Sombra na borda */
-        padding: 10px;
+      display: flex;
+      justify-content: flex-start;
+      width: 50%;
+      border: 2px solid #ff6347; /* Cor da borda */
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Sombra na borda */
+      padding: 10px;
     }
-
+  
     .player-wrapper,
     .computer-wrapper {
-        flex: 1;
-        margin-right: 10px;
-
-        ion-card {
-            ion-card-header {
-                ion-card-title {
-                    font-family: 'Pokemon Hollow', sans-serif;
-                    color: #ff6347; /* Este é um tom de laranja, mas você pode escolher qualquer cor que preferir. */
-                    font-weight: bold;
-                    text-decoration: underline;
-                }
-            }
-
-            ion-card-content {
-                display: flex; // Cria um layout flexível
-                justify-content: space-between; // Alinha os itens nas extremidades do contêiner
-
-                > div {
-                    width: 50%; // Divide o espaço disponível em duas colunas
-                }
-
-                .ash-image {
-                    width: 100%; // Preenche a largura total da coluna
-                    height: auto; // Mantém a proporção da imagem
-                }
-
-                p {
-                    font-family: 'Pokemon Solid', sans-serif;
-                    color: #ffffff; /* Cor branca */
-                }
-            }
+      flex: 1;
+      margin-right: 10px;
+  
+      ion-card {
+        ion-card-header {
+          ion-card-title {
+            font-family: 'Pokemon Hollow', sans-serif;
+            color: #ff6347; /* Este é um tom de laranja, mas você pode escolher qualquer cor que preferir. */
+            font-weight: bold;
+            text-decoration: underline;
+          }
         }
+  
+        ion-card-content {
+          display: flex; // Cria um layout flexível
+          justify-content: space-between; // Alinha os itens nas extremidades do contêiner
+  
+          > div {
+            width: 50%; // Divide o espaço disponível em duas colunas
+          }
+  
+          .ash-image {
+            width: 100%; // Preenche a largura total da coluna
+            height: auto; // Mantém a proporção da imagem
+          }
+  
+          p {
+            font-family: 'Pokemon Solid', sans-serif;
+            color: #ffffff; /* Cor branca */
+          }
+        }
+      }
     }
-}
+  
+    .action-section {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+  
+      .abandon-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #ff6347; /* Cor de fundo do botão */
+        color: #ffffff; /* Cor do texto do botão */
+        border: none;
+        border-radius: 5px;
+        padding: 20px 20px;
+        font-weight: bold;
+        cursor: pointer;
+  
+        ion-icon {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+  
