@@ -1,35 +1,53 @@
 <ion-content>
-  <section class="cards">
-    <!-- Player Information -->
-    <ng-container *ngIf="player$ | async as player">
-      <div class="player-wrapper">
-        <app-player></app-player>
-      </div>
-    </ng-container>
+  <div class="container">
+    <!-- Cards Section -->
+    <section class="cards-section">
+      <div class="cards-wrapper">
+        <!-- Player Information -->
+        <ng-container *ngIf="player$ | async as player">
+          <div class="player-wrapper">
+            <app-player></app-player>
+          </div>
+        </ng-container>
 
-    <!-- Computer Information -->
-    <ng-container *ngIf="computerPlayer$ | async as computerPlayer">
-      <div class="computer-wrapper">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Informações do Computador</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p>Vitórias: {{computerPlayer.wins}}</p>
-            <!-- Computer's Pokemon Cards -->
-            <div *ngFor="let card of computerPlayer.cards">
-              <app-computer-player-card [pokemons]="[card]"></app-computer-player-card>
-            </div>
-          </ion-card-content>
-        </ion-card>
+        <!-- Computer Information -->
+        <ng-container *ngIf="computerPlayer$ | async as computerPlayer">
+          <div class="computer-wrapper">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Informações do Computador</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <p>Vitórias: {{computerPlayer.wins}}</p>
+                <!-- Computer's Pokemon Cards -->
+                <div *ngFor="let card of computerPlayer.cards">
+                  <app-computer-player-card [pokemons]="[card]"></app-computer-player-card>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ng-container>
       </div>
-    </ng-container>
-  </section>
+    </section>
+
+    <!-- Battle Mechanics Section -->
+    <section class="battle-mechanics-section">
+      <app-battle-mechanics (attributeSelect)="onAttributeSelect($event)"></app-battle-mechanics>
+    </section>
+  </div>
 
   <section class="action-section">
-    <button ion-button class="abandon-button" (click)="confirmBattleAbandonment()">
-      <ion-icon name="exit"></ion-icon>
-      Abandonar Batalha
-    </button>
+    <form [formGroup]="confirmationForm" (ngSubmit)="confirmBattleAbandonment()">
+      <ion-list>
+        <ion-item>
+          <ion-label>Confirmar abandono da batalha?</ion-label>
+          <ion-select formControlName="confirmation">
+            <ion-select-option value="confirm">Confirmar</ion-select-option>
+            <ion-select-option value="cancel">Cancelar</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+      <ion-button expand="full" type="submit">Sair</ion-button>
+    </form>
   </section>
 </ion-content>

@@ -51,6 +51,11 @@ export class PokemonGymPage implements OnInit {
     });
   }
 
+  onAttributeSelect(event: any) {
+    const attribute = event.target.value;
+    // Implement the logic to handle the attribute selection here
+  }
+
   onPokemonsChanged(updatedPokemons: Card[]) {
     // Implement the logic to handle the changed pokemons here
   }

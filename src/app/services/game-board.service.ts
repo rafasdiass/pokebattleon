@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { PlayerService } from './player.service';
-import { ComputerPlayerService } from './computer-player.service';
-import { Card } from '../models/card.model';
+import { Card, CardAttribute } from '../models/card.model';
 import { Player } from '../models/player.model';
 import { ComputerPlayer } from '../models/computer-player.model';
+import { PlayerService } from './player.service';
+import { ComputerPlayerService } from './computer-player.service';
 import { DeckService } from './deck.service';
 import { BattleService } from './battle.service';
 
@@ -22,32 +22,28 @@ export class GameBoardService {
     private battleService: BattleService
   ) {
     this.computer = new ComputerPlayer();
-    // this.initGame();
   }
 
-  // async initGame(): Promise<void> {
-  //   const player = await this.playerService.getPlayer(this.playerService.getCurrentUserId());
-  //   if (!player) {
-  //     // Tratar caso o jogador não seja encontrado
-  //     return;
-  //   }
+  async initGame(): Promise<void> {
+    const player = await this.playerService.getPlayer(this.playerService.getCurrentUserId());
+    if (!player) {
+      // Handle case where player is not found
+      return;
+    }
 
-  //   this.player = player;
+    this.player = player;
 
-  //   await this.computerPlayerService.init();
-  //   this.computer = this.computerPlayerService.getComputerPlayer();
+    await this.computerPlayerService.init();
+    this.computer = this.computerPlayerService.getComputerPlayer();
 
-  //   const deck = await this.deckService.createDeck(10);
-  //   this.deckService.addCardsToPile(deck);
+    const deck = await this.deckService.createDeck(10);
+    this.deckService.addCardsToPile(deck);
 
-  //   while (!this.isGameEnd()) {
-  //     this.playTurn();
-  //   }
+    // Note that playTurn method is not called here anymore. It should be called
+    // from the component where the user selects the attribute.
+  }
 
-  //   this.endGame();
-  // }
-
-  playTurn(): void {
+  playTurn(attributeToCompare: CardAttribute): void {
     if (!this.player) {
       throw new Error('Player is not defined');
     }
@@ -56,7 +52,6 @@ export class GameBoardService {
     const computerCard = this.computer.playCard();
 
     if (playerCard && computerCard) {
-      const attributeToCompare: keyof Card = 'hp'; // Defina o atributo a ser comparado, por exemplo, 'hp', 'attack', 'defense', etc.
       const battleResult = this.battleService.battle(attributeToCompare, playerCard, computerCard);
 
       if (battleResult === 'user') {
@@ -77,7 +72,7 @@ export class GameBoardService {
 
   isGameEnd(): boolean {
     if (!this.player) {
-      return true; // O jogo termina se o jogador não for definido
+      return true; // The game ends if the player is not defined
     }
 
     return this.player.cards.length === 0 || this.computer.cards.length === 0;

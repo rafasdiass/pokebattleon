@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Battle Mechanics
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>Attribute to compare</ion-label>
+      <ion-select [formControl]="selectedAttribute">
+        <ion-select-option *ngFor="let attribute of attributes" [value]="attribute">
+          {{ attribute }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

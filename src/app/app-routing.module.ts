@@ -55,6 +55,10 @@ const routes: Routes = [
     path: 'computer-player-card',
     loadChildren: () => import('./components/computer-player-card/computer-player-card.module').then( m => m.ComputerPlayerCardPageModule)
   },
+  {
+    path: 'battle-mechanics',
+    loadChildren: () => import('./components/battle-mechanics/battle-mechanics.module').then( m => m.BattleMechanicsPageModule)
+  },
   
 ];
 
