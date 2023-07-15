@@ -1,0 +1,28 @@
+
+ion-card {
+    ion-card-header {
+      ion-card-title {
+        font-family: 'Pokemon Hollow', sans-serif;
+        color: #ff6347; /* Define a cor do título do card */
+      }
+    }
+  
+    ion-card-content {
+      display: flex; // Cria um layout flexível
+      justify-content: space-between; // Alinha os itens nas extremidades do contêiner
+  
+      > div {
+        width: 50%; // Divide o espaço disponível em duas colunas
+      }
+  
+      p {
+        font-family: 'Pokemon Solid', sans-serif;
+        color: #ffffff; /* Define a cor do texto no card */
+      }
+    }
+  }
+  
+  .rocket-image {
+    width: 30%; // Define a largura da imagem como 30% do contêiner
+    height: auto; // Mantém a proporção da imagem
+  }

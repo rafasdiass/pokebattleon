@@ -1,33 +1,28 @@
-<ng-container *ngIf="player$ | async as player">
-  <!-- Player Information -->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Informações do Jogador</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Nome: {{player.name}}</p>
-      <p>Vitórias: {{player.wins}}</p>
-      <p>Ranking: {{player.rank}}</p>
-      <img src="assets/img/ash.png" alt="Ash" class="ash-image">
-    </ion-card-content>
-  </ion-card>
+<ion-content>
+  <section class="cards">
+    <!-- Player Information -->
+    <ng-container *ngIf="player$ | async as player">
+        <div class="player-wrapper">
+            <app-player></app-player>
+        </div>
+    </ng-container>
 
-  <!-- Player's Pokemon Cards -->
-  <app-card [pokemons]="player.cards" (pokemonsEmitter)="onPokemonsChanged($event)"></app-card>
-</ng-container>
-
-<!-- Computer Information -->
-<ng-container *ngIf="computerPlayer$ | async as computerPlayer">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Informações do Computador</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Vitórias: {{computerPlayer.wins}}</p>
-      <!-- Computer's Pokemon Cards -->
-      <div *ngFor="let card of computerPlayer.cards">
-        <app-computer-player-card [pokemons]="[card]"></app-computer-player-card>
-      </div>
-    </ion-card-content>
-  </ion-card>
-</ng-container>
+    <!-- Computer Information -->
+    <ng-container *ngIf="computerPlayer$ | async as computerPlayer">
+        <div class="computer-wrapper">
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>Informações do Computador</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <p>Vitórias: {{computerPlayer.wins}}</p>
+                    <!-- Computer's Pokemon Cards -->
+                    <div *ngFor="let card of computerPlayer.cards">
+                        <app-computer-player-card [pokemons]="[card]"></app-computer-player-card>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </div>
+    </ng-container>
+  </section>
+</ion-content>

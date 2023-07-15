@@ -9,15 +9,13 @@
         <p>Nome: {{player.name}}</p>
         <p>Vitórias: {{player.wins}}</p>
         <p>Ranking: {{player.rank}}</p>
+        <img src="assets/img/ash.png" alt="Ash" class="ash-image">
       </div>
 
-<!-- Player Img -->
-      <div class="img"> 
-        <img src="assets/img/ash.png" alt="Ash" class="ash-image">
-          </div>
-      <div>
-        
-        <!-- Player pokebola -->
+
+
+<!-- Player pokebola -->
+      <div> 
         <app-card [pokemons]="player.cards" (pokemonsEmitter)="onPokemonsChanged($event)"></app-card>
       </div>
     </ion-card-content>

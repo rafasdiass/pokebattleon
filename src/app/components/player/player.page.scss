@@ -19,11 +19,11 @@ ion-card {
     }
 
     .img {
-      max-width: 50%; // Restringe o tamanho da imagem
+      max-width: 30%; // Restringe o tamanho da div que envolve a imagem
     }
 
     .ash-image {
-      width: 100%; // Preenche a largura total da coluna
+      width: 30%; // Preenche a largura total da div que envolve a imagem
       height: auto; // Mantém a proporção da imagem
     }
 

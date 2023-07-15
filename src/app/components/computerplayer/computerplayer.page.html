@@ -6,5 +6,7 @@
   <ion-card-content>
     <p>Vitórias: {{computerPlayer.wins}}</p>
     <app-card *ngFor="let card of computerPlayer.cards" [pokemons]="[card]"></app-card>
+    <img src="assets/img/rocket.png" alt="rocket" class="rocket-image">
   </ion-card-content>
 </ion-card>
+
