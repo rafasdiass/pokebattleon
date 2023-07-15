@@ -3,6 +3,7 @@ import { getFirestore, doc, setDoc, updateDoc, getDoc } from "firebase/firestore
 import { getAuth } from "firebase/auth";
 import { Player } from '../models/player.model';
 import { Card } from '../models/card.model';
+import { CardPokemonService } from './card-pokemon.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,22 @@ export class PlayerService {
   private firestore = getFirestore();
   private auth = getAuth();
 
+  constructor(private cardPokemonService: CardPokemonService) {}
+
   async getPlayer(uid: string): Promise<Player | undefined> {
     const docRef = doc(this.firestore, 'players', uid);
     const docSnap = await getDoc(docRef);
 
     console.log('Fetched player document: ', docSnap);
 
-    return docSnap.exists() ? docSnap.data() as Player : undefined;
+    if(docSnap.exists()){
+      const playerData = docSnap.data() as Player;
+      // Get the player's cards
+      playerData.cards = await this.cardPokemonService.getCard(uid);
+      return playerData;
+    } else {
+      return undefined;
+    }
   }
 
   async updatePlayerWins(uid: string, wins: number): Promise<void> {
