@@ -11,9 +11,15 @@ ion-card {
   .card-content {
     display: flex; // Cria um layout flexível
     justify-content: space-between; // Alinha os itens nas extremidades do contêiner
+    flex-wrap: wrap; // Permite que os itens sejam ajustados para a próxima linha se necessário
 
     > div {
-      width: 50%; // Divide o espaço disponível em duas colunas
+      flex: 1 1 0px; // Permite que cada div cresça e encolha conforme necessário
+      margin: 10px; // Adiciona uma margem em torno de cada div
+    }
+
+    .img {
+      max-width: 50%; // Restringe o tamanho da imagem
     }
 
     .ash-image {
