@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Card } from '../../models/card.model';
+import { Card, CardAttribute } from '../../models/card.model';
 import { AuthService } from '../../services/auth.service';
 import { CardPokemonService } from '../../services/card-pokemon.service';
 import { Router } from '@angular/router';
+import { GameBoardService } from 'src/app/services/game-board.service';
+import { PlayerService } from 'src/app/services/player.service';
+import { ComputerCardService } from 'src/app/services/computer-card.service';
 
 @Component({
   selector: 'app-pokemon-gym',
@@ -12,20 +15,31 @@ import { Router } from '@angular/router';
 export class PokemonGymPage implements OnInit {
   isLoggedIn: boolean = true;
   pokemons: Card[] = [];
-  isGameStarted: boolean = true;
-  currentCardIndex: number = 0; // Adicionado para navegar entre as cartas
+  computerPokemons: Card[] = [];
+  isGameStarted: boolean = false;
+  currentCardIndex: number = 0;
+  currentComputerCardIndex: number = 0; // índice da carta atual do computador
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private cardPokemonService: CardPokemonService,
+    private gameBoardService: GameBoardService,
+    private playerService: PlayerService,
+    private computerCardService: ComputerCardService,
   ) {}
 
   ngOnInit() {
     this.authService.getUser().subscribe(user => {
       if (user) {
-        this.cardPokemonService.getCard(user.uid).then(pokemons => {
-          this.pokemons = pokemons;
+        this.gameBoardService.initGame().then(() => {
+          this.cardPokemonService.getCard(user.uid).then(pokemons => {
+            this.pokemons = pokemons;
+            this.computerCardService.getRandomPokemon(3).then(computerPokemons => {
+              this.computerPokemons = computerPokemons;
+              this.isGameStarted = true;
+            });
+          });
         });
       }
     });
@@ -46,8 +60,24 @@ export class PokemonGymPage implements OnInit {
   }
 
   confirmBattleAbandonment() {
-    // Aqui você pode exibir um modal ou uma caixa de diálogo para confirmar a saída da batalha
-    // Ao confirmar, você pode navegar para o dashboard
     this.router.navigate(['/dashboard']);
+  }
+
+  onAttributeSelect(event: any) {
+    const selectedAttribute: CardAttribute = event.target.value as CardAttribute;
+    this.gameBoardService.playTurn(selectedAttribute);
+
+    // após o turno do jogador, o computador deve jogar seu turno
+    this.nextComputerCard();
+  }
+
+  // Função para o computador ir para a próxima carta
+  nextComputerCard() {
+    if (this.currentComputerCardIndex < this.computerPokemons.length - 1) {
+      this.currentComputerCardIndex++;
+    } else {
+      // Se o computador já exibiu todas as suas cartas, pode-se reiniciar o índice ou implementar alguma outra lógica.
+      this.currentComputerCardIndex = 0;
+    }
   }
 }

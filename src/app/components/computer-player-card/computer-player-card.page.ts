@@ -7,11 +7,10 @@ import { Card } from '../../models/card.model';
   styleUrls: ['./computer-player-card.page.scss'],
 })
 export class ComputerPlayerCardPage implements OnInit {
-  @Input() pokemons!: Card[];  // aqui é 'pokemons' em vez de 'pokemon'
+  @Input() pokemon!: Card;  // alterado para 'pokemon'
 
   constructor() { }
 
   ngOnInit() {
   }
-
 }

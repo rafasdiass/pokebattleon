@@ -1,18 +1,28 @@
-<!-- pokemon-gym.page.html -->
-
 <ion-content>
   <ion-grid>
     <ion-row>
       <ion-col>
         <!-- Player's Current Card -->
         <app-card *ngIf="pokemons && pokemons.length > 0" [pokemon]="pokemons[currentCardIndex]"></app-card>
+
+        <!-- Attribute Selection -->
+        <ion-item *ngIf="isGameStarted">
+          <ion-label>Escolha um atributo para a batalha:</ion-label>
+          <ion-button (click)="onAttributeSelect('hp')">HP</ion-button>
+          <ion-button (click)="onAttributeSelect('attack')">Ataque</ion-button>
+          <ion-button (click)="onAttributeSelect('defense')">Defesa</ion-button>
+          <ion-button (click)="onAttributeSelect('specialAttack')">Ataque Especial</ion-button>
+          <ion-button (click)="onAttributeSelect('specialDefense')">Defesa Especial</ion-button>
+          <ion-button (click)="onAttributeSelect('speed')">Velocidade</ion-button>
+        </ion-item>
+
         <ion-button (click)="previousCard()">Anterior</ion-button>
         <ion-button (click)="nextCard()">Próximo</ion-button>
       </ion-col>
 
       <ion-col>
         <!-- Computer Information -->
-        <app-computerplayer *ngIf="isGameStarted"></app-computerplayer>
+        <app-computer-player-card [pokemon]="computerPokemons[currentComputerCardIndex]"></app-computer-player-card>
 
         <!-- Exit Button Section -->
         <ion-item>

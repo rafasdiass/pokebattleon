@@ -17,6 +17,11 @@ export class PlayerService {
   constructor(private cardPokemonService: CardPokemonService, private authService: AuthService) {}
 
   async getPlayer(uid: string): Promise<Player | null> {
+    if (!uid) {
+      console.error('UID is undefined or null');
+      return null;
+    }
+    
     const playerDoc = doc(this.db, 'users', uid);
     const playerSnapshot = await getDoc(playerDoc);
   
