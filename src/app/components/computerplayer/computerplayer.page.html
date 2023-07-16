@@ -1,15 +1,22 @@
-<!-- Informações do Computador -->
-<ion-card *ngIf="(computerPlayer$ | async) as computerPlayer">
-  <ion-card-header>
-    <ion-card-title>Informações do Computador
-      <!-- <img src="../../../assets/img/rocket.png" alt="rocket" class="rocket-image"> -->
-    </ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
+<ng-container *ngIf="(computerPlayer$ | async) as computerPlayer">
+  <!-- Computer Information -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Informações do Computador</ion-card-title>
+      
+    </ion-card-header>
+    <ion-card-content class="card-content">
+      <div>
+        <p>Vitórias: {{computerPlayer.wins}}</p>
+        <p>Ranking: {{computerPlayer.rank}}</p>
+        <!-- Adicionando a imagem aqui -->
+        <img src="assets/img/rocket.png" alt="Rocket Team" class="rocket-image">
+      </div>
 
-    <p>Vitórias: {{computerPlayer.wins}}</p>
-    <app-card *ngFor="let card of computerPlayer.cards" [pokemons]="[card]"></app-card>
-    
-  </ion-card-content>
-</ion-card>
-
+      <!-- Computer pokebola -->
+      <div>
+        <app-computer-player-card *ngFor="let card of computerPlayer.cards" [pokemons]="[card]"></app-computer-player-card>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ng-container>

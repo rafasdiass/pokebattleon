@@ -6,7 +6,7 @@ import { Observable, from, EMPTY, of } from 'rxjs';
 import { Card } from '../../models/card.model';
 import { Router } from '@angular/router';
 import { CardPokemonService } from '../../services/card-pokemon.service';
-
+import { ComputerPlayerPage } from '../computerplayer/computerplayer.page';
 @Component({
   selector: 'app-pokemon-gym',
   templateUrl: './pokemon-gym.page.html',

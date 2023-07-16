@@ -4,13 +4,14 @@ import { Card } from './card.model';
 export class ComputerPlayer extends User {
   cards: Card[];
   wins: number;
+  rank: number; // adicione essa linha
   name: string = 'Gary';
 
   constructor() {
     super('computer', 'computer@game.com', 'Computer Player');
     this.cards = [];
     this.wins = 0;
-    
+    this.rank = 0; // inicialize o rank aqui
   }
 
   maximizeStatStrategy(): string {

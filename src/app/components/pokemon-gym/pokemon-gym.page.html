@@ -1,44 +1,22 @@
 <ion-content>
-  <div class="container">
-    <div class="column">
-      <!-- Battle Mechanics Section -->
-      <!-- <section class="battle-mechanics-section">
-        <app-battle-mechanics (attributeSelect)="onAttributeSelect($event)"></app-battle-mechanics>
-      </section> -->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <!-- Player Information -->
+        <ng-container>
+          <app-player *ngIf="isLoggedIn"></app-player>
+        </ng-container>
+      </ion-col>
 
-      <!-- Player Information -->
-      <ng-container> <app-player *ngIf="isLoggedIn"></app-player>
-        
-      </ng-container>
+      <ion-col>
+        <!-- Computer Information -->
+        <app-computerplayer *ngIf="isGameStarted"></app-computerplayer>
 
-
-    </div>
-
-    <div class="column">
-      <!-- Computer Information -->
-      <app-computer *ngIf="isGameStarted"></app-computer>
-        <div class="computer-wrapper">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Informações do Computador</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <p>Vitórias: {{computerPlayer.wins}}</p>
-              <!-- Computer's Pokemon Cards -->
-              <div *ngFor="let card of computerPlayer.cards">
-                <app-computer-player-card [pokemons]="[card]"></app-computer-player-card>
-              </div>
-            </ion-card-content>
-          </ion-card>
-        </div>
-      </ng-container>
-
-      <!-- Exit Button Section -->
-      <section class="exit-button-section">
-        <div class="button-wrapper">
+        <!-- Exit Button Section -->
+        <ion-item>
           <ion-button expand="full" (click)="confirmBattleAbandonment()">Sair</ion-button>
-        </div>
-      </section>
-    </div>
-  </div>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
