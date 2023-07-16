@@ -7,16 +7,17 @@ import { Card } from '../models/card.model';
 export class BattleService {
   constructor() { }
 
-  battle(attribute: keyof Card, userCard: Card, computerCard: Card): 'user' | 'computer' | 'draw' {
-    const userAttribute = userCard[attribute];
+  battle(attribute: keyof Card, playerCard: Card, computerCard: Card): 'player' | 'computer' | 'draw' {
+    const playerAttribute = playerCard[attribute];
     const computerAttribute = computerCard[attribute];
-
-    if (userAttribute > computerAttribute) {
-      return 'user';
-    } else if (userAttribute < computerAttribute) {
+  
+    if (playerAttribute > computerAttribute) {
+      return 'player';
+    } else if (playerAttribute < computerAttribute) {
       return 'computer';
     } else {
       return 'draw';
     }
   }
+
 }

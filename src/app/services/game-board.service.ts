@@ -51,7 +51,7 @@ export class GameBoardService {
     if (playerCard && computerCard) {
       const battleResult = this.battleService.battle(attributeToCompare, playerCard, computerCard);
 
-      if (battleResult === 'user') {
+      if (battleResult === 'player') {
         this.deckService.addCardToPile(playerCard);
         this.deckService.addCardToPile(computerCard);
         this.deckService.addCardsToPile(this.pile);
@@ -65,6 +65,16 @@ export class GameBoardService {
         this.pile.push(playerCard, computerCard);
       }
     }
+  }
+
+  onAttributeSelect(event: any) {
+    const attributeToCompare = event.target.value as CardAttribute;
+
+    if (!attributeToCompare) {
+      throw new Error('Attribute is not selected');
+    }
+
+    this.playTurn(attributeToCompare);
   }
 
   isGameEnd(): boolean {

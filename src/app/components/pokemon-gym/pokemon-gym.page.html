@@ -4,7 +4,7 @@
     <section class="cards-section">
       <div class="cards-wrapper">
         <!-- Player Information -->
-        <ng-container *ngIf="player$ | async as player">
+        <ng-container *ngIf="player as player">
           <div class="player-wrapper">
             <app-player></app-player>
           </div>
