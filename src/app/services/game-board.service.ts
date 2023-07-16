@@ -15,6 +15,8 @@ export class GameBoardService {
   computer: ComputerPlayer;
   pile: Card[] = [];
 
+  attributesInOrder: CardAttribute[] = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
+
   constructor(
     private playerService: PlayerService,
     private computerPlayerService: ComputerPlayerService,
@@ -58,18 +60,14 @@ export class GameBoardService {
     if (playerCard && computerCard) {
       const battleResult = this.battleService.battle(attributeToCompare, playerCard, computerCard);
 
-      if (battleResult === 'player') {
-        this.deckService.addCardToPile(playerCard);
-        this.deckService.addCardToPile(computerCard);
-        this.deckService.addCardsToPile(this.pile);
-        this.pile = [];
-      } else if (battleResult === 'computer') {
+      if (battleResult !== 'draw') {
         this.deckService.addCardToPile(playerCard);
         this.deckService.addCardToPile(computerCard);
         this.deckService.addCardsToPile(this.pile);
         this.pile = [];
       } else {
         this.pile.push(playerCard, computerCard);
+        this.playTurn(this.nextAttribute(attributeToCompare));
       }
     }
   }
@@ -98,5 +96,11 @@ export class GameBoardService {
     } else if (this.computer.cards.length === 0) {
       console.log('Player wins!');
     }
+  }
+
+  nextAttribute(currentAttribute: CardAttribute): CardAttribute {
+    const currentIndex = this.attributesInOrder.indexOf(currentAttribute);
+    const nextIndex = (currentIndex + 1) % this.attributesInOrder.length;
+    return this.attributesInOrder[nextIndex];
   }
 }

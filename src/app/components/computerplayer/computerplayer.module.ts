@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { ComputerplayerPageRoutingModule } from './computerplayer-routing.module';
 import { ComputerPlayerPage } from './computerplayer.page';
 import { CardPageModule } from '../card/card.module';  // Import CardPageModule
+import { ComputerPlayerCardPageModule } from '../computer-player-card/computer-player-card.module';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { CardPageModule } from '../card/card.module';  // Import CardPageModule
     FormsModule,
     IonicModule,
     ComputerplayerPageRoutingModule,
-    CardPageModule  // Add CardPageModule to imports
+    CardPageModule,
+    ComputerPlayerCardPageModule  // Add CardPageModule to imports
   ],
   declarations: [ComputerPlayerPage],
   exports: [ComputerPlayerPage]

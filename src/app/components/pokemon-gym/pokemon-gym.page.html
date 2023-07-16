@@ -2,15 +2,13 @@
   <div class="container">
     <div class="column">
       <!-- Battle Mechanics Section -->
-      <section class="battle-mechanics-section">
+      <!-- <section class="battle-mechanics-section">
         <app-battle-mechanics (attributeSelect)="onAttributeSelect($event)"></app-battle-mechanics>
-      </section>
+      </section> -->
 
       <!-- Player Information -->
-      <ng-container *ngIf="player">
-        <div class="player-wrapper">
-          <app-player></app-player>
-        </div>
+      <ng-container> <app-player *ngIf="isLoggedIn"></app-player>
+        
       </ng-container>
 
 
@@ -18,7 +16,7 @@
 
     <div class="column">
       <!-- Computer Information -->
-      <ng-container *ngIf="computerPlayer$ | async as computerPlayer">
+      <app-computer *ngIf="isGameStarted"></app-computer>
         <div class="computer-wrapper">
           <ion-card>
             <ion-card-header>
