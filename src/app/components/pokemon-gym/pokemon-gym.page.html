@@ -1,6 +1,11 @@
 <ion-content>
   <div class="container">
     <div class="column">
+      <!-- Battle Mechanics Section -->
+      <section class="battle-mechanics-section">
+        <app-battle-mechanics (attributeSelect)="onAttributeSelect($event)"></app-battle-mechanics>
+      </section>
+
       <!-- Player Information -->
       <ng-container *ngIf="player">
         <div class="player-wrapper">
@@ -8,10 +13,7 @@
         </div>
       </ng-container>
 
-      <!-- Battle Mechanics Section -->
-      <section class="battle-mechanics-section">
-        <app-battle-mechanics (attributeSelect)="onAttributeSelect($event)"></app-battle-mechanics>
-      </section>
+
     </div>
 
     <div class="column">

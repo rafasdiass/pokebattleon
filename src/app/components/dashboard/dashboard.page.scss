@@ -2,11 +2,11 @@ ion-content {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding: 20px;
+  //padding: 20px;
 
   app-navbar {
-    flex: 0;
-    margin-bottom: 20px; /* Adicionado para separar do próximo elemento */
+    position: relative; /* Importante, pois o z-index só funciona em elementos posicionados */
+    z-index: 9999; /* Escolha um valor alto para garantir que estará na frente */
   }
 /* No arquivo .scss relacionado ao componente onde o ion-content está localizado */
 
@@ -17,7 +17,7 @@ ion-content {
   height: 100vh; /* Faz a altura do wrapper corresponder à altura da janela de visualização */
   
   app-player {
-    width: 90%; /* Define a largura do componente player para 90% da largura disponível */
+    width: 130%; /* Define a largura do componente player para 90% da largura disponível */
     max-width: 800px; /* Define uma largura máxima para evitar que o cartão fique muito grande em telas grandes */
     height: auto; /* Deixa a altura do cartão se ajustar automaticamente ao conteúdo */
   }
