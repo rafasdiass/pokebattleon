@@ -3,3 +3,44 @@
   height: 30px;
   margin-right: 10px;
 }
+/* card.page.scss */
+
+ion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+ion-card-header {
+  ion-card-title {
+    font-family: 'Pokemon Solid', sans-serif;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
+
+ion-list {
+  ion-item {
+    display: flex;
+    align-items: center;
+
+    ion-label {
+      flex: 1;
+
+      p.pokemon-attribute-title {
+        font-family: 'Pokemon Solid', sans-serif;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    img.pokemon-image {
+      max-width: 100%;
+      height: auto;
+      margin-right: 1rem;
+    }
+  }
+}

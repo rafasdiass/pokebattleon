@@ -15,7 +15,7 @@ import { Card } from '../../models/card.model';
 export class PlayerPage implements OnInit {
   private playerSubject = new BehaviorSubject<Player | null>(null);
   player$ = this.playerSubject.asObservable();
-  currentCardIndex: number = 0;
+  
 
   constructor(
     private playerService: PlayerService, 
@@ -44,16 +44,4 @@ export class PlayerPage implements OnInit {
     });
   }
 
-  nextPokemon() {
-    const currentPlayer = this.playerSubject.getValue();
-    if(currentPlayer && this.currentCardIndex < currentPlayer.cards.length - 1) {
-      this.currentCardIndex++;
-    }
-  }
-
-  previousPokemon() {
-    if (this.currentCardIndex > 0) {
-      this.currentCardIndex--;
-    }
-  }
 }

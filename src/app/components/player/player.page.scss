@@ -1,52 +1,53 @@
 /* player.page.scss */
 
 ion-card {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 25rem;
-  width: 50rem;
-  padding: 3rem;
-  border: solid 1px yellow;
-}
+  margin: 1rem;
+  padding: 0.5rem;
+  width: 80%;
+  max-width: 400px;
+  align-self: center;
 
   ion-card-header {
     ion-card-title {
-      font-family: 'roboto', sans-serif;
-      color: #ff6347; /* Este é um tom de laranja, mas você pode escolher qualquer cor que preferir. */
-      text-align: center;
-      margin-bottom: 2rem;
+      font-family: 'Pokemon Hollow', sans-serif;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-decoration: underline;
     }
   }
 
   .card-content {
-    display: flex; // Cria um layout flexível
-    justify-content: space-between; // Alinha os itens nas extremidades do contêiner
-    flex-wrap: wrap; // Permite que os itens sejam ajustados para a próxima linha se necessário
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    > div {
-      flex: 1 1 0px; // Permite que cada div cresça e encolha conforme necessário
-      margin: 10px; // Adiciona uma margem em torno de cada div
+    div {
+      margin-bottom: 1rem;
     }
 
-    .img {
-      max-width: 30%; // Restringe o tamanho da div que envolve a imagem
-    }
-
-    .ash-image {
-      margin-top: 3rem;
-      width: 30%; // Preenche a largura total da div que envolve a imagem
-      height: auto; // Mantém a proporção da imagem
+    img.ash-image {
+      margin-top: 1rem;
+      width: 40%;
+      height: auto;
     }
 
     p {
-      font-family: 'roboto', sans-serif;
-      color: #ffffff; /* Cor branca */
+      margin-bottom: 0.5rem;
+      font-family: 'Pokemon Hollow', sans-serif;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    p.name,
+    p.rank {
+      color: #ff6347; /* Cor para Nome e Ranking */
+    }
+
+    p.wins {
+      color: #ffffff; /* Cor para Vitórias */
     }
   }
-
-
-ion-card-title {
-  font-weight: bold;
-  text-decoration: underline;
 }

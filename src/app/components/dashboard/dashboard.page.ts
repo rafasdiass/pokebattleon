@@ -11,6 +11,7 @@ import { Card } from '../../models/card.model';
 export class DashboardPage implements OnInit {
   isLoggedIn: boolean = true;
   pokemons: Card[] = [];
+  currentCardIndex: number = 0;
 
   constructor(
     private authService: AuthService,
@@ -25,5 +26,18 @@ export class DashboardPage implements OnInit {
         });
       }
     });
+  }
+   // Função para ir para a carta anterior
+   previousCard() {
+    if (this.currentCardIndex > 0) {
+      this.currentCardIndex--;
+    }
+  }
+
+  // Função para ir para a próxima carta
+  nextCard() {
+    if (this.currentCardIndex < this.pokemons.length - 1) {
+      this.currentCardIndex++;
+    }
   }
 }

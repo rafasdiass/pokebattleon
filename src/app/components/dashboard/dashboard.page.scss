@@ -1,26 +1,60 @@
+/* player.page.scss */
+
 ion-content {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  //padding: 20px;
+  height: 100%;
 
   app-navbar {
-    position: relative; /* Importante, pois o z-index só funciona em elementos posicionados */
-    z-index: 9999; /* Escolha um valor alto para garantir que estará na frente */
+    flex: 0 0 auto;
   }
-/* No arquivo .scss relacionado ao componente onde o ion-content está localizado */
 
-.content-wrapper {
-  display: flex;
-  justify-content: center; /* Alinha horizontalmente ao centro */
-  align-items: center; /* Alinha verticalmente ao centro */
-  height: 100vh; /* Faz a altura do wrapper corresponder à altura da janela de visualização */
-  
-  app-player {
-    width: 130%; /* Define a largura do componente player para 90% da largura disponível */
-    max-width: 800px; /* Define uma largura máxima para evitar que o cartão fique muito grande em telas grandes */
-    height: auto; /* Deixa a altura do cartão se ajustar automaticamente ao conteúdo */
+  ion-grid {
+    height: 100%;
   }
-}
 
+  ion-row {
+    height: 100%;
+    align-items: center;
+  }
+
+  ion-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+
+    .content-wrapper {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      width: 100%;
+
+      .player-wrapper,
+      .pokebola-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        margin: 1rem;
+        border: 2px solid #ff6347; /* Borda laranja */
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .pokebola-wrapper {
+        position: relative;
+
+        ion-button {
+          position: absolute;
+          bottom: 1rem;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }
+    }
+  }
 }
