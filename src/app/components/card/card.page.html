@@ -1,5 +1,5 @@
 <!-- Pokémons no Card -->
-<ion-card *ngIf="pokemons">
+<ion-card *ngIf="pokemon">
   <ion-card-header>
     <ion-card-title>
       <img src="assets/img/pokebola.png" alt="Pokebola" class="pokebola-image">
@@ -8,7 +8,7 @@
   </ion-card-header>
   <!-- <ion-card-content> -->
     <ion-list>
-      <ion-item *ngFor="let pokemon of pokemons">
+      <ion-item>
         <img [src]="pokemon.imageUrl" alt="{{pokemon.name}} image" class="pokemon-image"> <!-- Adicionado a tag de imagem -->
 
         <ion-label>
@@ -20,8 +20,8 @@
           <p class="pokemon-attribute-title">Defesa Especial: {{pokemon.specialDefense}}</p>
           <p class="pokemon-attribute-title">Velocidade: {{pokemon.speed}}</p>
         </ion-label>
-        <!-- <ion-button color="primary" (click)="selectCard(pokemon)">Selecionar</ion-button>
-        <ion-button color="danger" (click)="removeCard(pokemon)">Remover</ion-button> -->
+        <!-- <ion-button color="primary" (click)="selectCard()">Selecionar</ion-button>
+        <ion-button color="danger" (click)="removeCard()">Remover</ion-button> -->
       </ion-item>
     </ion-list>
   <!-- </ion-card-content> -->

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Card } from '../../models/card.model';
 import { CardPokemonService } from '../../services/card-pokemon.service';
 import { AuthService } from '../../services/auth.service';
@@ -11,8 +11,7 @@ import { PokemonSelectionService } from '../../services/pokemon-selection.servic
   styleUrls: ['./card.page.scss'],
 })
 export class CardPage implements OnInit {
-  @Input() pokemons: Card[] = [];
-  @Output() pokemonsEmitter = new EventEmitter<Card[]>();
+  @Input() pokemon!: Card;
 
   constructor(
     private cardPokemonService: CardPokemonService,
@@ -40,11 +39,10 @@ export class CardPage implements OnInit {
         const pokemons = await this.cardPokemonService.getCard(playerId);
         console.log('Pokemons Data:', pokemons);
 
-        // Emitting the pokemons data to parent Dashboard component
-        this.pokemonsEmitter.emit(pokemons);
+        // We are no longer emitting pokemons here
 
-        // Update pokemons in this component
-        this.pokemons = pokemons;
+        // Update pokemon in this component
+        this.pokemon = pokemons[0]; // We are only setting the first Pokemon here
       } catch (error) {
         console.error('Error loading player pokemons:', error);
       }
@@ -53,13 +51,13 @@ export class CardPage implements OnInit {
     }
   }
 
-  selectCard(card: Card) {
-    this.pokemonSelectionService.selectPokemon(card);
-    console.log('Pokemon Card Selected:', card);
+  selectCard() {
+    this.pokemonSelectionService.selectPokemon(this.pokemon);
+    console.log('Pokemon Card Selected:', this.pokemon);
   }
 
-  removeCard(card: Card) {
-    this.pokemonSelectionService.removePokemon(card);
-    console.log('Pokemon Card Removed:', card);
+  removeCard() {
+    this.pokemonSelectionService.removePokemon(this.pokemon);
+    console.log('Pokemon Card Removed:', this.pokemon);
   }
 }

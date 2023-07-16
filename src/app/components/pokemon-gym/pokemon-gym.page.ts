@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { PlayerService } from '../../services/player.service';
-import { AuthService } from '../../services/auth.service';
-import { Player } from '../../models/player.model';
-import { Observable, from, EMPTY, of } from 'rxjs';
 import { Card } from '../../models/card.model';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { CardPokemonService } from '../../services/card-pokemon.service';
-import { ComputerPlayerPage } from '../computerplayer/computerplayer.page';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-pokemon-gym',
   templateUrl: './pokemon-gym.page.html',
@@ -16,6 +13,7 @@ export class PokemonGymPage implements OnInit {
   isLoggedIn: boolean = true;
   pokemons: Card[] = [];
   isGameStarted: boolean = true;
+  currentCardIndex: number = 0; // Adicionado para navegar entre as cartas
 
   constructor(
     private authService: AuthService,
@@ -31,6 +29,20 @@ export class PokemonGymPage implements OnInit {
         });
       }
     });
+  }
+
+  // Função para ir para a carta anterior
+  previousCard() {
+    if (this.currentCardIndex > 0) {
+      this.currentCardIndex--;
+    }
+  }
+
+  // Função para ir para a próxima carta
+  nextCard() {
+    if (this.currentCardIndex < this.pokemons.length - 1) {
+      this.currentCardIndex++;
+    }
   }
 
   confirmBattleAbandonment() {

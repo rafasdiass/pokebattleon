@@ -1,11 +1,13 @@
+<!-- pokemon-gym.page.html -->
+
 <ion-content>
   <ion-grid>
     <ion-row>
       <ion-col>
-        <!-- Player Information -->
-        <ng-container>
-          <app-player *ngIf="isLoggedIn"></app-player>
-        </ng-container>
+        <!-- Player's Current Card -->
+        <app-card *ngIf="pokemons && pokemons.length > 0" [pokemon]="pokemons[currentCardIndex]"></app-card>
+        <ion-button (click)="previousCard()">Anterior</ion-button>
+        <ion-button (click)="nextCard()">Próximo</ion-button>
       </ion-col>
 
       <ion-col>

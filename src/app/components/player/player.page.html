@@ -12,12 +12,15 @@
         <img src="assets/img/ash.png" alt="Ash" class="ash-image">
       </div>
 
-
-
- <!-- Player pokebola -->
+      <!-- Player pokebola -->
       <div> 
-        <app-card [pokemons]="player.cards" (pokemonsEmitter)="onPokemonsChanged($event)"></app-card>
+        <app-card [pokemon]="player.cards[currentCardIndex]"></app-card>
       </div>
+
+      <!-- Buttons to navigate pokemons -->
+      <button (click)="previousPokemon()">Previous</button>
+      <button (click)="nextPokemon()">Next</button>
+      
     </ion-card-content>
   </ion-card>
 </ng-container>

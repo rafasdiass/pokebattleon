@@ -4,7 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { Player } from '../../models/player.model';
 import { BehaviorSubject, of } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';  // Import 'take' here
+import { switchMap, take } from 'rxjs/operators';
 import { Card } from '../../models/card.model';
 
 @Component({
@@ -15,6 +15,7 @@ import { Card } from '../../models/card.model';
 export class PlayerPage implements OnInit {
   private playerSubject = new BehaviorSubject<Player | null>(null);
   player$ = this.playerSubject.asObservable();
+  currentCardIndex: number = 0;
 
   constructor(
     private playerService: PlayerService, 
@@ -23,8 +24,8 @@ export class PlayerPage implements OnInit {
   ) {}
   
   ngOnInit() {
-    this.authService.getUser().pipe(take(1)).subscribe((user: any) => { // Assuming 'user' is of any type. You might need to replace 'any' with the correct type.
-      if (user && user.uid) {  // Check if user and user.uid exist
+    this.authService.getUser().pipe(take(1)).subscribe((user: any) => {
+      if (user && user.uid) {
         this.playerService.getPlayer(user.uid).then(player => {
           if (player) {
             console.log("Player data:", player);
@@ -43,12 +44,16 @@ export class PlayerPage implements OnInit {
     });
   }
 
-  onPokemonsChanged(updatedPokemons: Card[]) {
-    // Assuming that 'player' is the player data variable in your Player component class.
+  nextPokemon() {
     const currentPlayer = this.playerSubject.getValue();
-    if(currentPlayer) {
-      currentPlayer.cards = updatedPokemons;
-      this.playerSubject.next(currentPlayer);
+    if(currentPlayer && this.currentCardIndex < currentPlayer.cards.length - 1) {
+      this.currentCardIndex++;
+    }
+  }
+
+  previousPokemon() {
+    if (this.currentCardIndex > 0) {
+      this.currentCardIndex--;
     }
   }
 }
