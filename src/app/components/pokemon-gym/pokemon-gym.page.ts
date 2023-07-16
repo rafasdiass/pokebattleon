@@ -41,6 +41,9 @@ export class PokemonGymPage implements OnInit {
         this.playerService.getPlayer(user.uid).then(player => {
           if (player) {
             this.player = player;
+            this.gameBoardService.setPlayerInGame(player).then(() => {
+              console.log('Player is set in the game');
+            });
           } else {
             console.error("Error while fetching player data: Player is null");
             alert('An error occurred while fetching player data');

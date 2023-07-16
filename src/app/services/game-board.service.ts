@@ -28,10 +28,13 @@ export class GameBoardService {
     });
   }
 
+  async setPlayerInGame(player: Player): Promise<void> {
+    this.player = player;
+  }
+
   async initGame(): Promise<void> {
     const player = await this.playerService.getPlayer(this.playerService.getCurrentUserId());
     if (!player) {
-      // Handle case where player is not found
       return;
     }
 
@@ -83,7 +86,7 @@ export class GameBoardService {
 
   isGameEnd(): boolean {
     if (!this.player) {
-      return true; // The game ends if the player is not defined
+      return true;
     }
 
     return this.player.cards.length === 0 || this.computer.cards.length === 0;
