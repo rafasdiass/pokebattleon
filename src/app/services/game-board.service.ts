@@ -6,6 +6,7 @@ import { PlayerService } from './player.service';
 import { ComputerPlayerService } from './computer-player.service';
 import { DeckService } from './deck.service';
 import { BattleService } from './battle.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class GameBoardService {
   computer?: ComputerPlayer;
   pile: Card[] = [];
   attributesInOrder: CardAttribute[] = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
+  battleResult$: Subject<'player' | 'computer' | 'draw'> = new Subject<'player' | 'computer' | 'draw'>();
 
   constructor(
     private playerService: PlayerService,
@@ -54,19 +56,18 @@ export class GameBoardService {
   private handleBattleResult(battleResult: 'player' | 'computer' | 'draw', playerCard: Card, computerCard: Card, selectedAttribute: CardAttribute): void {
     switch (battleResult) {
       case 'player':
-        // Jogador vence o turno
         console.log('Jogador vence o turno!');
         break;
       case 'computer':
-        // Computador vence o turno
         console.log('Computador vence o turno!');
         break;
       case 'draw':
-        // É um empate, então adicionaremos as cartas ao monte e selecionaremos um novo atributo para comparação
         this.pile.push(playerCard, computerCard);
         this.playTurn(this.nextAttribute(selectedAttribute));
         break;
     }
+
+    this.battleResult$.next(battleResult);
   }
 
   nextAttribute(currentAttribute: CardAttribute): CardAttribute {
