@@ -10,7 +10,7 @@
   <ion-grid>
     <ion-row *ngFor="let attribute of attributes">
       <ion-col>
-        <ion-button expand="full" (click)="selectAttribute(attribute)">
+        <ion-button [disabled]="!gameBoardService.player" expand="full" (click)="selectAttribute(attribute)">
           <ion-icon [name]="attribute.icon"></ion-icon>
           {{ attribute.name }}
         </ion-button>

@@ -22,6 +22,10 @@ export class GameBoardService {
     private battleService: BattleService
   ) {
     this.computer = new ComputerPlayer();
+
+    this.initGame().then(() => {
+      console.log('Game is initialized.');
+    });
   }
 
   async initGame(): Promise<void> {

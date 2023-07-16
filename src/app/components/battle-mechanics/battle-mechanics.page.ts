@@ -17,10 +17,15 @@ export class BattleMechanicsPage implements OnInit {
     { name: 'speed', icon: 'speedometer' }
   ];
 
-  constructor(private gameBoardService: GameBoardService) {}
+  constructor(public gameBoardService: GameBoardService) {} // Make gameBoardService public
 
-  async ngOnInit() {
-    await this.gameBoardService.initGame();
+  ngOnInit() {
+    if (!this.gameBoardService.player) {
+      console.log('Player is not defined');
+      return;
+    }
+
+    // Here, you can put any other logic you need to run when the component is initialized.
   }
 
   selectAttribute(attribute: AttributeIcon) {
