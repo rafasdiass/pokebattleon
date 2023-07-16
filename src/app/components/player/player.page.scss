@@ -3,9 +3,10 @@
 ion-card {
   margin: 1rem;
   padding: 0.5rem;
-  width: 80%;
+  width: 120%;
   max-width: 400px;
   align-self: center;
+  border: 2px solid #ff6347; /* Borda laranja */
 
   ion-card-header {
     ion-card-title {
@@ -31,11 +32,14 @@ ion-card {
       margin-top: 1rem;
       width: 40%;
       height: auto;
+      display: block; /* Centraliza a imagem */
+      margin-left: auto;
+      margin-right: auto;
     }
 
     p {
       margin-bottom: 0.5rem;
-      font-family: 'Pokemon Hollow', sans-serif;
+      font-family: 'Pokemon Solid', sans-serif;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
       font-size: 1.4rem;
       text-align: center;

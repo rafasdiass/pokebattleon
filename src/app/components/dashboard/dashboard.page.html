@@ -4,15 +4,24 @@
     <ion-row>
       <ion-col size="12" size-md="8" offset-md="2">
         <div class="content-wrapper">
-          <app-player *ngIf="isLoggedIn"></app-player>
           
-          <ion-col>
-            <!-- Player's Current Card -->
-            <app-card *ngIf="pokemons && pokemons.length > 0" [pokemon]="pokemons[currentCardIndex]"></app-card>
-            <ion-button (click)="previousCard()">Anterior</ion-button>
-            <ion-button (click)="nextCard()">Próximo</ion-button>
-            
-          </ion-col>
+          <div class="player">
+          <app-player *ngIf="isLoggedIn"></app-player>
+          </div>
+
+          <div class="button-anterior">
+            <ion-button (click)="previousCard()">
+              <ion-icon name="arrow-back"></ion-icon> Anterior
+            </ion-button>
+            </div>
+
+          <app-card *ngIf="pokemons && pokemons.length > 0" [pokemon]="pokemons[currentCardIndex]"></app-card>
+          
+            <div class="button-proximo">
+            <ion-button (click)="nextCard()">
+              Próximo <ion-icon name="arrow-forward"></ion-icon>
+            </ion-button>
+          </div>
         </div>
       </ion-col>
     </ion-row>
