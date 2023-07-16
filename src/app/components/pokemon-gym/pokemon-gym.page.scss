@@ -1,65 +1,28 @@
-.cards-section, .battle-mechanics-section {
-  flex: 1.5; /* Increase this number as needed */
-  margin-right: 20px;
-}
-
-ion-content {
+.container {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 20px;
+  gap: 20px;
 
-  .container {
-    display: flex;
-    width: 100%;
-  }
-
-  .cards-section {
+  .column {
     flex: 1;
-    margin-right: 20px;
+
+    .player-wrapper {
+      margin-bottom: 20px;
+    }
+
+    .battle-mechanics-section {
+      margin-bottom: 20px;
+    }
   }
 
-  .battle-mechanics-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .cards-wrapper {
-    border: 2px solid #ff6347;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    padding: 10px;
-  }
-
-  .player-wrapper,
   .computer-wrapper {
-    margin-bottom: 10px;
-  }
+    ion-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
 
-  .action-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-top: 20px;
-  }
-
-  .abandon-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ff6347;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    padding: 20px 20px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-
-    ion-icon {
-      margin-right: 5px;
+    ion-card-content {
+      flex: 1;
     }
   }
 }
-

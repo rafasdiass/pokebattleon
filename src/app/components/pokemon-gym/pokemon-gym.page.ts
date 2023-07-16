@@ -4,7 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { Player } from '../../models/player.model';
 import { ComputerPlayerService } from '../../services/computer-player.service';
 import { ComputerPlayer } from '../../models/computer-player.model';
-import { Observable, from, EMPTY } from 'rxjs';
+import { Observable, from, EMPTY, of } from 'rxjs';
 import { switchMap, catchError, filter, map } from 'rxjs/operators';
 import { Card } from '../../models/card.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
