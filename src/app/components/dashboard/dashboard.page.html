@@ -1,8 +1,13 @@
 <ion-content>
-    <app-navbar *ngIf="isLoggedIn"></app-navbar>
-    <div class="content-wrapper">
-      <app-player *ngIf="isLoggedIn"></app-player>
-      <!-- <app-card [pokemons]="pokemons"></app-card> -->
-    </div>
-  </ion-content>
-  
+  <app-navbar *ngIf="isLoggedIn"></app-navbar>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="8" offset-md="2">
+        <div class="content-wrapper">
+          <app-player *ngIf="isLoggedIn"></app-player>
+          <!-- <app-card [pokemons]="pokemons"></app-card> -->
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
