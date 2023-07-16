@@ -1,36 +1,5 @@
-ion-card {
-  ion-card-header {
-    ion-card-title {
-      display: flex;
-      align-items: center;
-
-      .pokebola-image {
-        width: 30px;
-        height: 30px;
-        margin-right: 10px;
-      }
-    }
-  }
-
-  ion-item {
-    display: flex;
-    align-items: center;
-
-    .pokemon-image {
-      width: 100px;
-      height: 100px;
-      margin-right: 10px;
-    }
-
-    ion-label {
-      ion-label {
-        margin-top: 5px;
-      }
-
-      .pokemon-attribute-title {
-        font-weight: bold;
-        margin-bottom: 5px;
-      }
-    }
-  }
+.pokebola-image {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
 }
