@@ -19,11 +19,14 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   isLoggedIn: boolean = true;
   pokemons: Card[] = [];
   computerPokemons: Card[] = [];
+  playerDeck: Card[] = [];
+  computerDeck: Card[] = [];
   isGameStarted: boolean = false;
   currentCardIndex: number = 0;
   currentComputerCardIndex: number = 0;
   deck: Card[] = [];
   deckCount: number = 0;
+  pokemonCount: number = 0;
   turnWinner: 'player' | 'computer' | 'draw' | null = null;
   turn: 'player' | 'computer' = 'player';
 
@@ -45,12 +48,12 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         this.gameBoardService.initGame().then(() => {
           this.cardPokemonService.getCard(user.uid).then(pokemons => {
             this.pokemons = pokemons;
+            this.pokemonCount = this.pokemons.length;
             this.deck = this.deckService.getDeck();
             this.deckCount = this.deck.length;
             const computerPlayer = this.computerPlayerService.getComputerPlayer();
             this.computerPokemons = computerPlayer.cards;
             this.isGameStarted = true;
-
             this.router.navigate(['/pokemon-gym']);
           });
         });
@@ -81,9 +84,8 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   onAttributeSelect(attribute: CardAttribute) {
     if (this.turn === 'player') {
       this.turnWinner = this.battleService.battle(attribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
-      this.currentCardIndex = (this.currentCardIndex + 1) % this.pokemons.length;
-
-      // After the player makes a move, it's the computer's turn
+      this.transferCard(this.turnWinner);
+      this.drawCard('player');
       this.turn = 'computer';
       this.computerTurn();
     }
@@ -91,15 +93,52 @@ export class PokemonGymPage implements OnInit, OnDestroy {
 
   computerTurn() {
     if (this.turn === 'computer') {
-      // The computer chooses an attribute
       const computerAttribute = this.computerPlayerService.chooseAttribute();
       this.turnWinner = this.battleService.battle(computerAttribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
-
-      this.currentComputerCardIndex = (this.currentComputerCardIndex + 1) % this.computerPokemons.length;
-
-      // After the computer makes a move, it's the player's turn
+      this.transferCard(this.turnWinner);
+      this.drawCard('computer');
       this.turn = 'player';
     }
+  }
+
+  transferCard(winner: 'player' | 'computer' | 'draw') {
+    if (winner === 'player') {
+      if (this.computerPokemons.length > 0) {
+        let card = this.computerPokemons.splice(this.currentComputerCardIndex, 1)[0];
+        if (card) {
+          this.playerDeck.push(card);
+        }
+        this.nextComputerCard();
+      }
+    } else if (winner === 'computer') {
+      if (this.pokemons.length > 0) {
+        let card = this.pokemons.splice(this.currentCardIndex, 1)[0];
+        if (card) {
+          this.computerDeck.push(card);
+        }
+        this.nextCard();
+      }
+    }
+    // Atualizar a contagem de cartas
+    this.pokemonCount = this.pokemons.length;
+    this.deckCount = this.playerDeck.length;
+  }
+  
+  drawCard(player: 'player' | 'computer') {
+    if (player === 'player' && this.playerDeck.length > 0) {
+      let card = this.playerDeck.pop();
+      if (card) {
+        this.pokemons.push(card);
+      }
+    } else if (player === 'computer' && this.computerDeck.length > 0) {
+      let card = this.computerDeck.pop();
+      if (card) {
+        this.computerPokemons.push(card);
+      }
+    }
+    // Atualizar a contagem de cartas
+    this.pokemonCount = this.pokemons.length;
+    this.deckCount = this.playerDeck.length;
   }
 
   nextComputerCard() {
