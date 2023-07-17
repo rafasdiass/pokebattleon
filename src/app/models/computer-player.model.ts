@@ -1,20 +1,18 @@
-import { User } from './user.model';
 import { Card } from './card.model';
 
-export class ComputerPlayer extends User {
+export class ComputerPlayer {
   cards: Card[];
   wins: number;
-  rank: number; // adicione essa linha
-  name: string = 'Gary';
+  rank: number;
+  name: string = 'Computer';
 
   constructor() {
-    super('computer', 'computer@game.com', 'Computer Player');
     this.cards = [];
     this.wins = 0;
-    this.rank = 0; // inicialize o rank aqui
+    this.rank = 0;
   }
 
-  maximizeStatStrategy(): string {
+  chooseAttribute(): string {
     const card = this.cards[0];
     const stats = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
     let maxStat = stats[0];

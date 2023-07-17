@@ -5,11 +5,11 @@ export class Player {
     public uid: string,
     public name: string,
     public cards: Card[],
-    public wins?: number,   // "wins" é opcional e vem depois dos parâmetros obrigatórios
-    public rank?: number    // "rank" é opcional e vem depois dos parâmetros obrigatórios
+    public wins?: number,
+    public rank?: number,
   ) {}
+
   playCard(): Card | null {
     return this.cards.pop() || null;
   }
-  
 }

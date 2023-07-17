@@ -8,6 +8,7 @@ import { PlayerService } from '../../services/player.service';
 import { ComputerPlayerService } from '../../services/computer-player.service';
 import { Subscription } from 'rxjs';
 import { DeckService } from '../../services/deck.service';
+import { BattleService } from '../../services/battle.service';
 
 @Component({
   selector: 'app-pokemon-gym',
@@ -26,8 +27,6 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   turnWinner: 'player' | 'computer' | 'draw' | null = null;
   turn?: 'player' | 'computer';
 
-  private battleResultSubscription: Subscription | undefined;
-
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -36,7 +35,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     private playerService: PlayerService,
     private computerPlayerService: ComputerPlayerService,
     private deckService: DeckService,
-
+    private battleService: BattleService
   ) {}
 
   ngOnInit() {
@@ -54,33 +53,10 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         });
       }
     });
-
-    this.battleResultSubscription = this.gameBoardService.battleResult$.subscribe(result => {
-      this.turnWinner = result; // Update the turnWinner variable
-    
-      switch (result) {
-        case 'player':
-          console.log('Jogador vence o turno!');
-          const card = this.deckService.drawCard();
-          if (card) {
-            this.pokemons.push(card);
-            this.deckCount--;
-          }
-          break;
-        case 'computer':
-          console.log('Computador vence o turno!');
-          break;
-        case 'draw':
-          console.log('É um empate!');
-          break;
-      }
-    });
   }
 
   ngOnDestroy() {
-    if (this.battleResultSubscription) {
-      this.battleResultSubscription.unsubscribe();
-    }
+    // Nothing to clean up in this current implementation
   }
 
   previousCard() {
@@ -100,20 +76,20 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   }
 
   onAttributeSelect(attribute: CardAttribute) {
-    this.gameBoardService.playTurn(attribute);
+    this.turnWinner = this.battleService.battle(attribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
     this.currentCardIndex = (this.currentCardIndex + 1) % this.pokemons.length;
 
-    // Depois que o jogador faz a jogada, é a vez do computador
+    // After the player makes a move, it's the computer's turn
     this.computerTurn();
-}
+  }
 
-computerTurn() {
-    // O computador escolhe um atributo
+  computerTurn() {
+    // The computer chooses an attribute
     const computerAttribute = this.computerPlayerService.chooseAttribute();
-    this.gameBoardService.playTurn(computerAttribute);
-
+    this.turnWinner = this.battleService.battle(computerAttribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
+    
     this.currentComputerCardIndex = (this.currentComputerCardIndex + 1) % this.computerPokemons.length;
-}
+  }
 
   nextComputerCard() {
     if (this.currentComputerCardIndex < this.computerPokemons.length - 1) {

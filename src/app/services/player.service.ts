@@ -32,9 +32,9 @@ export class PlayerService {
       if (playerData) {
         const player = new Player(
           uid,
-          playerData['displayName'], // use displayName here
+          playerData['displayName'],
           playerCards,
-          playerData['wins'] || 0, // if playerData doesn't have 'wins' or 'rank' property, default to 0
+          playerData['wins'] || 0,
           playerData['rank'] || 0
         );
         return player;
@@ -48,7 +48,6 @@ export class PlayerService {
     }
   }
   
-
   async updatePlayerWins(uid: string, wins: number): Promise<void> {
     const playerDoc = doc(this.db, 'users', uid);
     await updateDoc(playerDoc, { wins: wins });
@@ -71,6 +70,7 @@ export class PlayerService {
       throw new Error('Player data is undefined');
     }
   }
+
   async getCurrentUserId(): Promise<string> {
     return new Promise((resolve, reject) => {
         this.authService.getUser().pipe(take(1)).subscribe(user => {
@@ -81,5 +81,5 @@ export class PlayerService {
             }
         });
     });
-}
+  }
 }
