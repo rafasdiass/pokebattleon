@@ -3,10 +3,11 @@ import { Card, CardAttribute } from '../../models/card.model';
 import { AuthService } from '../../services/auth.service';
 import { CardPokemonService } from '../../services/card-pokemon.service';
 import { Router } from '@angular/router';
-import { GameBoardService } from 'src/app/services/game-board.service';
-import { PlayerService } from 'src/app/services/player.service';
-import { ComputerCardService } from 'src/app/services/computer-card.service';
+import { GameBoardService } from '../../services/game-board.service';
+import { PlayerService } from '../../services/player.service';
+import { ComputerPlayerService } from '../../services/computer-player.service';
 import { Subscription } from 'rxjs';
+import { DeckService } from '../../services/deck.service';
 
 @Component({
   selector: 'app-pokemon-gym',
@@ -20,6 +21,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   isGameStarted: boolean = false;
   currentCardIndex: number = 0;
   currentComputerCardIndex: number = 0;
+  deck: Card[] = [];
 
   private battleResultSubscription: Subscription | undefined;
 
@@ -29,7 +31,8 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     private cardPokemonService: CardPokemonService,
     private gameBoardService: GameBoardService,
     private playerService: PlayerService,
-    private computerCardService: ComputerCardService,
+    private computerPlayerService: ComputerPlayerService,
+    private deckService: DeckService,
   ) {}
 
   ngOnInit() {
@@ -38,10 +41,10 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         this.gameBoardService.initGame().then(() => {
           this.cardPokemonService.getCard(user.uid).then(pokemons => {
             this.pokemons = pokemons;
-            this.computerCardService.getRandomPokemon(3).then(computerPokemons => {
-              this.computerPokemons = computerPokemons;
-              this.isGameStarted = true;
-            });
+            this.deck = this.deckService.getDeck();
+            const computerPlayer = this.computerPlayerService.getComputerPlayer();
+            this.computerPokemons = computerPlayer.cards;
+            this.isGameStarted = true;
           });
         });
       }
@@ -51,6 +54,10 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       switch (result) {
         case 'player':
           console.log('Jogador vence o turno!');
+          const card = this.deckService.drawCard();
+          if (card) {
+            this.pokemons.push(card);
+          }
           break;
         case 'computer':
           console.log('Computador vence o turno!');
@@ -86,7 +93,8 @@ export class PokemonGymPage implements OnInit, OnDestroy {
 
   onAttributeSelect(attribute: CardAttribute) {
     this.gameBoardService.playTurn(attribute);
-    this.nextComputerCard();
+    this.currentCardIndex = (this.currentCardIndex + 1) % this.pokemons.length;
+    this.currentComputerCardIndex = (this.currentComputerCardIndex + 1) % this.computerPokemons.length;
   }
 
   nextComputerCard() {

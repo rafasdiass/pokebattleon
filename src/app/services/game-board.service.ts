@@ -31,44 +31,69 @@ export class GameBoardService {
     if (!player) {
       return;
     }
-
+  
     this.player = player;
     await this.computerPlayerService.init();
     this.computer = this.computerPlayerService.getComputerPlayer();
     
-    const deck = await this.deckService.createDeck(10);
-    this.deckService.addCardsToPile(deck);
-}
-
+    const initialCards = await this.deckService.createDeck(28);
+    this.player.cards.push(...initialCards.slice(0, 3));  // give first 3 cards to player
+    this.computer.cards.push(...initialCards.slice(3, 6));  // give next 3 cards to computer
+    this.deckService.addCardsToPile(initialCards.slice(6));  // add the remaining cards to the pile
+  }
+  
   playTurn(attributeToCompare: CardAttribute): void {
     if (!this.player || !this.computer) {
       throw new Error('O jogador ou o computador não estão definidos');
     }
-
+  
     const playerCard = this.player.playCard();
     const computerCard = this.computer.playCard();
-
+  
     if (playerCard && computerCard) {
-      const battleResult = this.battleService.battle(attributeToCompare, playerCard, computerCard);
+      const battleResult = this.battleService.battle(attributeToCompare, playerCard as Card, computerCard as Card);
       this.handleBattleResult(battleResult, playerCard, computerCard, attributeToCompare);
     }
   }
+  
 
   private handleBattleResult(battleResult: 'player' | 'computer' | 'draw', playerCard: Card, computerCard: Card, selectedAttribute: CardAttribute): void {
     switch (battleResult) {
       case 'player':
         console.log('Jogador vence o turno!');
+        this.player?.cards.push(computerCard);  // jogador recebe a carta do computador
+        this.removeCardFromPlayer(this.computer, computerCard);  // remove carta do computador
+        this.distributePileCards(this.player);
         break;
       case 'computer':
         console.log('Computador vence o turno!');
+        this.computer?.cards.push(playerCard);  // computador recebe a carta do jogador
+        this.removeCardFromPlayer(this.player, playerCard);  // remove carta do jogador
+        this.distributePileCards(this.computer);
         break;
       case 'draw':
         this.pile.push(playerCard, computerCard);
         this.playTurn(this.nextAttribute(selectedAttribute));
         break;
     }
-
+  
     this.battleResult$.next(battleResult);
+  }
+  
+  private removeCardFromPlayer(player: Player | ComputerPlayer | undefined, card: Card) {
+    if (player) {
+      const index = player.cards.findIndex(c => c === card);
+      if (index !== -1) {
+        player.cards.splice(index, 1);
+      }
+    }
+  }
+
+  private distributePileCards(player: Player | ComputerPlayer | undefined): void {
+    if (player && this.pile.length > 0) {
+      player.cards.push(...this.pile);
+      this.pile = [];
+    }
   }
 
   nextAttribute(currentAttribute: CardAttribute): CardAttribute {
