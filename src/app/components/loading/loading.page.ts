@@ -12,17 +12,17 @@ export class LoadingPage implements OnInit {
   constructor(public loadingController: LoadingController) { }
 
   ngOnInit() {
-    this.presentLoading();
+   // this.presentLoading();
   }
 
-  async presentLoading() {
-    const loading = await this.loadingController.create({
-      message: 'Loading...',
-      duration: 7000
-    });
-    await loading.present();
+  // async presentLoading() {
+  //   const loading = await this.loadingController.create({
+  //     message: 'Loading...',
+  //     duration: 7000
+  //   });
+  //   await loading.present();
 
-    const { role, data } = await loading.onDidDismiss();
-    console.log('Loading dismissed!');
-  }
+  //   const { role, data } = await loading.onDidDismiss();
+  //   console.log('Loading dismissed!');
+  // }
 }
