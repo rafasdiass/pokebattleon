@@ -1,7 +1,6 @@
 .pokebola-image {
   width: 40px;
   height: 40px;
-  // margin-right: 10px;
 }
 
 /* card.page.scss */
@@ -13,6 +12,8 @@ ion-card {
   max-width: 600px;
   align-self: center;
   border: 2px solid #ff6347; /* Borda laranja */
+  height: 600px;
+}
 
   ion-card-header {
     ion-card-title {
@@ -56,4 +57,3 @@ ion-card {
     object-fit: cover; /* Para manter a proporção da imagem */
     margin-right: 1rem;
   }
-}

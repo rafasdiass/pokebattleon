@@ -1,19 +1,16 @@
 <ng-container *ngIf="player$ | async as player">
   <!-- Player Information -->
-  <ion-card>
+  <ion-card class="card">
     <ion-card-header>
       <ion-card-title>Informações do Jogador</ion-card-title>
     </ion-card-header>
     <ion-card-content class="card-content">
-      <div>
+      <div class="player-status">
         <p>Nome: {{player.name}}</p>
         <p>Vitórias: {{player.wins}}</p>
         <p>Ranking: {{player.rank}}</p>
         <img src="assets/img/ash.png" alt="Ash" class="ash-image">
       </div>
-
-     
-      
     </ion-card-content>
   </ion-card>
 </ng-container>
