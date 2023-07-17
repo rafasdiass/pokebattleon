@@ -1,0 +1,12 @@
+.loading-container {
+    --backdrop-opacity: 0.6; /* Define a opacidade do fundo */
+    --background: transparent; /* Define o fundo como transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  img{
+    width: 120px;
+    margin-top: 150px;
+  }
