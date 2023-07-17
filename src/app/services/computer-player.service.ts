@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ComputerPlayer } from '../models/computer-player.model';
-import { Card } from '../models/card.model';
+import { Card, CardAttribute } from '../models/card.model';
 import { ComputerCardService } from './computer-card.service';
 
 @Injectable({
@@ -9,6 +9,7 @@ import { ComputerCardService } from './computer-card.service';
 })
 export class ComputerPlayerService {
   private _computerPlayer$: BehaviorSubject<ComputerPlayer>;
+  private attributes: CardAttribute[] = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
 
   constructor(private computerCardService: ComputerCardService) {
     this._computerPlayer$ = new BehaviorSubject<ComputerPlayer>(new ComputerPlayer());
@@ -50,5 +51,10 @@ export class ComputerPlayerService {
 
   reset(): void {
     this._computerPlayer$ = new BehaviorSubject<ComputerPlayer>(new ComputerPlayer());
+  }
+
+  chooseAttribute(): CardAttribute {
+    const index = Math.floor(Math.random() * this.attributes.length);
+    return this.attributes[index];
   }
 }

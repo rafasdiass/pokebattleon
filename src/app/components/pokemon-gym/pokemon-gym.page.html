@@ -37,10 +37,14 @@
       <ion-item>
         <ion-label>Cartas no deck: {{ deckCount }}</ion-label>
       </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
+      <ion-item>
+        <ion-label>Cartas do jogador: {{ pokemons.length }}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Cartas do computador: {{ computerPokemons.length }}</ion-label>
+      </ion-item>
+   
+
       <!-- Resultado do turno -->
       <ion-item *ngIf="turnWinner">
         <ion-label>
@@ -49,5 +53,6 @@
       </ion-item>
     </ion-col>
   </ion-row>
+  
   
 </ion-content>

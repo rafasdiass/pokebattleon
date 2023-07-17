@@ -24,6 +24,8 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   deck: Card[] = [];
   deckCount: number = 0;
   turnWinner: 'player' | 'computer' | 'draw' | null = null;
+  turn?: 'player' | 'computer';
+
   private battleResultSubscription: Subscription | undefined;
 
   constructor(
@@ -100,8 +102,18 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   onAttributeSelect(attribute: CardAttribute) {
     this.gameBoardService.playTurn(attribute);
     this.currentCardIndex = (this.currentCardIndex + 1) % this.pokemons.length;
+
+    // Depois que o jogador faz a jogada, é a vez do computador
+    this.computerTurn();
+}
+
+computerTurn() {
+    // O computador escolhe um atributo
+    const computerAttribute = this.computerPlayerService.chooseAttribute();
+    this.gameBoardService.playTurn(computerAttribute);
+
     this.currentComputerCardIndex = (this.currentComputerCardIndex + 1) % this.computerPokemons.length;
-  }
+}
 
   nextComputerCard() {
     if (this.currentComputerCardIndex < this.computerPokemons.length - 1) {

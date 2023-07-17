@@ -42,9 +42,19 @@ export class GameBoardService {
     this.deckService.addCardsToPile(initialCards.slice(6));  // add the remaining cards to the pile
   }
   
-  playTurn(attributeToCompare: CardAttribute): void {
+  async playTurn(playerAttribute?: CardAttribute): Promise<void> {
     if (!this.player || !this.computer) {
       throw new Error('O jogador ou o computador não estão definidos');
+    }
+
+    let attributeToCompare: CardAttribute;
+  
+    // Se for a vez do jogador
+    if (playerAttribute) {
+      attributeToCompare = playerAttribute;
+    } else {
+      // Se for a vez do computador
+      attributeToCompare = this.computerPlayerService.chooseAttribute();
     }
   
     const playerCard = this.player.playCard();
@@ -55,7 +65,6 @@ export class GameBoardService {
       this.handleBattleResult(battleResult, playerCard, computerCard, attributeToCompare);
     }
   }
-  
 
   private handleBattleResult(battleResult: 'player' | 'computer' | 'draw', playerCard: Card, computerCard: Card, selectedAttribute: CardAttribute): void {
     switch (battleResult) {
