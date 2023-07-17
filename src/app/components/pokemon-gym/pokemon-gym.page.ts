@@ -25,7 +25,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   deck: Card[] = [];
   deckCount: number = 0;
   turnWinner: 'player' | 'computer' | 'draw' | null = null;
-  turn?: 'player' | 'computer';
+  turn: 'player' | 'computer' = 'player';
 
   constructor(
     private authService: AuthService,
@@ -39,6 +39,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.router.navigate(['/loading']);
     this.authService.getUser().subscribe(user => {
       if (user) {
         this.gameBoardService.initGame().then(() => {
@@ -49,6 +50,8 @@ export class PokemonGymPage implements OnInit, OnDestroy {
             const computerPlayer = this.computerPlayerService.getComputerPlayer();
             this.computerPokemons = computerPlayer.cards;
             this.isGameStarted = true;
+
+            this.router.navigate(['/pokemon-gym']);
           });
         });
       }
@@ -76,19 +79,27 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   }
 
   onAttributeSelect(attribute: CardAttribute) {
-    this.turnWinner = this.battleService.battle(attribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
-    this.currentCardIndex = (this.currentCardIndex + 1) % this.pokemons.length;
+    if (this.turn === 'player') {
+      this.turnWinner = this.battleService.battle(attribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
+      this.currentCardIndex = (this.currentCardIndex + 1) % this.pokemons.length;
 
-    // After the player makes a move, it's the computer's turn
-    this.computerTurn();
+      // After the player makes a move, it's the computer's turn
+      this.turn = 'computer';
+      this.computerTurn();
+    }
   }
 
   computerTurn() {
-    // The computer chooses an attribute
-    const computerAttribute = this.computerPlayerService.chooseAttribute();
-    this.turnWinner = this.battleService.battle(computerAttribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
-    
-    this.currentComputerCardIndex = (this.currentComputerCardIndex + 1) % this.computerPokemons.length;
+    if (this.turn === 'computer') {
+      // The computer chooses an attribute
+      const computerAttribute = this.computerPlayerService.chooseAttribute();
+      this.turnWinner = this.battleService.battle(computerAttribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
+
+      this.currentComputerCardIndex = (this.currentComputerCardIndex + 1) % this.computerPokemons.length;
+
+      // After the computer makes a move, it's the player's turn
+      this.turn = 'player';
+    }
   }
 
   nextComputerCard() {

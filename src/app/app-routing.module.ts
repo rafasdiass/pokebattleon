@@ -59,6 +59,10 @@ const routes: Routes = [
     path: 'battle-mechanics',
     loadChildren: () => import('./components/battle-mechanics/battle-mechanics.module').then( m => m.BattleMechanicsPageModule)
   },
+  {
+    path: 'loading',
+    loadChildren: () => import('./components/loading/loading.module').then( m => m.LoadingPageModule)
+  },
   
 ];
 
