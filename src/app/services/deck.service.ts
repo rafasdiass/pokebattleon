@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Card } from '../models/card.model';
 import { CardPokemonService } from './card-pokemon.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,12 +12,13 @@ export class DeckService {
 
   async createDeck(numberOfCards: number): Promise<Card[]> {
     this.deck = [];
+    numberOfCards = numberOfCards - 6; // subtract the initial cards in play
     for (let i = 0; i < numberOfCards; i++) {
       const randomPokemons = await this.cardPokemonService.getRandomPokemon(1);
       this.deck.push(randomPokemons[0]);
     }
     this.shuffleDeck();
-    return this.drawCards(6);  // draw the first 6 cards to start the game
+    return this.deck.slice(0, 6); // return only the first 6 cards
   }
 
   shuffleDeck(): void {
@@ -31,9 +33,9 @@ export class DeckService {
   }
 
   drawCards(numCards: number): Card[] {
-    let cards: Card[] = [];
+    const cards: Card[] = [];
     for (let i = 0; i < numCards; i++) {
-      let card = this.drawCard();
+      const card = this.drawCard();
       if (card) {
         cards.push(card);
       }

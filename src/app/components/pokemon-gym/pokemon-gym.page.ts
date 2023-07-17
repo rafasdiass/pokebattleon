@@ -23,9 +23,6 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   isGameStarted: boolean = false;
   currentCardIndex: number = 0;
   currentComputerCardIndex: number = 0;
-  deck: Card[] = [];
-  deckCount: number = 0;
-  handCount: number = 0;
   turnWinner: 'player' | 'computer' | 'draw' | null = null;
   turn: 'player' | 'computer' = 'player';
 
@@ -36,7 +33,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     private gameBoardService: GameBoardService,
     private playerService: PlayerService,
     private computerPlayerService: ComputerPlayerService,
-    private deckService: DeckService,
+    public deckService: DeckService, // made this public
     private battleService: BattleService
   ) {}
 
@@ -47,9 +44,6 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         this.gameBoardService.initGame().then(() => {
           this.cardPokemonService.getCard(user.uid).then(cards => {
             this.playerHand = cards;
-            this.handCount = this.playerHand.length;
-            this.deck = this.deckService.getDeck();
-            this.deckCount = this.deck.length;
             const computerPlayer = this.computerPlayerService.getComputerPlayer();
             this.computerHand = computerPlayer.cards;
             this.isGameStarted = true;
@@ -115,7 +109,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       this.checkGameOver();
     }
   }
-  
+
   drawCardFromDeck(player: 'player' | 'computer') {
     let card = this.deckService.drawCard();
     if (card) {
@@ -143,6 +137,4 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     // Você pode mostrar uma mensagem para o usuário e redirecioná-lo para a tela inicial.
     // Também você pode usar o parâmetro `winner` para informar quem venceu o jogo.
   }
-  
-  // ... outras funções ...
 }

@@ -1,23 +1,27 @@
-ion-card{
-    margin: 1rem;
-    padding: 0.5rem;
-    width: 125%;
-    max-width: 600px;
-    align-self: center;
-    border: 2px solid #ff6347; /* Borda laranja */
-    height: 600px;
-}
+ion-card {
+  margin: 1rem;
+  padding: 0.5rem;
+  width: 125%;
+  max-width: 600px;
+  align-self: center;
+  border: 2px solid #ff6347; /* Borda laranja */
+  height: 600px;
 
-ion-card-header {
+  ion-card-header {
     ion-card-title {
       font-family: 'Pokemon Solid', sans-serif;
       font-size: 1.5rem;
       text-align: center;
       margin-bottom: 1rem;
     }
+
+    img {
+      width: 150px; /* Ajuste o tamanho da imagem dos rivais conforme necessário */
+      align-self: center;
+    }
   }
 
-  .card-content {
+  ion-card-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,4 +29,13 @@ ion-card-header {
     .pokemon-container {
       margin-bottom: 1rem;
     }
+
+    img {
+      width: 300%;
+      /* Ajuste o tamanho da imagem do Pokémon conforme necessário */
+      // max-height: 300px; /* Ajuste a altura máxima da imagem do Pokémon conforme necessário */
+      object-fit: contain;
+      align-items: center;
+    }
   }
+}
