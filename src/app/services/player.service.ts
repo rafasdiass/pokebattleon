@@ -71,12 +71,15 @@ export class PlayerService {
       throw new Error('Player data is undefined');
     }
   }
-
-  getCurrentUserId(): string {
-    let userId: string | null = null;
-    this.authService.getUser().pipe(take(1)).subscribe(user => {
-      userId = user ? user.uid : null;
+  async getCurrentUserId(): Promise<string> {
+    return new Promise((resolve, reject) => {
+        this.authService.getUser().pipe(take(1)).subscribe(user => {
+            if (user && user.uid) {
+                resolve(user.uid);
+            } else {
+                reject('No user ID found');
+            }
+        });
     });
-    return userId || '';
-  }
+}
 }

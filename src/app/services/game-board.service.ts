@@ -26,7 +26,8 @@ export class GameBoardService {
   ) {}
 
   async initGame(): Promise<void> {
-    const player = await this.playerService.getPlayer(this.playerService.getCurrentUserId());
+    const currentUserId = await this.playerService.getCurrentUserId();
+    const player = await this.playerService.getPlayer(currentUserId);
     if (!player) {
       return;
     }
@@ -37,7 +38,7 @@ export class GameBoardService {
     
     const deck = await this.deckService.createDeck(10);
     this.deckService.addCardsToPile(deck);
-  }
+}
 
   playTurn(attributeToCompare: CardAttribute): void {
     if (!this.player || !this.computer) {
