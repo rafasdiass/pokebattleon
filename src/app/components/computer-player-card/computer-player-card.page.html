@@ -1,18 +1,13 @@
-<ion-card *ngIf="pokemon">
-  <img [src]="pokemon.imageUrl" alt="{{pokemon.name}} image">
-  <ion-card-header>
-    <ion-card-title>{{pokemon.name}}</ion-card-title>
-    <img src="../../../assets/rivals/Pokemon-White-Trainer2.gif" alt="rivals image">
-  </ion-card-header>
-  <!-- <ion-card-content>
-    <p>HP: {{pokemon.hp}}</p>
-    <p>Attack: {{pokemon.attack}}</p>
-    <p>Defense: {{pokemon.defense}}</p>
-    <p>Special Attack: {{pokemon.specialAttack}}</p>
-    <p>Special Defense: {{pokemon.specialDefense}}</p>
-    <p>Speed: {{pokemon.speed}}</p>
-  </ion-card-content> -->
-  <ion-img>
-   
-  </ion-img>
-</ion-card>
+
+
+  <ion-card *ngIf="pokemon">
+    <img [src]="pokemon.imageUrl" alt="{{pokemon.name}} image">
+    <ion-card-header>
+      <ion-card-title>{{pokemon.name}}</ion-card-title>
+      <ion-img>
+        <img src="/src/assets/rivals/Pokemon-White-Trainer.gif" alt="rivals image">
+      </ion-img>
+    </ion-card-header>
+  </ion-card>
+
+

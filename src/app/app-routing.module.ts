@@ -62,7 +62,11 @@ const routes: Routes = [
   {
     path: 'loading',
     loadChildren: () => import('./components/loading/loading.module').then( m => m.LoadingPageModule)
+  },  {
+    path: 'score',
+    loadChildren: () => import('./components/score/score.module').then( m => m.ScorePageModule)
   },
+
   
 ];
 
