@@ -39,4 +39,15 @@
       </ion-item>
     </ion-col>
   </ion-row>
+  <ion-row>
+    <ion-col>
+      <!-- Resultado do turno -->
+      <ion-item *ngIf="turnWinner">
+        <ion-label>
+          {{ turnWinner === 'player' ? 'Você venceu o turno!' : turnWinner === 'computer' ? 'Computador venceu o turno!' : 'É um empate!' }}
+        </ion-label>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  
 </ion-content>

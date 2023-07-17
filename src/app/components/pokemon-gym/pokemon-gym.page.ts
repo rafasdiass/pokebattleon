@@ -23,7 +23,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   currentComputerCardIndex: number = 0;
   deck: Card[] = [];
   deckCount: number = 0;
-  
+  turnWinner: 'player' | 'computer' | 'draw' | null = null;
   private battleResultSubscription: Subscription | undefined;
 
   constructor(
@@ -34,6 +34,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     private playerService: PlayerService,
     private computerPlayerService: ComputerPlayerService,
     private deckService: DeckService,
+
   ) {}
 
   ngOnInit() {
@@ -53,6 +54,8 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     });
 
     this.battleResultSubscription = this.gameBoardService.battleResult$.subscribe(result => {
+      this.turnWinner = result; // Update the turnWinner variable
+    
       switch (result) {
         case 'player':
           console.log('Jogador vence o turno!');
