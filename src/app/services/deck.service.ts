@@ -12,6 +12,7 @@ export class DeckService {
 
   async createDeck(numberOfCards: number): Promise<Card[]> {
     this.deck = [];
+    numberOfCards = numberOfCards - 6;  // subtract the initial cards in play
     for (let i = 0; i < numberOfCards; i++) {
       const randomPokemons = await this.cardPokemonService.getRandomPokemon(1);
       this.deck.push(randomPokemons[0]);
