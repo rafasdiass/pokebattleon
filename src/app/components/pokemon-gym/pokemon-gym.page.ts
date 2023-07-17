@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { GameBoardService } from '../../services/game-board.service';
 import { PlayerService } from '../../services/player.service';
 import { ComputerPlayerService } from '../../services/computer-player.service';
-import { Subscription } from 'rxjs';
 import { DeckService } from '../../services/deck.service';
 import { BattleService } from '../../services/battle.service';
 
@@ -17,16 +16,16 @@ import { BattleService } from '../../services/battle.service';
 })
 export class PokemonGymPage implements OnInit, OnDestroy {
   isLoggedIn: boolean = true;
-  pokemons: Card[] = [];
-  computerPokemons: Card[] = [];
-  playerDeck: Card[] = [];
-  computerDeck: Card[] = [];
+  playerHand: Card[] = [];
+  computerHand: Card[] = [];
+  playerRepository: Card[] = [];
+  computerRepository: Card[] = [];
   isGameStarted: boolean = false;
   currentCardIndex: number = 0;
   currentComputerCardIndex: number = 0;
   deck: Card[] = [];
   deckCount: number = 0;
-  pokemonCount: number = 0;
+  handCount: number = 0;
   turnWinner: 'player' | 'computer' | 'draw' | null = null;
   turn: 'player' | 'computer' = 'player';
 
@@ -46,13 +45,13 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     this.authService.getUser().subscribe(user => {
       if (user) {
         this.gameBoardService.initGame().then(() => {
-          this.cardPokemonService.getCard(user.uid).then(pokemons => {
-            this.pokemons = pokemons;
-            this.pokemonCount = this.pokemons.length;
+          this.cardPokemonService.getCard(user.uid).then(cards => {
+            this.playerHand = cards;
+            this.handCount = this.playerHand.length;
             this.deck = this.deckService.getDeck();
             this.deckCount = this.deck.length;
             const computerPlayer = this.computerPlayerService.getComputerPlayer();
-            this.computerPokemons = computerPlayer.cards;
+            this.computerHand = computerPlayer.cards;
             this.isGameStarted = true;
             this.router.navigate(['/pokemon-gym']);
           });
@@ -72,7 +71,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   }
 
   nextCard() {
-    if (this.currentCardIndex < this.pokemons.length - 1) {
+    if (this.currentCardIndex < this.playerHand.length - 1) {
       this.currentCardIndex++;
     }
   }
@@ -83,9 +82,9 @@ export class PokemonGymPage implements OnInit, OnDestroy {
 
   onAttributeSelect(attribute: CardAttribute) {
     if (this.turn === 'player') {
-      this.turnWinner = this.battleService.battle(attribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
+      this.turnWinner = this.battleService.battle(attribute, this.playerHand[this.currentCardIndex], this.computerHand[this.currentComputerCardIndex]);
       this.transferCard(this.turnWinner);
-      this.drawCard('player');
+      this.drawCardFromDeck('player');
       this.turn = 'computer';
       this.computerTurn();
     }
@@ -94,58 +93,56 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   computerTurn() {
     if (this.turn === 'computer') {
       const computerAttribute = this.computerPlayerService.chooseAttribute();
-      this.turnWinner = this.battleService.battle(computerAttribute, this.pokemons[this.currentCardIndex], this.computerPokemons[this.currentComputerCardIndex]);
+      this.turnWinner = this.battleService.battle(computerAttribute, this.playerHand[this.currentCardIndex], this.computerHand[this.currentComputerCardIndex]);
       this.transferCard(this.turnWinner);
-      this.drawCard('computer');
+      this.drawCardFromDeck('computer');
       this.turn = 'player';
     }
   }
 
   transferCard(winner: 'player' | 'computer' | 'draw') {
     if (winner === 'player') {
-      if (this.computerPokemons.length > 0) {
-        let card = this.computerPokemons.splice(this.currentComputerCardIndex, 1)[0];
-        if (card) {
-          this.playerDeck.push(card);
-        }
-        this.nextComputerCard();
+      let card = this.computerHand.shift();
+      if (card) {
+        this.playerRepository.push(card);
       }
+      this.checkGameOver();
     } else if (winner === 'computer') {
-      if (this.pokemons.length > 0) {
-        let card = this.pokemons.splice(this.currentCardIndex, 1)[0];
-        if (card) {
-          this.computerDeck.push(card);
-        }
-        this.nextCard();
+      let card = this.playerHand.shift();
+      if (card) {
+        this.computerRepository.push(card);
       }
+      this.checkGameOver();
     }
-    // Atualizar a contagem de cartas
-    this.pokemonCount = this.pokemons.length;
-    this.deckCount = this.playerDeck.length;
   }
   
-  drawCard(player: 'player' | 'computer') {
-    if (player === 'player' && this.playerDeck.length > 0) {
-      let card = this.playerDeck.pop();
-      if (card) {
-        this.pokemons.push(card);
+  drawCardFromDeck(player: 'player' | 'computer') {
+    let card = this.deckService.drawCard();
+    if (card) {
+      if (player === 'player') {
+        this.playerHand.push(card);
+      } else {
+        this.computerHand.push(card);
       }
-    } else if (player === 'computer' && this.computerDeck.length > 0) {
-      let card = this.computerDeck.pop();
-      if (card) {
-        this.computerPokemons.push(card);
-      }
+    } else {
+      // Se o deck estiver vazio, o jogo termina.
+      this.endGame();
     }
-    // Atualizar a contagem de cartas
-    this.pokemonCount = this.pokemons.length;
-    this.deckCount = this.playerDeck.length;
   }
 
-  nextComputerCard() {
-    if (this.currentComputerCardIndex < this.computerPokemons.length - 1) {
-      this.currentComputerCardIndex++;
-    } else {
-      this.currentComputerCardIndex = 0;
+  checkGameOver() {
+    if (this.playerRepository.length === 28) {
+      this.endGame('player');
+    } else if (this.computerRepository.length === 28) {
+      this.endGame('computer');
     }
   }
+
+  endGame(winner: 'player' | 'computer' | null = null) {
+    // Implemente a lógica para terminar o jogo aqui.
+    // Você pode mostrar uma mensagem para o usuário e redirecioná-lo para a tela inicial.
+    // Também você pode usar o parâmetro `winner` para informar quem venceu o jogo.
+  }
+  
+  // ... outras funções ...
 }
