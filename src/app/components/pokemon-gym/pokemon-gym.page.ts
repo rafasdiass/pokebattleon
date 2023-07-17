@@ -22,7 +22,8 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   currentCardIndex: number = 0;
   currentComputerCardIndex: number = 0;
   deck: Card[] = [];
-
+  deckCount: number = 0;
+  
   private battleResultSubscription: Subscription | undefined;
 
   constructor(
@@ -42,6 +43,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
           this.cardPokemonService.getCard(user.uid).then(pokemons => {
             this.pokemons = pokemons;
             this.deck = this.deckService.getDeck();
+            this.deckCount = this.deck.length;
             const computerPlayer = this.computerPlayerService.getComputerPlayer();
             this.computerPokemons = computerPlayer.cards;
             this.isGameStarted = true;
@@ -57,6 +59,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
           const card = this.deckService.drawCard();
           if (card) {
             this.pokemons.push(card);
+            this.deckCount--;
           }
           break;
         case 'computer':
