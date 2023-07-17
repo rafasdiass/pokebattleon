@@ -1,14 +1,17 @@
 /* player.page.scss */
 
-ion-card {
-  margin: 1rem;
+.card {
+  align-items: center;
   padding: 0.5rem;
   width: 120%;
   max-width: 400px;
+  height: 600px;
   align-self: center;
   border: 2px solid #ff6347; /* Borda laranja */
+  background-color: black;
+}
 
-  ion-card-header {
+  
     ion-card-title {
       font-family: 'Pokemon Hollow', sans-serif;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -16,7 +19,7 @@ ion-card {
       font-weight: bold;
       text-decoration: underline;
     }
-  }
+  
 
   .card-content {
     display: flex;
@@ -24,8 +27,8 @@ ion-card {
     align-items: center;
     justify-content: center;
 
-    div {
-      margin-bottom: 1rem;
+    .player-status{
+      margin-bottom: 2rem;
     }
 
     img.ash-image {
@@ -54,4 +57,4 @@ ion-card {
       color: #ffffff; /* Cor para Vitórias */
     }
   }
-}
+
