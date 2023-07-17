@@ -1,0 +1,28 @@
+ion-card{
+    margin: 1rem;
+    padding: 0.5rem;
+    width: 125%;
+    max-width: 600px;
+    align-self: center;
+    border: 2px solid #ff6347; /* Borda laranja */
+    height: 600px;
+}
+
+ion-card-header {
+    ion-card-title {
+      font-family: 'Pokemon Solid', sans-serif;
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .pokemon-container {
+      margin-bottom: 1rem;
+    }
+  }
