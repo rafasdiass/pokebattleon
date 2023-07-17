@@ -3,7 +3,7 @@
     <ion-row>
       <ion-col>
         <!-- Player's Current Card -->
-        <app-card *ngIf="pokemons && pokemons.length > 0" [pokemon]="pokemons[currentCardIndex]"></app-card>
+        <app-card *ngIf="playerHand && playerHand.length > 0" [pokemon]="playerHand[currentCardIndex]"></app-card>
 
         <!-- Attribute Selection -->
         <ion-item *ngIf="isGameStarted">
@@ -22,7 +22,7 @@
 
       <ion-col>
         <!-- Computer Information -->
-        <app-computer-player-card [pokemon]="computerPokemons[currentComputerCardIndex]"></app-computer-player-card>
+        <app-computer-player-card [pokemon]="computerHand[currentComputerCardIndex]"></app-computer-player-card>
 
         <!-- Exit Button Section -->
         <ion-item>
@@ -35,16 +35,18 @@
   <ion-row>
     <ion-col>
       <ion-item>
+        <ion-icon name="albums-outline"></ion-icon>
         <ion-label>Cartas no deck: {{ deckCount }}</ion-label>
       </ion-item>
       <ion-item>
-        <ion-label>Cartas do jogador: {{ pokemons.length }}</ion-label>
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <ion-label>Cartas do jogador: {{ playerHand.length }}</ion-label>
       </ion-item>
       <ion-item>
-        <ion-label>Cartas do computador: {{ computerPokemons.length }}</ion-label>
+        <ion-icon name="desktop-outline"></ion-icon>
+        <ion-label>Cartas do computador: {{ computerHand.length }}</ion-label>
       </ion-item>
    
-
       <!-- Resultado do turno -->
       <ion-item *ngIf="turnWinner">
         <ion-label>
@@ -53,6 +55,5 @@
       </ion-item>
     </ion-col>
   </ion-row>
-  
   
 </ion-content>

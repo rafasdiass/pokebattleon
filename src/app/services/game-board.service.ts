@@ -46,15 +46,25 @@ export class GameBoardService {
     if (!this.player || !this.computer) {
       throw new Error('O jogador ou o computador não estão definidos');
     }
-
+  
     let attributeToCompare: CardAttribute;
   
     // Se for a vez do jogador
     if (playerAttribute) {
       attributeToCompare = playerAttribute;
+      // Dar uma carta para o jogador
+      const drawnCard = this.deckService.drawCard();
+      if (drawnCard) {
+        this.player.cards.push(drawnCard);
+      }
     } else {
       // Se for a vez do computador
       attributeToCompare = this.computerPlayerService.chooseAttribute();
+      // Dar uma carta para o computador
+      const drawnCard = this.deckService.drawCard();
+      if (drawnCard) {
+        this.computer.cards.push(drawnCard);
+      }
     }
   
     const playerCard = this.player.playCard();
@@ -65,7 +75,7 @@ export class GameBoardService {
       this.handleBattleResult(battleResult, playerCard, computerCard, attributeToCompare);
     }
   }
-
+  
   private handleBattleResult(battleResult: 'player' | 'computer' | 'draw', playerCard: Card, computerCard: Card, selectedAttribute: CardAttribute): void {
     switch (battleResult) {
       case 'player':
