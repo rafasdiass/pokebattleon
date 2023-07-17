@@ -12,6 +12,7 @@ import { ComputerplayerPageModule } from '../computerplayer/computerplayer.modul
 import { CardPageModule } from '../card/card.module';
 import { ComputerPlayerCardPageModule } from '../computer-player-card/computer-player-card.module';
 import { BattleMechanicsPageModule } from '../battle-mechanics/battle-mechanics.module';
+import { ScorePageModule } from '../score/score.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { BattleMechanicsPageModule } from '../battle-mechanics/battle-mechanics.
     CardPageModule,
     ComputerPlayerCardPageModule,
     BattleMechanicsPageModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ScorePageModule
   ],
   declarations: [PokemonGymPage]
 })

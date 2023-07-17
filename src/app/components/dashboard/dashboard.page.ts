@@ -12,11 +12,27 @@ export class DashboardPage implements OnInit {
   isLoggedIn: boolean = true;
   pokemons: Card[] = [];
   currentCardIndex: number = 0;
+  playerCard: Card | undefined;
+  computerCard: Card | undefined;
+  winner: string;
+  playerWins: number;
+  computerWins: number;
 
+  // constructor(private gameService: GameService) {
+  //   this.winner = '';
+  //   this.playerWins = 0;
+  //   this.computerWins = 0;
+  //   console.log('GameBoardComponent constructor called');
+  // }
   constructor(
     private authService: AuthService,
     private cardPokemonService: CardPokemonService
-  ) {}
+  ) {
+    this.winner = '';
+    this.playerWins = 0;
+    this.computerWins = 0;
+    console.log('GameBoardComponent constructor called');
+  }
 
   ngOnInit() {
     this.authService.getUser().subscribe(user => {
