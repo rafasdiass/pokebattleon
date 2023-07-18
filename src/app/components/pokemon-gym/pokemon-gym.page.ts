@@ -90,7 +90,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
 
   timeIsUp() {
     console.log('Time is up!');
-    this.confirmBattleAbandonment();
+    // this.confirmBattleAbandonment();
   }
 
   ngOnDestroy() {
