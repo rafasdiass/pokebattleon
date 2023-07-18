@@ -74,6 +74,10 @@ const routes: Routes = [
     path: 'turn-time',
     loadChildren: () => import('./components/turn-time/turn-time.module').then( m => m.TurnTimePageModule)
   },
+  {
+    path: 'battle-result',
+    loadChildren: () => import('./components/battle-result/battle-result.module').then( m => m.BattleResultPageModule)
+  },
 
   
 ];

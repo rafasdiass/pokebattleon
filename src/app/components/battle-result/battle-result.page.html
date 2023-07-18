@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Battle Result</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeResult()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="result-container" *ngIf="winner">
+    <h1 *ngIf="winner === 'player'">Player Wins!</h1>
+    <h1 *ngIf="winner === 'computer'">Computer Wins!</h1>
+    <h1 *ngIf="winner === null">It's a Draw!</h1>
+  </div>
+</ion-content>
