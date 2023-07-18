@@ -66,6 +66,10 @@ const routes: Routes = [
     path: 'score',
     loadChildren: () => import('./components/score/score.module').then( m => m.ScorePageModule)
   },
+  {
+    path: 'deck',
+    loadChildren: () => import('./components/deck/deck.module').then( m => m.DeckPageModule)
+  },
 
   
 ];
