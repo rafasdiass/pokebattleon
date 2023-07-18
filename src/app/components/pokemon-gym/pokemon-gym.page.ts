@@ -80,7 +80,9 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       this.transferCard(this.turnWinner);
       this.drawCardFromDeck('player');
       this.turn = 'computer';
-      this.computerTurn();
+      setTimeout(() => {
+        this.computerTurn();
+      }, 2000); // aqui definimos um atraso de 2 segundos para o turno do computador
     }
   }
 
