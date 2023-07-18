@@ -63,19 +63,21 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       this.timer--;
       if (this.timer === 0) {
         clearInterval(this.intervalId);
-        this.timeIsUp(); // chama a função timeIsUp
+        this.timeIsUp(); // calls the function timeIsUp
       }
     }, 1000);
   }
 
   timeIsUp() {
-    // Lógica a ser executada quando o tempo do turno acabar
-    // Por exemplo, remover a carta do jogador, etc.
+    // Logic to be executed when the turn time is up
+    // For example, remove the player's card, etc.
     console.log('Time is up!');
   }
 
   ngOnDestroy() {
-    // Nothing to clean up in this current implementation
+    if(this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   previousCard() {
@@ -106,7 +108,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       this.turn = 'computer';
       setTimeout(() => {
         this.computerTurn();
-      }, 2000); // aqui definimos um atraso de 2 segundos para o turno do computador
+      }, 2000); // here we define a delay of 2 seconds for the computer turn
     }
   }
 
@@ -149,7 +151,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         this.computerHand.push(card);
       }
     } else {
-      // Se o deck estiver vazio, o jogo termina.
+      // If the deck is empty, the game ends.
       this.endGame();
     }
   }
@@ -163,8 +165,8 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   }
 
   endGame(winner: 'player' | 'computer' | null = null) {
-    // Implemente a lógica para terminar o jogo aqui.
-    // Você pode mostrar uma mensagem para o usuário e redirecioná-lo para a tela inicial.
-    // Também você pode usar o parâmetro `winner` para informar quem venceu o jogo.
+    // Implement the logic to end the game here.
+    // You can show a message to the user and redirect them to the home screen.
+    // Also, you can use the `winner` parameter to inform who won the game.
   }
 }

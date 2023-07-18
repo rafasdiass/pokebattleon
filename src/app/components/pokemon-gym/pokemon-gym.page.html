@@ -3,62 +3,95 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="6">
+      <ion-col size-xs="12" size-md="6">
         <!-- Player's Current Card -->
         <app-card *ngIf="playerHand && playerHand.length > 0" [pokemon]="playerHand[currentCardIndex]"></app-card>
 
         <!-- Attribute Selection -->
         <ion-item *ngIf="isGameStarted">
           <ion-label>Escolha um atributo para a batalha:</ion-label>
-          <ion-button (click)="onAttributeSelect('hp')">HP</ion-button>
-          <ion-button (click)="onAttributeSelect('attack')">Ataque</ion-button>
-          <ion-button (click)="onAttributeSelect('defense')">Defesa</ion-button>
-          <ion-button (click)="onAttributeSelect('specialAttack')">Ataque Especial</ion-button>
-          <ion-button (click)="onAttributeSelect('specialDefense')">Defesa Especial</ion-button>
-          <ion-button (click)="onAttributeSelect('speed')">Velocidade</ion-button>
+          <ion-button color="primary" expand="full" (click)="onAttributeSelect('hp')">
+            <ion-icon name="heart-outline"></ion-icon>
+            HP
+          </ion-button>
+          <ion-button color="danger" expand="full" (click)="onAttributeSelect('attack')">
+            <ion-icon name="arrow-up-outline"></ion-icon>
+            Ataque
+          </ion-button>
+          <ion-button color="secondary" expand="full" (click)="onAttributeSelect('defense')">
+            <ion-icon name="shield-outline"></ion-icon>
+            Defesa
+          </ion-button>
+          <ion-button color="warning" expand="full" (click)="onAttributeSelect('specialAttack')">
+            <ion-icon name="flame-outline"></ion-icon>
+            Ataque Especial
+          </ion-button>
+          <ion-button color="success" expand="full" (click)="onAttributeSelect('specialDefense')">
+            <ion-icon name="water-outline"></ion-icon>
+            Defesa Especial
+          </ion-button>
+          <ion-button color="tertiary" expand="full" (click)="onAttributeSelect('speed')">
+            <ion-icon name="speedometer-outline"></ion-icon>
+            Velocidade
+          </ion-button>
         </ion-item>
 
-        <ion-button (click)="previousCard()">Anterior</ion-button>
-        <ion-button (click)="nextCard()">Próximo</ion-button>
+        <ion-button expand="full" (click)="previousCard()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          Anterior
+        </ion-button>
+        <ion-button expand="full" (click)="nextCard()">
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+          Próximo
+        </ion-button>
       </ion-col>
 
-      <ion-col size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="6">
+      <ion-col size-xs="12" size-md="6">
         <!-- Computer Information -->
         <app-computer-player-card [pokemon]="computerHand[currentComputerCardIndex]"></app-computer-player-card>
 
         <!-- Exit Button Section -->
         <ion-item>
-          <ion-button expand="full" (click)="confirmBattleAbandonment()">Sair</ion-button>
+          <ion-button color="danger" expand="full" (click)="confirmBattleAbandonment()">
+            <ion-icon name="exit-outline"></ion-icon>
+            Sair
+          </ion-button>
         </ion-item>
       </ion-col>
     </ion-row>
 
     <!-- Deck Information -->
     <ion-row>
-      <ion-col size="12" size-md="6">
+      <ion-col size="12">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Player Hand</ion-card-title>
+            <ion-card-title>
+              <ion-icon name="person-outline"></ion-icon>
+              Player Hand
+            </ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-list>
               <ion-item *ngFor="let card of playerHand">
-                <ion-icon name="person-circle" slot="start"></ion-icon>
+                <ion-icon name="person-circle-outline" slot="start"></ion-icon>
                 <ion-label>{{card.name}}</ion-label>
               </ion-item>
             </ion-list>
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col size="12" size-md="6">
+      <ion-col size="12">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Computer Hand</ion-card-title>
+            <ion-card-title>
+              <ion-icon name="laptop-outline"></ion-icon>
+              Computer Hand
+            </ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-list>
               <ion-item *ngFor="let card of computerHand">
-                <ion-icon name="laptop" slot="start"></ion-icon>
+                <ion-icon name="desktop-outline" slot="start"></ion-icon>
                 <ion-label>{{card.name}}</ion-label>
               </ion-item>
             </ion-list>
