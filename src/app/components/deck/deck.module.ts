@@ -15,6 +15,7 @@ import { DeckPage } from './deck.page';
     IonicModule,
     DeckPageRoutingModule
   ],
-  declarations: [DeckPage]
+  declarations: [DeckPage],
+  exports: [DeckPage],
 })
 export class DeckPageModule {}

@@ -38,18 +38,20 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.router.navigate(['/loading']);
     this.authService.getUser().subscribe(user => {
-      if (user) {
+      if (user && user.uid) {
+        this.router.navigate(['/loading']);
         this.gameBoardService.initGame().then(() => {
-          this.cardPokemonService.getCard(user.uid).then(cards => {
-            this.playerHand = cards;
-            const computerPlayer = this.computerPlayerService.getComputerPlayer();
-            this.computerHand = computerPlayer.cards;
+          this.deckService.createDeck(28).then(deck => {
+            this.playerHand = deck.slice(0, 3);
+            this.computerHand = deck.slice(3, 6);
             this.isGameStarted = true;
             this.router.navigate(['/pokemon-gym']);
           });
         });
+      } else {
+        console.log('User not authenticated or invalid user object');
+        this.router.navigate(['/']);
       }
     });
   }

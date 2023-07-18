@@ -1,4 +1,3 @@
-// loading.page.ts
 import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 
@@ -8,21 +7,28 @@ import { LoadingController } from '@ionic/angular';
   styleUrls: ['./loading.page.scss'],
 })
 export class LoadingPage implements OnInit {
+  loading: any;
 
   constructor(public loadingController: LoadingController) { }
 
   ngOnInit() {
-   // this.presentLoading();
+    this.presentLoading();
   }
 
-  // async presentLoading() {
-  //   const loading = await this.loadingController.create({
-  //     message: 'Loading...',
-  //     duration: 7000
-  //   });
-  //   await loading.present();
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Loading...',
+      duration: 7000
+    });
+    await this.loading.present();
 
-  //   const { role, data } = await loading.onDidDismiss();
-  //   console.log('Loading dismissed!');
-  // }
+    const { role, data } = await this.loading.onDidDismiss();
+    console.log('Loading dismissed!');
+  }
+
+  async dismissLoading() {
+    if (this.loading) {
+      await this.loading.dismiss();
+    }
+  }
 }

@@ -1,8 +1,9 @@
 <app-score></app-score>
+
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col>
+      <ion-col size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="6">
         <!-- Player's Current Card -->
         <app-card *ngIf="playerHand && playerHand.length > 0" [pokemon]="playerHand[currentCardIndex]"></app-card>
 
@@ -21,7 +22,7 @@
         <ion-button (click)="nextCard()">Próximo</ion-button>
       </ion-col>
 
-      <ion-col>
+      <ion-col size-xs="12" size-sm="12" size-md="6" size-lg="6" size-xl="6">
         <!-- Computer Information -->
         <app-computer-player-card [pokemon]="computerHand[currentComputerCardIndex]"></app-computer-player-card>
 
@@ -31,30 +32,62 @@
         </ion-item>
       </ion-col>
     </ion-row>
+
+    <!-- Deck Information -->
+    <ion-row>
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Player Hand</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item *ngFor="let card of playerHand">
+                <ion-icon name="person-circle" slot="start"></ion-icon>
+                <ion-label>{{card.name}}</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Computer Hand</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item *ngFor="let card of computerHand">
+                <ion-icon name="laptop" slot="start"></ion-icon>
+                <ion-label>{{card.name}}</ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-icon name="albums-outline"></ion-icon>
+          <ion-label>Cartas no deck: {{ deckService.getDeck().length }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="person-circle-outline"></ion-icon>
+          <ion-label>Cartas do jogador: {{ playerHand.length }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="desktop-outline"></ion-icon>
+          <ion-label>Cartas do computador: {{ computerHand.length }}</ion-label>
+        </ion-item>
+
+        <!-- Resultado do turno -->
+        <ion-item *ngIf="turnWinner">
+          <ion-label>
+            {{ turnWinner === 'player' ? 'Você venceu o turno!' : turnWinner === 'computer' ? 'Computador venceu o turno!' : 'É um empate!' }}
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
   </ion-grid>
-  <!-- Deck Information -->
-  <ion-row>
-    <ion-col>
-      <ion-item>
-        <ion-icon name="albums-outline"></ion-icon>
-        <ion-label>Cartas no deck: {{ deckService.getDeck().length }}</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="person-circle-outline"></ion-icon>
-        <ion-label>Cartas do jogador: {{ playerHand.length }}</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="desktop-outline"></ion-icon>
-        <ion-label>Cartas do computador: {{ computerHand.length }}</ion-label>
-      </ion-item>
-   
-      <!-- Resultado do turno -->
-      <ion-item *ngIf="turnWinner">
-        <ion-label>
-          {{ turnWinner === 'player' ? 'Você venceu o turno!' : turnWinner === 'computer' ? 'Computador venceu o turno!' : 'É um empate!' }}
-        </ion-label>
-      </ion-item>
-    </ion-col>
-  </ion-row>
-  
 </ion-content>

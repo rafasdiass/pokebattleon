@@ -1,12 +1,11 @@
 .loading-container {
-    --backdrop-opacity: 0.6; /* Define a opacidade do fundo */
-    --background: transparent; /* Define o fundo como transparente */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-image: url('/assets/pokemon pack1/pokebola.load.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
-  img{
-    width: 120px;
-    margin-top: 150px;
-  }
+  
