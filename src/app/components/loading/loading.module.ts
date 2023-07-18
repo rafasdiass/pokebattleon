@@ -15,6 +15,7 @@ import { LoadingPage } from './loading.page';
     IonicModule,
     LoadingPageRoutingModule
   ],
-  declarations: [LoadingPage]
+  declarations: [LoadingPage],
+  exports: [LoadingPage],
 })
 export class LoadingPageModule {}

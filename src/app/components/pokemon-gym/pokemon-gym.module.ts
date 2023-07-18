@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, LoadingController } from '@ionic/angular';
 
 import { PokemonGymPageRoutingModule } from './pokemon-gym-routing.module';
 
@@ -15,6 +15,7 @@ import { BattleMechanicsPageModule } from '../battle-mechanics/battle-mechanics.
 import { ScorePageModule } from '../score/score.module';
 import { DeckPageModule } from '../deck/deck.module';
 import { TurnTimePageModule } from '../turn-time/turn-time.module';
+import { LoadingPageModule } from '../loading/loading.module';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { TurnTimePageModule } from '../turn-time/turn-time.module';
     ScorePageModule,
     DeckPageModule,
     TurnTimePageModule,
+    LoadingPageModule,
   ],
   declarations: [PokemonGymPage]
 })
