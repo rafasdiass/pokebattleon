@@ -18,7 +18,7 @@ export class DeckService {
       this.deck.push(randomPokemons[0]);
     }
     this.shuffleDeck();
-    return this.deck.slice(0, 6); // return only the first 6 cards
+    return this.deck; // return the complete deck
   }
 
   shuffleDeck(): void {

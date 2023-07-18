@@ -18,6 +18,7 @@ import { ComputerplayerPageModule } from '../computerplayer/computerplayer.modul
     PlayerPageModule,
     ComputerplayerPageModule  
   ],
-  declarations: [GameBoardPage]
+  declarations: [GameBoardPage],
+  exports: [GameBoardPage], 
 })
 export class GameBoardPageModule {}

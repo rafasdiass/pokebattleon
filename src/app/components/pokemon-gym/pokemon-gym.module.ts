@@ -16,6 +16,7 @@ import { ScorePageModule } from '../score/score.module';
 import { DeckPageModule } from '../deck/deck.module';
 import { TurnTimePageModule } from '../turn-time/turn-time.module';
 import { LoadingPageModule } from '../loading/loading.module';
+import { GameBoardPageModule } from '../game-board/game-board.module';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { LoadingPageModule } from '../loading/loading.module';
     DeckPageModule,
     TurnTimePageModule,
     LoadingPageModule,
+    GameBoardPageModule,
   ],
   declarations: [PokemonGymPage]
 })

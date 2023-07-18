@@ -3,6 +3,8 @@ import { Card } from '../../models/card.model';
 import { DeckService } from '../../services/deck.service';
 import { CardPokemonService } from '../../services/card-pokemon.service';
 import { AuthService } from '../../services/auth.service';
+import { BattleService } from '../../services/battle.service';
+
 @Component({
   selector: 'app-deck',
   templateUrl: './deck.page.html',
@@ -12,9 +14,9 @@ export class DeckPage implements OnInit {
   deck: Card[] = [];
   playerHand: Card[] = [];
   computerHand: Card[] = [];
-  userId: string | null = null;  // Valor inicial é null
+  userId: string | null = null;
 
-  constructor(private deckService: DeckService, private cardPokemonService: CardPokemonService, private authService: AuthService) {}
+  constructor(private deckService: DeckService, private cardPokemonService: CardPokemonService, private authService: AuthService, private battleService: BattleService) {}
 
   ngOnInit() {
     this.authService.getUser().subscribe(user => {
@@ -29,12 +31,12 @@ export class DeckPage implements OnInit {
   }
 
   async startGame(): Promise<void> {
-    this.deck = await this.deckService.createDeck(28); // Inicia o deck com 28 cartas
-    this.dealCards(); // Distribui as cartas iniciais
+    this.deck = await this.deckService.createDeck(28);
+    this.dealCards();
   }
 
   dealCards(): void {
-    for (let i = 0; i < 3; i++) { // Cada jogador recebe 3 cartas
+    for (let i = 0; i < 3; i++) {
       this.drawCard('player');
       this.drawCard('computer');
     }
@@ -55,19 +57,41 @@ export class DeckPage implements OnInit {
     }
   }
 
-  // Esta função pode ser chamada quando um turno é concluído e o jogador vencedor é determinado
-  winTurn(winner: 'player' | 'computer', loserCard: Card): void {
-    if (winner === 'player') {
-      this.playerHand.push(loserCard); // O vencedor recebe a carta do perdedor
-      this.computerHand = this.computerHand.filter(card => card !== loserCard); // Remove a carta da mão do perdedor
-    } else {
-      this.computerHand.push(loserCard);
-      this.playerHand = this.playerHand.filter(card => card !== loserCard);
+  winTurn(playerAttribute: keyof Card, computerAttribute: keyof Card): void {
+    if (this.playerHand.length > 0 && this.computerHand.length > 0) {
+      const winner = this.battleService.battle(playerAttribute, this.playerHand[0], this.computerHand[0]);
+      if (winner === 'player') {
+        this.playerHand.push(this.computerHand.shift()!); // The winner receives the loser's card
+      } else if (winner === 'computer') {
+        this.computerHand.push(this.playerHand.shift()!);
+      }
+      console.log(winner + ' won the turn');
+      console.log('Player hand:', this.playerHand);
+      console.log('Computer hand:', this.computerHand);
     }
 
-    console.log(winner + ' won the turn and received a card:', loserCard);
-    console.log('Player hand:', this.playerHand);
-    console.log('Computer hand:', this.computerHand);
+    if (this.playerHand.length === 0 || this.computerHand.length === 0) {
+      this.replenishHand();
+    }
+  }
+
+  replenishHand(): void {
+    let cardsToDeal = 5;
+    while (this.deck.length < cardsToDeal && cardsToDeal > 1) {
+      cardsToDeal /= 2;
+    }
+
+    if (this.deck.length >= cardsToDeal) {
+      for (let i = 0; i < cardsToDeal; i++) {
+        this.drawCard('player');
+        this.drawCard('computer');
+      }
+    } else if (this.playerHand.length !== this.computerHand.length) {
+      const winner = this.playerHand.length > this.computerHand.length ? 'player' : 'computer';
+      console.log(winner + ' wins the game because they have more cards');
+    } else {
+      console.log('The game is a draw');
+    }
   }
 
   resetGame(): void {

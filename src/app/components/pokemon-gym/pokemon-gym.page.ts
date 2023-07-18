@@ -42,15 +42,20 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.authService.getUser().subscribe((user) => {
       if (user && user.uid) {
-        // O usuário está autenticado, não faça nada.
+        this.isLoggedIn = true;
+        this.loadGameData();
       } else {
         console.log('Usuário não autenticado ou objeto de usuário inválido');
+        this.isLoggedIn = false;
         this.router.navigate(['/']);
       }
     });
   }
+
   ngAfterViewInit() {
-    this.loadGameData();
+    if(this.isLoggedIn) {
+      this.loadGameData();
+    }
   }
 
   loadGameData() {
@@ -60,14 +65,17 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         this.playerHand = deck.slice(0, 3);
         this.computerHand = deck.slice(3, 6);
         this.isGameStarted = true;
+        this.startCountdown();
         this.router.navigate(['/pokemon-gym']);
       });
     });
   }
 
   enterPokemonGym() {
-    this.router.navigate(['/loading']);
-    this.loadGameData();
+    if(this.isLoggedIn) {
+      this.router.navigate(['/loading']);
+      this.loadGameData();
+    }
   }
 
   startCountdown() {
@@ -75,15 +83,14 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       this.timer--;
       if (this.timer === 0) {
         clearInterval(this.intervalId);
-        this.timeIsUp(); // calls the function timeIsUp
+        this.timeIsUp();
       }
     }, 1000);
   }
 
   timeIsUp() {
-    // Logic to be executed when the turn time is up
-    // For example, remove the player's card, etc.
     console.log('Time is up!');
+    this.confirmBattleAbandonment();
   }
 
   ngOnDestroy() {
@@ -91,6 +98,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       clearInterval(this.intervalId);
     }
   }
+
   previousCard() {
     if (this.currentCardIndex > 0) {
       this.currentCardIndex--;
@@ -119,7 +127,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       this.turn = 'computer';
       setTimeout(() => {
         this.computerTurn();
-      }, 2000); // here we define a delay of 2 seconds for the computer turn
+      }, 2000);
     }
   }
 
@@ -162,7 +170,6 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         this.computerHand.push(card);
       }
     } else {
-      // If the deck is empty, the game ends.
       this.endGame();
     }
   }
