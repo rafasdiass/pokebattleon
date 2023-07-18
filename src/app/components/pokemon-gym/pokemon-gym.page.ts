@@ -15,66 +15,66 @@ import { BattleService } from '../../services/battle.service';
   styleUrls: ['./pokemon-gym.page.scss'],
 })
 export class PokemonGymPage implements OnInit, OnDestroy {
-  isLoggedIn: boolean = true;
-  playerHand: Card[] = [];
-  computerHand: Card[] = [];
-  playerRepository: Card[] = [];
-  computerRepository: Card[] = [];
-  isGameStarted: boolean = false;
-  currentCardIndex: number = 0;
-  currentComputerCardIndex: number = 0;
-  turnWinner: 'player' | 'computer' | 'draw' | null = null;
-  turn: 'player' | 'computer' = 'player';
-  timer: number = 20;
-  intervalId: any;
+  public isLoggedIn: boolean = true;
+  public playerHand: Array<Card> = [];
+  public computerHand: Array<Card> = [];
+  public playerRepository: Array<Card> = [];
+  public computerRepository: Array<Card> = [];
+  public isGameStarted: boolean = false;
+  public currentCardIndex: number = 0;
+  public currentComputerCardIndex: number = 0;
+  public turnWinner: 'player' | 'computer' | 'draw' | null = null;
+  public turn: 'player' | 'computer' = 'player';
+  public timer: number = 20;
+  public intervalId: any;
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
+    private authenticationService: AuthService,
+    private routerService: Router,
     private cardPokemonService: CardPokemonService,
     private gameBoardService: GameBoardService,
     private playerService: PlayerService,
     private computerPlayerService: ComputerPlayerService,
-    public deckService: DeckService, // made this public
+    public deckService: DeckService,
     private battleService: BattleService
   ) {}
 
   ngOnInit() {
-    this.authService.getUser().subscribe((user) => {
+    this.authenticationService.getUser().subscribe((user) => {
       if (user && user.uid) {
         this.isLoggedIn = true;
-        this.loadGameData();
+        this.loadGameDetails();
       } else {
         console.log('Usuário não autenticado ou objeto de usuário inválido');
         this.isLoggedIn = false;
-        this.router.navigate(['/']);
+        this.routerService.navigate(['/']);
       }
     });
   }
 
   ngAfterViewInit() {
     if(this.isLoggedIn) {
-      this.loadGameData();
+      this.loadGameDetails();
     }
   }
 
-  loadGameData() {
-    this.router.navigate(['/loading']);
+  loadGameDetails() {
+    this.routerService.navigate(['/loading']);
     this.gameBoardService.initGame().then(() => {
       this.deckService.createDeck(28).then((deck) => {
         this.playerHand = deck.slice(0, 3);
         this.computerHand = deck.slice(3, 6);
         this.isGameStarted = true;
         this.startCountdown();
-        this.router.navigate(['/pokemon-gym']);
+        this.routerService.navigate(['/pokemon-gym']);
       });
     });
   }
 
   enterPokemonGym() {
     if(this.isLoggedIn) {
-      this.router.navigate(['/loading']);
-      this.loadGameData();
+      this.routerService.navigate(['/loading']);
+      this.loadGameDetails();
     }
   }
 
@@ -112,7 +112,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   }
 
   confirmBattleAbandonment() {
-    this.router.navigate(['/dashboard']);
+    this.routerService.navigate(['/dashboard']);
   }
 
   onAttributeSelect(attribute: CardAttribute) {
