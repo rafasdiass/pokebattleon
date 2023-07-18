@@ -14,6 +14,7 @@ import { ComputerPlayerCardPageModule } from '../computer-player-card/computer-p
 import { BattleMechanicsPageModule } from '../battle-mechanics/battle-mechanics.module';
 import { ScorePageModule } from '../score/score.module';
 import { DeckPageModule } from '../deck/deck.module';
+import { TurnTimePageModule } from '../turn-time/turn-time.module';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { DeckPageModule } from '../deck/deck.module';
     BattleMechanicsPageModule,
     ReactiveFormsModule,
     ScorePageModule,
-    DeckPageModule
+    DeckPageModule,
+    TurnTimePageModule,
   ],
   declarations: [PokemonGymPage]
 })

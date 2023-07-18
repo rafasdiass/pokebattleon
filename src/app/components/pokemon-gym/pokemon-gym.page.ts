@@ -25,6 +25,8 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   currentComputerCardIndex: number = 0;
   turnWinner: 'player' | 'computer' | 'draw' | null = null;
   turn: 'player' | 'computer' = 'player';
+  timer: number = 20;
+  intervalId: any;
 
   constructor(
     private authService: AuthService,
@@ -38,11 +40,11 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.authService.getUser().subscribe(user => {
+    this.authService.getUser().subscribe((user) => {
       if (user && user.uid) {
         this.router.navigate(['/loading']);
         this.gameBoardService.initGame().then(() => {
-          this.deckService.createDeck(28).then(deck => {
+          this.deckService.createDeck(28).then((deck) => {
             this.playerHand = deck.slice(0, 3);
             this.computerHand = deck.slice(3, 6);
             this.isGameStarted = true;
@@ -54,6 +56,22 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         this.router.navigate(['/']);
       }
     });
+  }
+
+  startCountdown() {
+    this.intervalId = setInterval(() => {
+      this.timer--;
+      if (this.timer === 0) {
+        clearInterval(this.intervalId);
+        this.timeIsUp(); // chama a função timeIsUp
+      }
+    }, 1000);
+  }
+
+  timeIsUp() {
+    // Lógica a ser executada quando o tempo do turno acabar
+    // Por exemplo, remover a carta do jogador, etc.
+    console.log('Time is up!');
   }
 
   ngOnDestroy() {
@@ -78,7 +96,11 @@ export class PokemonGymPage implements OnInit, OnDestroy {
 
   onAttributeSelect(attribute: CardAttribute) {
     if (this.turn === 'player') {
-      this.turnWinner = this.battleService.battle(attribute, this.playerHand[this.currentCardIndex], this.computerHand[this.currentComputerCardIndex]);
+      this.turnWinner = this.battleService.battle(
+        attribute,
+        this.playerHand[this.currentCardIndex],
+        this.computerHand[this.currentComputerCardIndex]
+      );
       this.transferCard(this.turnWinner);
       this.drawCardFromDeck('player');
       this.turn = 'computer';
@@ -91,7 +113,11 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   computerTurn() {
     if (this.turn === 'computer') {
       const computerAttribute = this.computerPlayerService.chooseAttribute();
-      this.turnWinner = this.battleService.battle(computerAttribute, this.playerHand[this.currentCardIndex], this.computerHand[this.currentComputerCardIndex]);
+      this.turnWinner = this.battleService.battle(
+        computerAttribute,
+        this.playerHand[this.currentCardIndex],
+        this.computerHand[this.currentComputerCardIndex]
+      );
       this.transferCard(this.turnWinner);
       this.drawCardFromDeck('computer');
       this.turn = 'player';

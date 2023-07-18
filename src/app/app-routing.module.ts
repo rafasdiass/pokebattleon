@@ -70,6 +70,10 @@ const routes: Routes = [
     path: 'deck',
     loadChildren: () => import('./components/deck/deck.module').then( m => m.DeckPageModule)
   },
+  {
+    path: 'turn-time',
+    loadChildren: () => import('./components/turn-time/turn-time.module').then( m => m.TurnTimePageModule)
+  },
 
   
 ];
