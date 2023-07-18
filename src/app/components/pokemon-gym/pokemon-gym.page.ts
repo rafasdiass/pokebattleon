@@ -42,20 +42,32 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.authService.getUser().subscribe((user) => {
       if (user && user.uid) {
-        this.router.navigate(['/loading']);
-        this.gameBoardService.initGame().then(() => {
-          this.deckService.createDeck(28).then((deck) => {
-            this.playerHand = deck.slice(0, 3);
-            this.computerHand = deck.slice(3, 6);
-            this.isGameStarted = true;
-            this.router.navigate(['/pokemon-gym']);
-          });
-        });
+        // O usuário está autenticado, não faça nada.
       } else {
-        console.log('User not authenticated or invalid user object');
+        console.log('Usuário não autenticado ou objeto de usuário inválido');
         this.router.navigate(['/']);
       }
     });
+  }
+  ngAfterViewInit() {
+    this.loadGameData();
+  }
+
+  loadGameData() {
+    this.router.navigate(['/loading']);
+    this.gameBoardService.initGame().then(() => {
+      this.deckService.createDeck(28).then((deck) => {
+        this.playerHand = deck.slice(0, 3);
+        this.computerHand = deck.slice(3, 6);
+        this.isGameStarted = true;
+        this.router.navigate(['/pokemon-gym']);
+      });
+    });
+  }
+
+  enterPokemonGym() {
+    this.router.navigate(['/loading']);
+    this.loadGameData();
   }
 
   startCountdown() {
@@ -79,7 +91,6 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       clearInterval(this.intervalId);
     }
   }
-
   previousCard() {
     if (this.currentCardIndex > 0) {
       this.currentCardIndex--;
