@@ -1,9 +1,10 @@
 
 
   <ion-card *ngIf="pokemon">
-    <img [src]="pokemon.imageUrl" alt="{{pokemon.name}} image">
+   
     <ion-card-header>
       <ion-card-title>{{pokemon.name}}</ion-card-title>
+      <img [src]="pokemon.imageUrl" alt="{{pokemon.name}} image">
       <!-- <ion-img> -->
         <img src="../../../assets/rivals/Pokemon-White-Trainer2.gif" alt="rivals image">
       <!-- </ion-img> -->
