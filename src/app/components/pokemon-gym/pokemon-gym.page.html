@@ -1,3 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Pokémon Gym Battle</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="enterPokemonGym()">Entrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <app-turn-time></app-turn-time>
 
 <ion-content>
@@ -114,7 +123,7 @@
           <ion-label>Cartas do computador: {{ computerHand.length }}</ion-label>
         </ion-item>
 
-        <!-- Resultado do turno -->
+        <!-- Turn Result -->
         <ion-item *ngIf="turnWinner">
           <ion-label>
             {{ turnWinner === 'player' ? 'Você venceu o turno!' : turnWinner === 'computer' ? 'Computador venceu o turno!' : 'É um empate!' }}

@@ -8,6 +8,8 @@ import { PlayerService } from '../../services/player.service';
 import { ComputerPlayerService } from '../../services/computer-player.service';
 import { DeckService } from '../../services/deck.service';
 import { BattleService } from '../../services/battle.service';
+import { ModalController } from '@ionic/angular';
+import { BattleResultPage } from '../battle-result/battle-result.page';
 
 @Component({
   selector: 'app-pokemon-gym',
@@ -29,6 +31,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   public intervalId: any;
 
   constructor(
+    private modalController: ModalController,
     private authenticationService: AuthService,
     private routerService: Router,
     private cardPokemonService: CardPokemonService,
@@ -125,6 +128,9 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       this.transferCard(this.turnWinner);
       this.drawCardFromDeck('player');
       this.turn = 'computer';
+      if (this.turnWinner !== 'draw') {
+        this.showBattleResult(this.turnWinner);
+      }
       setTimeout(() => {
         this.computerTurn();
       }, 2000);
@@ -142,6 +148,9 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       this.transferCard(this.turnWinner);
       this.drawCardFromDeck('computer');
       this.turn = 'player';
+      if (this.turnWinner !== 'draw') {
+        this.showBattleResult(this.turnWinner);
+      }
     }
   }
 
@@ -182,9 +191,21 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     }
   }
 
-  endGame(winner: 'player' | 'computer' | null = null) {
+  async endGame(winner: 'player' | 'computer' | null = null) {
+    await this.showBattleResult(winner);
     // Implement the logic to end the game here.
     // You can show a message to the user and redirect them to the home screen.
     // Also, you can use the `winner` parameter to inform who won the game.
+  }
+
+  async showBattleResult(winner: 'player' | 'computer' | null) {
+    const modal = await this.modalController.create({
+      component: BattleResultPage,
+      componentProps: {
+        'winner': winner
+      }
+    });
+
+    return await modal.present();
   }
 }
