@@ -1,5 +1,5 @@
 export const environment = {
-  firebase: {
+  firebaseConfig: {
     projectId: 'pokebattleon',
     appId: '1:438723625160:web:89bbd55852e9fb2159a5fd',
     storageBucket: 'pokebattleon.appspot.com',
