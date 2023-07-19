@@ -34,6 +34,7 @@ export class DeckService {
   addCardToDeck(newCard: Card): void {
     this.deck.push(newCard);
   }
+
   shuffleDeck(): void {
     for (let i = this.deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -70,5 +71,9 @@ export class DeckService {
 
   resetDeck(): void {
     this.deck = [];
+  }
+
+  cardsLeft(): number {
+    return this.deck.length;
   }
 }

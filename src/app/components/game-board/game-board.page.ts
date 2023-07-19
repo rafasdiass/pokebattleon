@@ -40,14 +40,25 @@ export class GameBoardPage implements OnInit {
 
   async checkForNewCards() {
     if(this.playerHand.length === 0 || this.computerHand.length === 0) {
-      let newCards = this.deckService.drawCards(5);
-      if (newCards.length < 5) {
-        newCards = this.deckService.drawCards(Math.floor(newCards.length / 2));
+      let cardsLeft = this.deckService.cardsLeft();
+  
+      if (cardsLeft >= 10) {
+        let newCards = this.deckService.drawCards(10);
+        this.playerHand.push(...newCards.slice(0, 5));
+        this.computerHand.push(...newCards.slice(5, 10));
+      } else if (cardsLeft > 0) {
+        // If there are fewer than 10 but more than 0 cards left, split them between the players
+        let newCards = this.deckService.drawCards(cardsLeft);
+        let half = Math.floor(cardsLeft / 2);
+        this.playerHand.push(...newCards.slice(0, half));
+        this.computerHand.push(...newCards.slice(half));
       }
-      this.playerHand.push(...newCards.slice(0, newCards.length / 2));
-      this.computerHand.push(...newCards.slice(newCards.length / 2, newCards.length));
+  
+      console.log('playerHand:', this.playerHand); // debug logging
+      console.log('computerHand:', this.computerHand); // debug logging
     }
   }
+  
 
   // Esta função será chamada quando um turno for concluído e o jogador vencedor for determinado
   async winTurn(winner: 'player' | 'computer', loserCard: Card): Promise<void> {
