@@ -115,99 +115,103 @@ export class PokemonGymPage implements OnInit, OnDestroy {
 
   onAttributeSelect(attribute: CardAttribute) {
     if (this.turn === 'player') {
-      if (this.isValidAttribute(attribute)) { // Verifica se o atributo é válido
-        this.turnWinner = this.battleService.battle(
-          attribute,
-          this.playerHand[this.currentCardIndex],
-          this.computerHand[this.currentComputerCardIndex]
-        );
-        this.transferCard(this.turnWinner);
-        this.drawCardFromDeck('player');
-        this.turn = 'computer';
-        if (this.turnWinner !== 'draw') {
-          this.showBattleResult(this.turnWinner);
+      if (this.isValidAttribute(attribute)) {
+        const playerCard = this.playerHand[this.currentCardIndex] as Card;
+        const computerCard = this.computerHand[this.currentComputerCardIndex] as Card;
+  
+        // Se ambas as cartas são definidas
+        if (playerCard && computerCard) {
+          this.turnWinner = this.battleService.battle(attribute, playerCard, computerCard);
+          this.transferCard(this.turnWinner, this.currentCardIndex);
+          this.drawCardFromDeck('player');
+          this.turn = 'computer';
+          if (this.turnWinner !== 'draw') {
+            this.showBattleResult(this.turnWinner);
+          }
+          // Passa a vez para o computador após um delay
+          setTimeout(() => {
+            this.computerTurn();
+          }, 2000);
+        } else {
+          console.log('Uma ou ambas as cartas são null');
         }
-        setTimeout(() => {
-          this.computerTurn();
-        }, 2000);
       } else {
         console.log('Atributo inválido');
       }
     }
   }
+
   
   isValidAttribute(attribute: string): attribute is CardAttribute {
     return this.battleService.battleAttributes.includes(attribute as CardAttribute);
   }
-  
 
   computerTurn() {
     if (this.turn === 'computer') {
       const computerAttribute = this.computerPlayerService.chooseAttribute();
       const playerCard = this.playerHand[this.currentCardIndex];
       const computerCard = this.computerHand[this.currentComputerCardIndex];
-  
-      this.turnWinner = this.battleService.battle(computerAttribute, playerCard, computerCard);
-  
-      this.transferCard(this.turnWinner);
-      this.drawCardFromDeck('computer');
-      this.turn = 'player';
-  
-      if (this.turnWinner !== 'draw') {
-        this.showBattleResult(this.turnWinner)
-          .catch((error) => {
-            console.log(error);
-          });
+      if (playerCard && computerCard) {
+        this.turnWinner = this.battleService.battle(computerAttribute, playerCard, computerCard);
+        this.transferCard(this.turnWinner, this.currentComputerCardIndex);
+        this.drawCardFromDeck('computer');
+        this.turn = 'player';
+        if (this.turnWinner !== 'draw') {
+          this.showBattleResult(this.turnWinner)
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      } else {
+        console.log('One or both cards are null');
       }
     }
-  }
-  
-  
+}
 
-  transferCard(winner: 'player' | 'computer' | 'draw') {
+
+  transferCard(winner: 'player' | 'computer' | 'draw', cardIndex: number) {
     if (winner === 'player') {
-      let card = this.computerHand.shift();
-      if (card) {
-        this.playerRepository.push(card);
+      let cardWon = this.computerHand.splice(cardIndex, 1)[0];
+      if (cardWon) {
+        this.playerHand.push(cardWon);
         this.checkGameOver();
       }
     } else if (winner === 'computer') {
-      let card = this.playerHand.shift();
-      if (card) {
-        this.computerRepository.push(card);
+      let cardLost = this.playerHand.splice(cardIndex, 1)[0];
+      if (cardLost) {
+        this.computerHand.push(cardLost);
         this.checkGameOver();
       }
+    } else if (winner === 'draw') {
+      // Implementar a lógica para o caso de empate.
+      // Talvez ambas as cartas sejam descartadas ou retornem para o fundo dos respectivos baralhos
     }
   }
 
   drawCardFromDeck(player: 'player' | 'computer') {
-    let card = this.deckService.drawCard();
-    if (card) {
-      if (player === 'player') {
-        this.playerHand.push(card);
-      } else {
-        this.computerHand.push(card);
+    if (this.deckService.getDeck().length > 0) {
+      const card = this.deckService.drawCard();
+      if (card) {
+        if (player === 'player') {
+          this.playerHand.push(card);
+        } else {
+          this.computerHand.push(card);
+        }
       }
-    } else {
-      this.endGame();
     }
   }
+  
 
   checkGameOver() {
-    if (this.playerRepository.length === 28) {
-      this.endGame('player');
-    } else if (this.computerRepository.length === 28) {
-      this.endGame('computer');
+    if (this.playerHand.length === 0 || this.computerHand.length === 0) {
+      this.isGameStarted = false;
+      if (this.playerHand.length > this.computerHand.length) {
+        console.log('O jogador venceu!');
+      } else if (this.playerHand.length < this.computerHand.length) {
+        console.log('O computador venceu!');
+      } else {
+        console.log('Jogo terminou empatado!');
+      }
     }
   }
-
-  async endGame(winner: 'player' | 'computer' | null = null) {
-    await this.showBattleResult(winner);
-    // Implement the logic to end the game here.
-    // You can show a message
-  }
-  // enterPokemonGym() {
-    // Implement your logic here, e.g. start a new game
-  //   this.loadGameDetails();
-  // }
 }
