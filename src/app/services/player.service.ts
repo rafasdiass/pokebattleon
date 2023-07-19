@@ -48,6 +48,18 @@ export class PlayerService {
     }
   }
   
+  async getPlayerCards(): Promise<Card[]> {
+    const uid = await this.getCurrentUserId();
+    const player = await this.getPlayer(uid);
+    
+    if (player) {
+      return player.cards;
+    } else {
+      console.log('No player found');
+      return [];
+    }
+  }
+  
   async updatePlayerWins(uid: string, wins: number): Promise<void> {
     const playerDoc = doc(this.db, 'users', uid);
     await updateDoc(playerDoc, { wins: wins });

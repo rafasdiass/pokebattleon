@@ -4,7 +4,7 @@ import { ComputerPlayer } from '../../models/computer-player.model';
 import { Card } from '../../models/card.model';
 import { DeckService } from '../../services/deck.service';
 import { BattleService } from '../../services/battle.service';
-
+import { PlayerService } from '../../services/player.service';
 @Component({
   selector: 'app-game-board',
   templateUrl: './game-board.page.html',
@@ -17,26 +17,27 @@ export class GameBoardPage implements OnInit {
   playerHand: Card[] = [];
   computerHand: Card[] = [];
 
-  constructor(private deckService: DeckService, private battleService: BattleService) { }
+  constructor(
+    private deckService: DeckService,
+    private battleService: BattleService,
+    private playerService: PlayerService // Inject the Player Service
+  ) { }
 
   async ngOnInit() {
+    this.playerHand = await this.playerService.getPlayerCards(); // Load the player cards
     await this.startGame();
   }
+  
   async startGame(): Promise<void> {
     const deck = await this.deckService.getDeck(); // get the deck of 22 cards
 
-    // Distribute the cards alternately to ensure that there are no same cards
-    for (let i = 0; i < 6; i++) {
-      if (i % 2 === 0) {
-        this.playerHand.push(deck[i]);
-      } else {
-        this.computerHand.push(deck[i]);
-      }
-    }
+    // Distribute the cards to the computer player
+    this.computerHand = deck.slice(0, 3);
 
     // Start the first turn
     await this.startTurn();
   }
+
   async checkForNewCards() {
     if(this.playerHand.length === 0 || this.computerHand.length === 0) {
       let newCards = this.deckService.drawCards(5);

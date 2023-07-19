@@ -57,10 +57,10 @@ export class PokemonGymPage implements OnInit, OnDestroy {
 
   loadGameDetails() {
     this.routerService.navigate(['/loading']);
-    this.gameBoardService.initGame().then(() => {
+    this.gameBoardService.initGame().then(async () => {
       const deck = this.deckService.getDeck();
-      this.playerHand = deck.slice(0, 3);
-      this.computerHand = deck.slice(3, 6);
+      this.playerHand = await this.playerService.getPlayerCards(); // Load the player cards
+      this.computerHand = deck.slice(0, 3);
       this.isGameStarted = true;
       this.startCountdown();
       this.routerService.navigate(['/pokemon-gym']);
