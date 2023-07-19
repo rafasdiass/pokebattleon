@@ -11,16 +11,24 @@ export class DeckService {
   constructor(private cardPokemonService: CardPokemonService) {}
 
   async createDeck(numberOfCards: number): Promise<Card[]> {
-    this.deck = [];
-    numberOfCards = numberOfCards - 6; // subtract the initial cards in play
-    for (let i = 0; i < numberOfCards; i++) {
+    if (this.deck.length >= numberOfCards) {
+      console.log(`Deck já possui ${this.deck.length} cartas.`);
+      return this.deck;
+    }
+  
+    // Adiciona novas cartas
+    while (this.deck.length < numberOfCards) {
       const randomPokemons = await this.cardPokemonService.getRandomPokemon(1);
       this.deck.push(randomPokemons[0]);
     }
     this.shuffleDeck();
     return this.deck; // return the complete deck
   }
-
+  
+  // função para adicionar uma carta ganha ao deck
+  addCardToDeck(newCard: Card): void {
+    this.deck.push(newCard);
+  }
   shuffleDeck(): void {
     for (let i = this.deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

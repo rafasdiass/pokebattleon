@@ -4,6 +4,7 @@ import { DeckService } from '../../services/deck.service';
 import { CardPokemonService } from '../../services/card-pokemon.service';
 import { AuthService } from '../../services/auth.service';
 import { BattleService } from '../../services/battle.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-deck',
@@ -16,7 +17,12 @@ export class DeckPage implements OnInit {
   computerHand: Card[] = [];
   userId: string | null = null;
 
-  constructor(private deckService: DeckService, private cardPokemonService: CardPokemonService, private authService: AuthService, private battleService: BattleService) {}
+  constructor(
+    private deckService: DeckService, 
+    private cardPokemonService: CardPokemonService, 
+    private authService: AuthService, 
+    private battleService: BattleService, 
+    private router: Router) {}
 
   ngOnInit() {
     this.authService.getUser().subscribe(user => {
@@ -25,7 +31,7 @@ export class DeckPage implements OnInit {
         this.startGame();
       } else {
         console.log('User not authenticated or invalid user object');
-        this.startGame();
+        this.router.navigate(['/']);
       }
     });
   }

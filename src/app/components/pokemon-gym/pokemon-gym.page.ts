@@ -55,12 +55,6 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit() {
-    if(this.isLoggedIn) {
-      this.loadGameDetails();
-    }
-  }
-
   loadGameDetails() {
     this.routerService.navigate(['/loading']);
     this.gameBoardService.initGame().then(() => {
@@ -72,13 +66,6 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         this.routerService.navigate(['/pokemon-gym']);
       });
     });
-  }
-
-  enterPokemonGym() {
-    if(this.isLoggedIn) {
-      this.routerService.navigate(['/loading']);
-      this.loadGameDetails();
-    }
   }
 
   startCountdown() {
@@ -93,7 +80,6 @@ export class PokemonGymPage implements OnInit, OnDestroy {
 
   timeIsUp() {
     console.log('Time is up!');
-    // this.confirmBattleAbandonment();
   }
 
   ngOnDestroy() {
@@ -112,6 +98,16 @@ export class PokemonGymPage implements OnInit, OnDestroy {
     if (this.currentCardIndex < this.playerHand.length - 1) {
       this.currentCardIndex++;
     }
+  }
+
+  async showBattleResult(winner: 'player' | 'computer' | null) {
+    const modal = await this.modalController.create({
+      component: BattleResultPage,
+      componentProps: {
+        winner: winner
+      }
+    });
+    await modal.present();
   }
 
   confirmBattleAbandonment() {
@@ -159,14 +155,14 @@ export class PokemonGymPage implements OnInit, OnDestroy {
       let card = this.computerHand.shift();
       if (card) {
         this.playerRepository.push(card);
+        this.checkGameOver();
       }
-      this.checkGameOver();
     } else if (winner === 'computer') {
       let card = this.playerHand.shift();
       if (card) {
         this.computerRepository.push(card);
+        this.checkGameOver();
       }
-      this.checkGameOver();
     }
   }
 
@@ -194,18 +190,10 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   async endGame(winner: 'player' | 'computer' | null = null) {
     await this.showBattleResult(winner);
     // Implement the logic to end the game here.
-    // You can show a message to the user and redirect them to the home screen.
-    // Also, you can use the `winner` parameter to inform who won the game.
+    // You can show a message
   }
-
-  async showBattleResult(winner: 'player' | 'computer' | null) {
-    const modal = await this.modalController.create({
-      component: BattleResultPage,
-      componentProps: {
-        'winner': winner
-      }
-    });
-
-    return await modal.present();
-  }
+  // enterPokemonGym() {
+    // Implement your logic here, e.g. start a new game
+  //   this.loadGameDetails();
+  // }
 }
