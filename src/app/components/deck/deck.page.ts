@@ -37,16 +37,19 @@ export class DeckPage implements OnInit {
   }
 
   async startGame(): Promise<void> {
-    this.deck = await this.deckService.createDeck(28);
+    await this.deckService.createDeck();
+    this.deck = this.deckService.getDeck();
+    // Deal 3 cards to each player.
     this.dealCards();
   }
 
-  dealCards(): void {
+dealCards(): void {
     for (let i = 0; i < 3; i++) {
-      this.drawCard('player');
-      this.drawCard('computer');
+        this.drawCard('player');
+        this.drawCard('computer');
     }
-  }
+}
+
 
   drawCard(player: 'player' | 'computer'): void {
     const card = this.deckService.drawCard();

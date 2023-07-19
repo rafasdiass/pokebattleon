@@ -36,12 +36,14 @@ export class GameBoardService {
     await this.computerPlayerService.init();
     this.computer = this.computerPlayerService.getComputerPlayer();
     
-    const initialCards = await this.deckService.createDeck(28);
-    this.player.cards.push(...initialCards.slice(0, 3));  // give first 3 cards to player
-    this.computer.cards.push(...initialCards.slice(3, 6));  // give next 3 cards to computer
-    this.deckService.addCardsToPile(initialCards.slice(6));  // add the remaining cards to the pile
-  }
-  
+    // Obtenha o deck existente em vez de criar um novo
+    await this.deckService.createDeck();
+    const deck = await this.deckService.getDeck();
+    
+    this.player.cards.push(...deck.slice(0, 3));  // give first 3 cards to player
+    this.computer.cards.push(...deck.slice(3, 6));  // give next 3 cards to computer
+    this.deckService.addCardsToPile(deck.slice(6));  // add the remaining cards to the pile
+}
   async playTurn(playerAttribute?: CardAttribute): Promise<void> {
     if (!this.player || !this.computer) {
       throw new Error('O jogador ou o computador não estão definidos');

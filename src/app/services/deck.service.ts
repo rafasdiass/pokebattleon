@@ -7,22 +7,27 @@ import { CardPokemonService } from './card-pokemon.service';
 })
 export class DeckService {
   private deck: Card[] = [];
+  private static readonly DECK_LIMIT = 28;
+  private static readonly INITIAL_CARDS_IN_PLAY = 6;
 
   constructor(private cardPokemonService: CardPokemonService) {}
 
-  async createDeck(numberOfCards: number): Promise<Card[]> {
-    if (this.deck.length >= numberOfCards) {
+  async createDeck(): Promise<Card[]> {
+    const numberOfCardsToCreate = DeckService.DECK_LIMIT - this.deck.length;
+    if (numberOfCardsToCreate <= 0) {
       console.log(`Deck já possui ${this.deck.length} cartas.`);
       return this.deck;
     }
   
     // Adiciona novas cartas
-    while (this.deck.length < numberOfCards) {
+    while (this.deck.length < DeckService.DECK_LIMIT) {
       const randomPokemons = await this.cardPokemonService.getRandomPokemon(1);
       this.deck.push(randomPokemons[0]);
     }
     this.shuffleDeck();
-    return this.deck; // return the complete deck
+    // Aqui colocamos as 6 primeiras cartas em jogo, ou quantas você definir na constante INITIAL_CARDS_IN_PLAY
+    this.deck.splice(0, DeckService.INITIAL_CARDS_IN_PLAY);
+    return this.deck; // retorna o deck completo
   }
   
   // função para adicionar uma carta ganha ao deck

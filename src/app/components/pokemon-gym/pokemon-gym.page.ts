@@ -48,7 +48,7 @@ export class PokemonGymPage implements OnInit, OnDestroy {
         this.isLoggedIn = true;
         this.loadGameDetails();
       } else {
-        console.log('Usuário não autenticado ou objeto de usuário inválido');
+        console.log('User not authenticated or invalid user object');
         this.isLoggedIn = false;
         this.routerService.navigate(['/']);
       }
@@ -58,13 +58,12 @@ export class PokemonGymPage implements OnInit, OnDestroy {
   loadGameDetails() {
     this.routerService.navigate(['/loading']);
     this.gameBoardService.initGame().then(() => {
-      this.deckService.createDeck(28).then((deck) => {
-        this.playerHand = deck.slice(0, 3);
-        this.computerHand = deck.slice(3, 6);
-        this.isGameStarted = true;
-        this.startCountdown();
-        this.routerService.navigate(['/pokemon-gym']);
-      });
+      const deck = this.deckService.getDeck();
+      this.playerHand = deck.slice(0, 3);
+      this.computerHand = deck.slice(3, 6);
+      this.isGameStarted = true;
+      this.startCountdown();
+      this.routerService.navigate(['/pokemon-gym']);
     });
   }
 
@@ -116,39 +115,54 @@ export class PokemonGymPage implements OnInit, OnDestroy {
 
   onAttributeSelect(attribute: CardAttribute) {
     if (this.turn === 'player') {
-      this.turnWinner = this.battleService.battle(
-        attribute,
-        this.playerHand[this.currentCardIndex],
-        this.computerHand[this.currentComputerCardIndex]
-      );
-      this.transferCard(this.turnWinner);
-      this.drawCardFromDeck('player');
-      this.turn = 'computer';
-      if (this.turnWinner !== 'draw') {
-        this.showBattleResult(this.turnWinner);
+      if (this.isValidAttribute(attribute)) { // Verifica se o atributo é válido
+        this.turnWinner = this.battleService.battle(
+          attribute,
+          this.playerHand[this.currentCardIndex],
+          this.computerHand[this.currentComputerCardIndex]
+        );
+        this.transferCard(this.turnWinner);
+        this.drawCardFromDeck('player');
+        this.turn = 'computer';
+        if (this.turnWinner !== 'draw') {
+          this.showBattleResult(this.turnWinner);
+        }
+        setTimeout(() => {
+          this.computerTurn();
+        }, 2000);
+      } else {
+        console.log('Atributo inválido');
       }
-      setTimeout(() => {
-        this.computerTurn();
-      }, 2000);
     }
   }
+  
+  isValidAttribute(attribute: string): attribute is CardAttribute {
+    return this.battleService.battleAttributes.includes(attribute as CardAttribute);
+  }
+  
 
   computerTurn() {
     if (this.turn === 'computer') {
       const computerAttribute = this.computerPlayerService.chooseAttribute();
-      this.turnWinner = this.battleService.battle(
-        computerAttribute,
-        this.playerHand[this.currentCardIndex],
-        this.computerHand[this.currentComputerCardIndex]
-      );
+      const playerCard = this.playerHand[this.currentCardIndex];
+      const computerCard = this.computerHand[this.currentComputerCardIndex];
+  
+      this.turnWinner = this.battleService.battle(computerAttribute, playerCard, computerCard);
+  
       this.transferCard(this.turnWinner);
       this.drawCardFromDeck('computer');
       this.turn = 'player';
+  
       if (this.turnWinner !== 'draw') {
-        this.showBattleResult(this.turnWinner);
+        this.showBattleResult(this.turnWinner)
+          .catch((error) => {
+            console.log(error);
+          });
       }
     }
   }
+  
+  
 
   transferCard(winner: 'player' | 'computer' | 'draw') {
     if (winner === 'player') {

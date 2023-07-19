@@ -22,11 +22,10 @@ export class GameBoardPage implements OnInit {
   async ngOnInit() {
     await this.startGame();
   }
-
   async startGame(): Promise<void> {
-    const deck = await this.deckService.createDeck(28); // Inicia o deck com 28 cartas
+    const deck = await this.deckService.getDeck(); // get the deck of 22 cards
 
-    // Distribui as cartas de forma alternada para garantir que não haja cartas iguais
+    // Distribute the cards alternately to ensure that there are no same cards
     for (let i = 0; i < 6; i++) {
       if (i % 2 === 0) {
         this.playerHand.push(deck[i]);
@@ -35,10 +34,9 @@ export class GameBoardPage implements OnInit {
       }
     }
 
-    // Inicia o primeiro turno
+    // Start the first turn
     await this.startTurn();
   }
-
   async checkForNewCards() {
     if(this.playerHand.length === 0 || this.computerHand.length === 0) {
       let newCards = this.deckService.drawCards(5);
