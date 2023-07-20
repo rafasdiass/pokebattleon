@@ -62,7 +62,8 @@ const routes: Routes = [
   {
     path: 'loading',
     loadChildren: () => import('./components/loading/loading.module').then( m => m.LoadingPageModule)
-  },  {
+  },
+  {
     path: 'score',
     loadChildren: () => import('./components/score/score.module').then( m => m.ScorePageModule)
   },
@@ -80,7 +81,11 @@ const routes: Routes = [
   },
   {
     path: 'multiplayer',
-    loadChildren: () => import('./components/multiplayer/multiplayer.module').then( m => m.MultiplayerPageModule)
+    loadChildren: () => import('./components/online/multiplayer/multiplayer.module').then( m => m.MultiplayerPageModule)
+  },
+  {
+    path: 'battle-room',
+    loadChildren: () => import('./components/online/battle-room/battle-room.module').then( m => m.BattleRoomPageModule)
   },
 
   
