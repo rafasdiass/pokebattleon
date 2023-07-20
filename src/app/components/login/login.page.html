@@ -5,19 +5,31 @@
 </ion-header>
 
 <ion-content>
-  <form [formGroup]="loginForm">
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input id="email" formControlName="email" type="text" class="form-control">
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input id="password" formControlName="password" type="password" class="form-control">
-    </div>
+  <form [formGroup]="loginForm" class="ion-padding">
+    <ion-item>
+      <ion-input id="email" formControlName="email" type="text" label="Email">
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input id="password" formControlName="password" type="password" label="Password">
+        <ion-icon name="key-outline" slot="start"></ion-icon>
+      </ion-input>
+    </ion-item>
+
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
-    <button type="button" (click)="login()" class="btn btn-primary">Login</button>
-    <button type="button" (click)="register()" class="btn btn-link">Faça seu registro</button>
+
+    <ion-button expand="full" (click)="login()" color="primary">
+      <ion-icon name="log-in-outline"></ion-icon>
+      Login
+    </ion-button>
+    
+    <ion-button expand="full" (click)="register()" fill="outline" color="secondary">
+      <ion-icon name="person-add-outline"></ion-icon>
+      Faça seu registro
+    </ion-button>
   </form>
 </ion-content>

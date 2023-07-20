@@ -1,0 +1,35 @@
+ion-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  ion-button {
+    margin-top: 20px;
+  }
+  
+  .alert {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  ion-item {
+    --padding-start: 5px;
+    --padding-end: 5px;
+    --padding-top: 5px;
+    --padding-bottom: 5px;
+    --background: rgba(255, 255, 255, 0.1); 
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+  
+  ion-input {
+    color: #ffffff;
+  }
+  
+  ion-label {
+    color: #ffffff;
+  }
+  

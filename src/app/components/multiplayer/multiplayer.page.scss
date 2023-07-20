@@ -1,0 +1,18 @@
+.status-dot {
+    height: 20px;
+    width: 20px;
+    background-color: #bbb; // Grey color when offline
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+  }
+  
+  .online {
+    background-color: #44b700; // Green color when online
+  }
+  
+  h2 {
+    font-family: 'Pokemon Solid', sans-serif;
+    font-size: 2rem;
+  }
+  

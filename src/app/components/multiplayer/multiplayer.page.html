@@ -12,6 +12,7 @@
       <ion-icon slot="start" name="person-circle-outline"></ion-icon>
       <ion-label>
         <h2>{{ user.displayName }}</h2>
+        <div class="status-dot" [ngClass]="{'online': user.online}"></div>
         <!-- <p>{{ user.email }}</p> -->
       </ion-label>
     </ion-item>
