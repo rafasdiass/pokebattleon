@@ -78,6 +78,10 @@ const routes: Routes = [
     path: 'battle-result',
     loadChildren: () => import('./components/battle-result/battle-result.module').then( m => m.BattleResultPageModule)
   },
+  {
+    path: 'multiplayer',
+    loadChildren: () => import('./components/multiplayer/multiplayer.module').then( m => m.MultiplayerPageModule)
+  },
 
   
 ];

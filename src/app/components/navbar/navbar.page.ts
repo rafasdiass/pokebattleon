@@ -30,6 +30,10 @@ export class NavbarPage implements OnInit {
     this.router.navigate(['/pokemon-gym']);  // Navegar para a rota do ginásio Pokémon
   }
 
+  navigateToMultiplayer() {
+    this.router.navigate(['/multiplayer']);  // Navegar para a rota do ginásio Pokémon
+  }
+
   logout() {
     this.authService.signOut()  // Chame authService.signOut() para fazer logout
     .then(() => {

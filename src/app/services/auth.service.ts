@@ -4,8 +4,7 @@ import { Observable } from 'rxjs';
 import { CardPokemonService } from './card-pokemon.service';
 import { UserService } from './user.service';
 import { User } from '../models/user.model';
-import { Firestore } from '@angular/fire/firestore';
-import { setDoc, doc } from 'firebase/firestore';
+import { Firestore, updateDoc, doc, setDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +22,13 @@ export class AuthService {
 
   signIn(email: string, password: string): Promise<FirebaseUser> {
     return signInWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => userCredential.user)
+      .then(async (userCredential) => {
+        const firebaseUser = userCredential.user;
+        if(firebaseUser){
+          await this.userService.updateUserOnlineStatus(firebaseUser.uid, true);
+        }
+        return firebaseUser;
+      })
       .catch((error) => {
         console.error(error);
         return Promise.reject(error);
@@ -40,7 +45,7 @@ export class AuthService {
         await updateProfile(firebaseUser, { displayName });
   
         // Create a new user document in Firestore
-        const user = new User(firebaseUser.uid, firebaseUser.email, displayName);
+        const user = new User(firebaseUser.uid, firebaseUser.email, displayName, true);
         await setDoc(doc(this.db, 'users', firebaseUser.uid), user.toFirestore());
   
         // Get 5 random Pokemons
@@ -61,6 +66,10 @@ export class AuthService {
   
 
   signOut(): Promise<void> {
+    const user = this.auth.currentUser;
+    if (user) {
+      this.userService.updateUserOnlineStatus(user.uid, false);
+    }
     return signOut(this.auth)
       .catch((error) => {
         console.error(error);

@@ -16,6 +16,15 @@
       <ion-button expand="full" fill="outline">Ginásio Pokémon</ion-button>
     </ion-item>
 
+    <ion-item *ngIf="isLoggedIn" (click)="navigateToMultiplayer()">
+      <div slot="start">
+        <ion-icon name="game-controller-outline"></ion-icon>
+        <ion-icon name="game-controller-outline"></ion-icon>
+      </div>
+      <ion-button expand="full" fill="outline">Multiplayer</ion-button>
+    </ion-item>
+    
+
     <ion-item *ngIf="!isLoggedIn">
       <ion-icon name="log-in-outline" slot="start"></ion-icon>
       <ion-button expand="full" fill="outline">Entrar</ion-button>
