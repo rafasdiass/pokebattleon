@@ -12,13 +12,17 @@ ion-content {
               h2 {
                   font-family: 'Pokemon Solid', sans-serif;
                   font-size: 2rem;
-                  color: #ff0000; // or any color you want for the username
+                  color: #ffffff; // or any color you want for the username
+
+                  &.hover {
+                      color: #0000ff; // Change color on hover
+                  }
               }
 
               .status-dot {
                   height: 20px;
                   width: 20px;
-                  background-color: #ffffff; // Grey color when offline
+                  background-color: #ff0000; // Red color when offline
                   border-radius: 50%;
                   display: inline-block;
                   margin-left: 10px;
@@ -27,6 +31,11 @@ ion-content {
                       background-color: #44b700; // Green color when online
                   }
               }
+          }
+
+          &:hover {
+            background-color: #eaeaea; // Add a light grey background on hover
+            cursor: pointer;
           }
       }
   }

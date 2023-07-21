@@ -11,6 +11,7 @@ import { ChatPage } from '../chat/chat.page';
 })
 export class MultiplayerPage implements OnInit {
   onlinePlayers: Player[] = [];
+  
 
   constructor(
     private playerService: PlayerService,
@@ -31,4 +32,12 @@ export class MultiplayerPage implements OnInit {
     
     return await modal.present();
   }
+
+  onMouseOver(player: Player) {
+    player.hover = true;
+}
+
+onMouseOut(player: Player) {
+    player.hover = false;
+}
 }

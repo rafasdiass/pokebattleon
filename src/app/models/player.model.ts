@@ -5,9 +5,12 @@ export class Player {
     public uid: string,
     public name: string,
     public cards: Card[],
+    public online: boolean = false,
     public wins?: number,
     public rank?: number,
-    public online: boolean = false
+    
+    public hover: boolean = false,
+    
   ) {}
 
   playCard(): Card | null {
