@@ -1,0 +1,32 @@
+ion-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    div {
+        padding: 10px;
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+
+            strong {
+                color: #3498db; // Color for the sender's name
+            }
+        }
+    }
+
+    ion-item {
+        margin-top: auto; // This will stick the input to the bottom of the page
+        ion-input {
+            font-size: 1rem;
+            color: #000; // Color for the input text
+        }
+    }
+
+    ion-button {
+        font-size: 1.2rem;
+        color: #fff; // Color for the button text
+    }
+}

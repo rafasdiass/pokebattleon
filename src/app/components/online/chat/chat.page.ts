@@ -33,6 +33,7 @@ export class ChatPage implements OnInit {
     if (this.player1 && this.player2) {
       this.messagingService.getMessages(this.player1, this.player2).then(messages => {
         this.messages = messages;
+        this.scrollToLatestMessage();
       });
     }
   }
@@ -41,6 +42,7 @@ export class ChatPage implements OnInit {
     if (this.player1 && this.player2) {
       this.messagingService.listenForNewMessages(this.player1, this.player2, (newMessage) => {
         this.messages.push(newMessage);
+        this.scrollToLatestMessage();
       });
     }
   }
@@ -51,6 +53,7 @@ export class ChatPage implements OnInit {
         this.messagingService.sendMessage(this.player1, this.player2.uid, this.newMessage).then(() => {
           console.log('Mensagem enviada com sucesso!');
           this.newMessage = '';
+          this.scrollToLatestMessage();
         }).catch(err => {
           console.error('Falha ao enviar a mensagem: ', err);
         });
@@ -59,5 +62,11 @@ export class ChatPage implements OnInit {
       }
     }
   }
-  
+
+  scrollToLatestMessage() {
+    setTimeout(() => {
+      const lastMessageElement = document.getElementById('lastMessage');
+      lastMessageElement?.scrollIntoView();
+    }, 0);
+  }
 }
