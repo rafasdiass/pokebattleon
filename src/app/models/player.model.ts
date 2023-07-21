@@ -7,6 +7,7 @@ export class Player {
     public cards: Card[],
     public wins?: number,
     public rank?: number,
+    public online: boolean = false
   ) {}
 
   playCard(): Card | null {

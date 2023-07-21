@@ -1,6 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { UserService } from '../../../services/user.service';
-import { User } from '../../../models/user.model';
+import { Component, OnInit } from '@angular/core';
+import { PlayerService } from '../../../services/player.service';
+import { Player } from '../../../models/player.model';
+import { ModalController } from '@ionic/angular';
+import { ChatPage } from '../chat/chat.page';
 
 @Component({
   selector: 'app-multiplayer',
@@ -8,11 +10,25 @@ import { User } from '../../../models/user.model';
   styleUrls: ['./multiplayer.page.scss'],
 })
 export class MultiplayerPage implements OnInit {
-  onlineUsers: User[] = [];
+  onlinePlayers: Player[] = [];
 
-  constructor(@Inject(UserService) private userService: UserService) { }
+  constructor(
+    private playerService: PlayerService,
+    private modalController: ModalController
+  ) { }
 
   async ngOnInit() {
-    this.onlineUsers = await this.userService.getOnlineUsers();
+    this.onlinePlayers = await this.playerService.getOnlinePlayers();
+  }
+
+  async openChatWithUser(player: Player) {
+    await this.playerService.onPlayer2Selected(player.uid);
+    
+    const modal = await this.modalController.create({
+      component: ChatPage,
+      componentProps: { 'uid': player.uid }
+    });
+    
+    return await modal.present();
   }
 }

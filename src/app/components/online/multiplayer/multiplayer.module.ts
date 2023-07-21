@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { MultiplayerPageRoutingModule } from './multiplayer-routing.module';
 
 import { MultiplayerPage } from './multiplayer.page';
+import { ChatPageModule } from '../chat/chat.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MultiplayerPageRoutingModule
+    MultiplayerPageRoutingModule,
+    ChatPageModule
   ],
   declarations: [MultiplayerPage]
 })
