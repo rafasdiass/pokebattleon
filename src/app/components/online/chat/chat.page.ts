@@ -28,24 +28,28 @@ export class ChatPage implements OnInit {
       this.listenForNewMessages();
     }
   }
-
-  getChatMessages() {
+  async getChatMessages() {
     if (this.player1 && this.player2) {
-      this.messagingService.getMessages(this.player1, this.player2).then(messages => {
-        this.messages = messages;
+      this.messagingService.getMessages(this.player1, this.player2).then(async messages => {
+        this.messages = await Promise.all(messages.map(async message => {
+          const senderName = await this.playerService.getPlayerNameById(message.senderId);
+          return {...message, senderName };
+        }));
         this.scrollToLatestMessage();
       });
     }
   }
-
-  listenForNewMessages() {
+  
+  async listenForNewMessages() {
     if (this.player1 && this.player2) {
-      this.messagingService.listenForNewMessages(this.player1, this.player2, (newMessage) => {
-        this.messages.push(newMessage);
+      this.messagingService.listenForNewMessages(this.player1, this.player2, async (newMessage) => {
+        const senderName = await this.playerService.getPlayerNameById(newMessage.senderId);
+        this.messages.push({...newMessage, senderName });
         this.scrollToLatestMessage();
       });
     }
   }
+  
 
   sendMessage() {
     if (this.player1 && this.player2 && this.newMessage !== '') {

@@ -6,7 +6,7 @@
 
 <ion-content>
   <div *ngFor="let message of messages; let isLast=last" [id]="isLast ? 'lastMessage' : ''">
-    <p><strong>{{ message.senderId }}</strong>: {{ message.message }}</p>
+    <p><strong>{{ message.senderName }}</strong>: {{ message.message }}</p>
   </div>
 
   <ion-item>

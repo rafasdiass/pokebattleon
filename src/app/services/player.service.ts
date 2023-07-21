@@ -65,6 +65,17 @@ export class PlayerService {
     }
   }
 
+  async getPlayerNameById(uid: string): Promise<string> {
+    const player = await this.getPlayer(uid);
+    
+    if (player) {
+      return player.name;
+    } else {
+      console.error('No player found with the uid:', uid);
+      return uid;
+    }
+  }
+
   setPlayer(player: Player, playerNumber: number) {
     if (playerNumber === 1) {
       this.player1 = player;
